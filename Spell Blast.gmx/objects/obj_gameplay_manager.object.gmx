@@ -34,7 +34,7 @@ stop_updating_letters=0
 can_pause=30
 
 collectTIME=round(room_speed*45)
-matchTIME=round(room_speed*25)
+matchTIME=round(room_speed*10)
 
 stop_spawning_minions=0
 
@@ -83,6 +83,29 @@ alarm[0]=collectTIME
         </arguments>
       </action>
     </event>
+    <event eventtype="2" enumb="2">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>   instance_create(room_width,0, obj_boss01)
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
     <event eventtype="2" enumb="1">
       <action>
         <libid>1</libid>
@@ -100,7 +123,13 @@ alarm[0]=collectTIME
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>instance_create(room_width,0, obj_boss01)
+            <string>
+//if CheckIfAllLettersCollected()=1 and CheckIfPlayerMatchedAllLetters()=1 and stop_spawning_minions=0
+//{
+//}
+
+  if stop_spawning_minions=0
+  { stop_spawning_minions=1 alarm[2]=room_speed*4}
 </string>
           </argument>
         </arguments>
@@ -202,10 +231,6 @@ if spawn_delay&lt;=0 and stop_spawning_minions=0
    }
 }
 
-if CheckIfAllLettersCollected()=1 and CheckIfPlayerMatchedAllLetters()=1 and stop_spawning_minions=0
-{
-    stop_spawning_minions=1 alarm[0]=-1 alarm[1]=room_speed*2
-}
 </string>
           </argument>
         </arguments>
@@ -297,14 +322,15 @@ for (p=0;p&lt;string_length(chosen_word);p++)
      draw_healthbar(100,room_height-150,room_width-100,room_height-156,tpc, c_black, c_white,c_white,0,true,true)
  }
        
- if CheckIfAllLettersCollected()=1 and CheckIfPlayerMatchedAllLetters()=0
+ //if CheckIfAllLettersCollected()=1 and CheckIfPlayerMatchedAllLetters()=0
+ if CheckIfAllLettersCollected()=1 and stop_spawning_minions=0
  {
        //display timer.
        draw_set_color(c_gray)
        draw_text(room_width/2,room_height-180,"TIME")//+string(alarm[0]))
        draw_set_color(c_white)
        draw_text(room_width/2,room_height-180,"TIME")//+string(alarm[0]))
-       var tpc=findtotalpercent(alarm[0],round(matchTIME));
+       var tpc=findtotalpercent(alarm[1],round(matchTIME));
        
        draw_set_color(c_orange)
        draw_healthbar(100,room_height-150,room_width-100,room_height-156,tpc, c_black, c_orange,c_orange,0,true,true)

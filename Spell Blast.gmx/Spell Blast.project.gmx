@@ -13,10 +13,15 @@
       <sprite>sprites\spr_enemy_bullet</sprite>
       <sprite>sprites\spr_enemy02</sprite>
       <sprite>sprites\spr_enemy03</sprite>
-      <sprite>sprites\spr_boss01_idle</sprite>
-      <sprite>sprites\spr_boss01_</sprite>
       <sprite>sprites\spr_explosion</sprite>
       <sprite>sprites\spr_player_bullet</sprite>
+      <sprites name="boss01 sprites">
+        <sprite>sprites\spr_boss01_idle</sprite>
+        <sprite>sprites\spr_boss01_eyes</sprite>
+        <sprite>sprites\spr_boss01_jaw</sprite>
+        <sprite>sprites\spr_boss01_gun</sprite>
+        <sprite>sprites\spr_boss01_blackeyes</sprite>
+      </sprites>
     </sprites>
     <sprites name="PROTOTYPE">
       <sprite>sprites\spr_letters</sprite>
@@ -49,19 +54,26 @@
     <font>fonts\font0</font>
   </fonts>
   <objects name="objects">
-    <object>objects\obj_player</object>
-    <object>objects\obj_enemy01</object>
-    <object>objects\obj_enemy02</object>
-    <object>objects\obj_mini_enemy02</object>
-    <object>objects\obj_enemy03</object>
-    <object>objects\obj_boss01</object>
-    <object>objects\obj_letter</object>
-    <object>objects\obj_pbullet</object>
-    <object>objects\obj_ebullet</object>
-    <object>objects\obj_gameplay_manager</object>
-    <object>objects\obj_titlescreen_manager</object>
-    <object>objects\obj_system_manager</object>
-    <object>objects\VFX_Manager</object>
+    <objects name="general stuff">
+      <object>objects\obj_player</object>
+      <object>objects\obj_mini_enemy02</object>
+      <object>objects\obj_enemy02</object>
+      <object>objects\obj_enemy03</object>
+      <object>objects\obj_ebullet</object>
+      <object>objects\obj_letter</object>
+      <object>objects\obj_pbullet</object>
+      <object>objects\obj_enemy01</object>
+    </objects>
+    <objects name="boss01 stuff">
+      <object>objects\obj_boss01</object>
+      <object>objects\obj_boss01_eyes</object>
+    </objects>
+    <objects name="managers">
+      <object>objects\obj_gameplay_manager</object>
+      <object>objects\obj_titlescreen_manager</object>
+      <object>objects\VFX_Manager</object>
+      <object>objects\obj_system_manager</object>
+    </objects>
   </objects>
   <rooms name="rooms">
     <room>rooms\rm_titlescreen</room>

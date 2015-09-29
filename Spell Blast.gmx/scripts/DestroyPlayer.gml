@@ -1,5 +1,5 @@
 var type=argument0, p1=obj_player;
-var rndX=irandom_range(-40,60),rndY=irandom_range(-40,60);
+var rndX=irandom_range(-60,70),rndY=irandom_range(-60,70);
 //if letter collect timer runs out.
 if type=0
 {
