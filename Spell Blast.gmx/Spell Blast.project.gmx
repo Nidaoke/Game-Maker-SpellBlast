@@ -5,9 +5,68 @@
   </Configs>
   <NewExtensions/>
   <sounds name="sound"/>
-  <sprites name="sprites"/>
-  <backgrounds name="background"/>
-  <paths name="paths"/>
+  <sprites name="sprites">
+    <sprites name="PLACEHOLDERS">
+      <sprite>sprites\spr_player_ship</sprite>
+      <sprite>sprites\spr_enemy01</sprite>
+      <sprite>sprites\spr_mini_enemy01</sprite>
+      <sprite>sprites\spr_enemy_bullet</sprite>
+      <sprite>sprites\spr_enemy02</sprite>
+      <sprite>sprites\spr_enemy03</sprite>
+      <sprite>sprites\spr_boss01_idle</sprite>
+      <sprite>sprites\spr_boss01_</sprite>
+      <sprite>sprites\spr_explosion</sprite>
+      <sprite>sprites\spr_player_bullet</sprite>
+    </sprites>
+    <sprites name="PROTOTYPE">
+      <sprite>sprites\spr_letters</sprite>
+      <sprite>sprites\spr_pbullet</sprite>
+      <sprite>sprites\spr_enemy</sprite>
+      <sprite>sprites\spr_player</sprite>
+      <sprite>sprites\spr_boss01</sprite>
+      <sprite>sprites\spr_boss_arm</sprite>
+    </sprites>
+  </sprites>
+  <backgrounds name="background">
+    <background>background\bg_titlescreen</background>
+    <background>background\bg_gameplay</background>
+    <background>background\bg_title</background>
+  </backgrounds>
+  <paths name="paths">
+    <path>paths\pth_jellyfish</path>
+  </paths>
+  <scripts name="scripts">
+    <script>scripts\ConvertLetterToValue.gml</script>
+    <script>scripts\CheckIfAllLettersCollected.gml</script>
+    <script>scripts\MoveLetterCursor.gml</script>
+    <script>scripts\findpercentvalue.gml</script>
+    <script>scripts\findtotalpercent.gml</script>
+    <script>scripts\CheckIfPlayerMatchedAllLetters.gml</script>
+    <script>scripts\ToggleValue.gml</script>
+    <script>scripts\DestroyPlayer.gml</script>
+  </scripts>
+  <fonts name="fonts">
+    <font>fonts\font0</font>
+  </fonts>
+  <objects name="objects">
+    <object>objects\obj_player</object>
+    <object>objects\obj_enemy01</object>
+    <object>objects\obj_enemy02</object>
+    <object>objects\obj_mini_enemy02</object>
+    <object>objects\obj_enemy03</object>
+    <object>objects\obj_boss01</object>
+    <object>objects\obj_letter</object>
+    <object>objects\obj_pbullet</object>
+    <object>objects\obj_ebullet</object>
+    <object>objects\obj_gameplay_manager</object>
+    <object>objects\obj_titlescreen_manager</object>
+    <object>objects\obj_system_manager</object>
+    <object>objects\VFX_Manager</object>
+  </objects>
+  <rooms name="rooms">
+    <room>rooms\rm_titlescreen</room>
+    <room>rooms\rm_gameplay</room>
+  </rooms>
   <help>
     <rtf>help.rtf</rtf>
   </help>
