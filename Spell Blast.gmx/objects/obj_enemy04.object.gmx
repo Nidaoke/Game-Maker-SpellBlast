@@ -25,9 +25,10 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>hp=2 move_speed=-3.6 fire_delay=room_speed*2
+            <string>hp=2 move_speed=-3.6 
+fire_delay=round(room_speed*2.7)
 image_xscale=0.56 image_yscale=0.56
-image_speed=0.1
+image_speed=0.1 fired=0
 old_path_speed=0 image_speed=0.12
 
   path_start(pth_jellyfish, 6, 2, false);
@@ -63,8 +64,11 @@ if fire_delay&gt;-1 {fire_delay--}
 if fire_delay=0
 { image_index=0 sprite_index=spr_enemy04_shoot }
 
-if sprite_index=spr_enemy04_shoot and image_index=2
-{ instance_create(x+58,y+90,obj_enemy04_bullet) }
+if sprite_index=spr_enemy04_shoot and (image_index&gt;=3 and image_index&lt;4) and fired=0
+{ PlaySFX("vomitron shoot") instance_create(x+58,y+90,obj_enemy04_bullet) fired=1 }
+
+if sprite_index=spr_enemy04_shoot and image_index=image_number-1
+{image_index=0 sprite_index=spr_enemy04_idle}
 
 if x&lt;-96 {instance_destroy()}
 </string>
@@ -92,6 +96,7 @@ if x&lt;-96 {instance_destroy()}
             <string>hp-- score++
 var vfxm=VFX_Manager;
 
+PlaySFX("player shot impact")
 with (other) 
 {
   //generate player projectile hitsparks.
@@ -102,36 +107,13 @@ with (other)
 
 if hp&lt;=0
 {
+PlaySFX("minion explode")
   ShakeCamera(20,room_speed/3)
    part_particles_create(global.Psystem, x, y, vfxm.prt_green_splat, 50);
    part_particles_create(global.Psystem, x, y, vfxm.prt_green_spray, 20);
  
  instance_destroy()
 }
-</string>
-          </argument>
-        </arguments>
-      </action>
-    </event>
-    <event eventtype="7" enumb="7">
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>if sprite_index=spr_enemy04_shoot
-{ sprite_index=spr_enemy04_idle }
 </string>
           </argument>
         </arguments>

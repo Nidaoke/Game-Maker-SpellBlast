@@ -2,6 +2,7 @@ var type=argument0, p1=obj_player,vfxm=VFX_Manager;
 var rndX=irandom_range(-60,70),rndY=irandom_range(-60,70);
 var con=obj_gameplay_manager;
 
+    PlaySFX("player explode")
   ShakeCamera(20,room_speed/3)
  //generate player death effects.
  part_particles_create(global.Psystem, p1.x, p1.y, vfxm.prt_player_death_ring, 5); 

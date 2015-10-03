@@ -28,6 +28,7 @@
             <string>hp=2 move_speed=-3.6 fire_delay=room_speed
 image_xscale=0.60 image_yscale=0.60
 old_path_speed=0 image_speed=0.12
+field_sfx_delay=0
 
   path_start(pth_jellyfish, 6, 2, false);
   old_path_speed=path_speed
@@ -58,6 +59,7 @@ old_path_speed=0 image_speed=0.12
 if con.game_paused=0 {path_speed=old_path_speed}
 if con.game_paused=1 {path_speed=0 return 0}
 
+if field_sfx_delay&gt;0 {field_sfx_delay--}
 if x&lt;-96 {instance_destroy()}
 </string>
           </argument>
@@ -84,6 +86,7 @@ if x&lt;-96 {instance_destroy()}
             <string>hp-- score++
 var vfxm=VFX_Manager;
 
+PlaySFX("player shot impact")
 with (other) 
 {
   //generate player projectile hitsparks.
@@ -94,6 +97,7 @@ with (other)
 
 if hp&lt;=0
 {
+PlaySFX("minion explode")
   ShakeCamera(20,room_speed/3)
   //generate jellyfish death hitsparks.
   part_particles_create(global.Psystem, x, y, vfxm.prt_jelly_splat, 10);
@@ -128,7 +132,14 @@ if hp&lt;=0
 if instance_exists(obj_player)
 {
    if distance_to_object(obj_player)&lt;380
-    {draw_self()}
+    {
+       draw_self()
+       if field_sfx_delay=0
+       { 
+         field_sfx_delay=round(room_speed*1.6)
+         PlaySFX("jellyfish field")
+       }
+    }
 }
 </string>
           </argument>

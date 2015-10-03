@@ -76,13 +76,13 @@ part_type_sprite(prt_starfield,spr_light_line,0,0,0);
 part_type_size(prt_starfield,0.10,0.03,0,0);
 part_type_scale(prt_starfield,1,1);
 part_type_color1(prt_starfield,16777215);
-part_type_alpha3(prt_starfield,1,0.50,0);
+part_type_alpha3(prt_starfield,1,0.7,0.1);
 part_type_speed(prt_starfield,4,25,0,0);
 part_type_direction(prt_starfield,180,180,0,0);
 part_type_gravity(prt_starfield,0,0);
 part_type_orientation(prt_starfield,0,0,0,0,1);
 part_type_blend(prt_starfield,1);
-part_type_life(prt_starfield,100,50);
+part_type_life(prt_starfield,55,130);
 
 /*
 ==============

@@ -9,6 +9,17 @@
     <sound>sound\bgm_gameplay01</sound>
     <sound>sound\bgm_gameplay02</sound>
     <sound>sound\bgm_gameplay03</sound>
+    <sound>sound\sfx_player_shot</sound>
+    <sound>sound\sfx_player_explode</sound>
+    <sound>sound\sfx_player_shot_impact</sound>
+    <sound>sound\sfx_jellyfish_field</sound>
+    <sound>sound\sfx_vomitron_shoot</sound>
+    <sound>sound\sfx_minion_explode</sound>
+    <sound>sound\sfx_boss_shoot</sound>
+    <sound>sound\sfx_boss_explode</sound>
+    <sound>sound\sfx_big_asteroid_explode</sound>
+    <sound>sound\sfx_small_asteroid_explode</sound>
+    <sound>sound\sfx_letter_collect</sound>
   </sounds>
   <sprites name="sprites">
     <sprites name="PLACEHOLDERS">
@@ -92,6 +103,7 @@
     <script>scripts\DisplayNumberSprite.gml</script>
     <script>scripts\draw_background_tiled_area.gml</script>
     <script>scripts\ShakeCamera.gml</script>
+    <script>scripts\PlaySFX.gml</script>
   </scripts>
   <fonts name="fonts">
     <font>fonts\font0</font>

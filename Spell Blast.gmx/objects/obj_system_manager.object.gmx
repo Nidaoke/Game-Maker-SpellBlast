@@ -87,7 +87,7 @@ if instance_exists(obj_gameplay_manager)=true
       starfield_delay=room_speed/1.5 stars=irandom_range(2,8)
       //generate starfield effect.
       for (p=0;p&lt;stars;p++)
-      {part_particles_create(global.STARFIELDsystem, room_width+5, irandom_range(10,room_height-100), vfxm.prt_starfield, 1); }
+      {part_particles_create(global.STARFIELDsystem, room_width+70, irandom_range(10,room_height-100), vfxm.prt_starfield, 1); }
    }
    bg_scrollX+=0.25 
 }

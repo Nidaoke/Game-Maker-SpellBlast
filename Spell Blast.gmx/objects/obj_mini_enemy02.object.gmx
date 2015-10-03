@@ -85,6 +85,8 @@ if x&lt;-96 {instance_destroy()}
             <string>var vfxm=VFX_Manager;
 hp-- score++
 
+PlaySFX("player shot impact")
+    
 with (other) 
 {
   //generate player projectile hitsparks.
@@ -94,6 +96,7 @@ with (other)
 }
 if hp&lt;=0
 {
+ PlaySFX("small rock explode")
   //generate asteroid poof hitsparks.
   part_particles_create(global.Psystem, x, y, vfxm.prt_asteroid_poof, 5);
   ShakeCamera(20,room_speed/3)

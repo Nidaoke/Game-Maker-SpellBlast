@@ -87,8 +87,14 @@ if come_back=1 and con.game_paused=0
 }
 
 if con.game_paused=1 {return 0;}
+
+ //generate player thrusters.
+ part_particles_create(global.Psystem, x-62, y-22, vfxm.prt_player_projectile_trail, 1); 
+ part_particles_create(global.Psystem, x-65, y+22, vfxm.prt_player_projectile_trail, 1); 
+ 
 if come_back=1 {fire_delay=100 return 0;}
 
+///==
 if praise=1 and lives=0 and instance_exists(obj_boss01)
  {recovery=30 shield=1 praise=0}
 
@@ -142,7 +148,7 @@ if CheckIfAllLettersCollected()=1 and con.matchCLOCK&gt;0 and con.stop_spawning_
 if (firekey) and fire_delay=0 and come_back=0
  {
     fire_delay=6
-    
+    PlaySFX("player shoot")
    //generate player muzzle flash.
    part_particles_create(global.Psystem, x+60, y+3, vfxm.prt_player_muzzle_flash, 1); 
     
@@ -179,7 +185,8 @@ if (firekey) and fire_delay=0 and come_back=0
           <argument>
             <kind>1</kind>
             <string>
-if shield&gt;0 {shield=0 recovery=room_speed*4 exit;}
+if shield&gt;0 
+{exit;}
 
 if visible=true and come_back=0 and invincible=0 and shield=0
 { DestroyPlayer(1) }
@@ -232,7 +239,7 @@ letval=val
     con.collectCLOCK=-1 con.matchCLOCK=con.matchTIME
  }
  
- 
+ PlaySFX("letter collect")
 with (other)
 {instance_destroy()}
 
