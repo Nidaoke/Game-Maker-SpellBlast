@@ -5,7 +5,7 @@
   <visible>-1</visible>
   <depth>0</depth>
   <persistent>0</persistent>
-  <parentName>&lt;undefined&gt;</parentName>
+  <parentName>obj_enemy_bad_touch</parentName>
   <maskName>&lt;undefined&gt;</maskName>
   <events>
     <event eventtype="0" enumb="0">
@@ -27,6 +27,7 @@
             <kind>1</kind>
             <string>hp=2 move_speed=-3.6 fire_delay=room_speed
 image_xscale=1.20 image_yscale=1.20
+image_speed=0.6
 path_used=0 old_path_speed=0
 
 </string>
@@ -88,8 +89,14 @@ if x&lt;-96 {instance_destroy()}
           <argument>
             <kind>1</kind>
             <string>hp-- score++
+var vfxm=VFX_Manager
 
-with (other) {instance_destroy()}
+with (other) 
+{
+
+  instance_destroy()
+}
+
 if hp&lt;=0
 {instance_destroy()}
 </string>

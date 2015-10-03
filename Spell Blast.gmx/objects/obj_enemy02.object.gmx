@@ -5,7 +5,7 @@
   <visible>-1</visible>
   <depth>0</depth>
   <persistent>0</persistent>
-  <parentName>&lt;undefined&gt;</parentName>
+  <parentName>obj_enemy_bad_touch</parentName>
   <maskName>&lt;undefined&gt;</maskName>
   <events>
     <event eventtype="0" enumb="0">
@@ -26,7 +26,7 @@
           <argument>
             <kind>1</kind>
             <string>hp=1 move_speed=-3.6 fire_delay=room_speed
-image_xscale=0.20 image_yscale=0.20
+image_xscale=0.35 image_yscale=0.35
 path_used=irandom(3)
 old_path_speed=0
 
@@ -81,12 +81,23 @@ if x&lt;-96 {instance_destroy()}
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>var inst=0;
+            <string>var inst=0, vfxm=VFX_Manager;
 hp-- score++
 
-with (other) {instance_destroy()}
+with (other) 
+{
+  //generate player projectile hitsparks.
+  part_particles_create(global.Psystem, x, y, vfxm.particle_hitspark1, 10);
+  part_particles_create(global.Psystem, x, y, vfxm.particle_hitspark2, 1);
+  instance_destroy()
+}
+
 if hp&lt;=0
 {
+  ShakeCamera(20,room_speed/3)
+ //generate asteroid poof hitsparks.
+  part_particles_create(global.Psystem, x, y, vfxm.prt_asteroid_poof, 5);
+  
  for (p=0;p&lt;2;p++)
  {
     //release children.

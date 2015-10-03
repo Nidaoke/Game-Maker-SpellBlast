@@ -3,7 +3,7 @@
   <spriteName>&lt;undefined&gt;</spriteName>
   <solid>0</solid>
   <visible>-1</visible>
-  <depth>0</depth>
+  <depth>100</depth>
   <persistent>-1</persistent>
   <parentName>&lt;undefined&gt;</parentName>
   <maskName>&lt;undefined&gt;</maskName>
@@ -26,6 +26,8 @@
           <argument>
             <kind>1</kind>
             <string>global.letters_found_list=ds_list_create()
+bg_scrollX=0 starfield_delay=0
+tutorial=0 level=0
 
 global.gamepad_support = gamepad_is_supported();
 for (p=0;p&lt;4;p++)
@@ -42,6 +44,7 @@ var gp_num = gamepad_get_device_count();
      {global.gamepad_enabled[i] = false;}
    }
 
+audio_channel_num(16)
 
 </string>
           </argument>
@@ -65,12 +68,30 @@ var gp_num = gamepad_get_device_count();
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>var exitgamekey=0;
+            <string>var exitgamekey=0, con=0, stars=0;
+var vfxm=VFX_Manager;
 
 //closes the game.
 exitgamekey=keyboard_check_pressed(vk_escape) or gamepad_button_check_pressed(0,gp_select)
 
 if (exitgamekey) {game_end()}
+
+if instance_exists(obj_gameplay_manager)=true
+{
+   con=obj_gameplay_manager;
+   if con.game_paused=1 {return 0}
+   
+   if starfield_delay&gt;0 {starfield_delay--}   
+   if starfield_delay=0
+   {
+      starfield_delay=room_speed/1.5 stars=irandom_range(2,8)
+      //generate starfield effect.
+      for (p=0;p&lt;stars;p++)
+      {part_particles_create(global.STARFIELDsystem, room_width+5, irandom_range(10,room_height-100), vfxm.prt_starfield, 1); }
+   }
+   bg_scrollX+=0.25 
+}
+
 
 </string>
           </argument>
@@ -95,6 +116,58 @@ if (exitgamekey) {game_end()}
           <argument>
             <kind>1</kind>
             <string>ds_list_destroy(global.letters_found_list)
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="8" enumb="0">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>var rm=room_get_name(room);
+draw_set_font(font0)
+draw_set_color(c_white)
+
+if rm="rm_titlescreen"
+  {
+    draw_sprite_ext(spr_titleBG01,0, 0,0, 1.5,1.5, 0,c_white,1)   
+    draw_sprite(spr_titlecard,0, (room_width/2),round(room_height/6))
+    draw_sprite_ext(spr_HUD_labels,4, (room_width/2)-(536/1.8),room_height/1.8, 0.6,0.6, 0,c_white,1)
+  }
+  
+if rm="rm_gameplay"
+  {
+    draw_set_color(make_color_rgb(190,190,190))
+    //draw_sprite_ext(spr_gameplayBG01,0, bg_scrollX,0, 4,4, 0,c_white,1)  
+    //draw_background_tiled_area(bg_ground_tile,0,32,0,room_height-256,room_width,room_height)
+  }
+ 
+   draw_set_color(c_white)
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+   
 </string>
           </argument>
         </arguments>

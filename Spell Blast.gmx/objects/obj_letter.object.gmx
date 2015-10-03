@@ -25,7 +25,9 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>move_speed=-4 image_speed=0 value=irandom(25)
+            <string>move_speed=-7 image_speed=0 
+value=irandom(25)
+image_xscale=0.16 image_yscale=0.16
 </string>
           </argument>
         </arguments>
@@ -49,12 +51,19 @@
           <argument>
             <kind>1</kind>
             <string>var con=obj_gameplay_manager;
+var vfxm=VFX_Manager,p1=obj_player;
 
 if con.game_paused=1 {return 0;}
 
 x+=move_speed
 
-if x&lt;-96 {instance_destroy()}
+if x&lt;-sprite_width 
+{
+  instance_destroy()
+
+  if p1.visible=true and p1.come_back=0 and p1.invincible=0
+   { DestroyPlayer(1) }
+}
 </string>
           </argument>
         </arguments>
@@ -77,33 +86,23 @@ if x&lt;-96 {instance_destroy()}
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>var letval=0, con=obj_gameplay_manager;
-letval=value
- 
-with (other)
-{instance_destroy()}
+            <string>var vfxm=VFX_Manager,p1=obj_player;
 
- for (p=0;p&lt;con.tls;p++)
- {
-   if letval=con.letters_assigned[p]-1 and con.letters_collected[p]=0
-    {
-      con.letters_collected[p]=1
-      /*
-      con.letters_collect_order[p]=con.collect_order
-      con.letters_collected_list[con.collect_order]=con.letters_assigned[con.letters_collect_order[p]]
-      */
-      ds_list_add(global.letters_found_list, letval)
-      //con.collect_order++
-      break;
-    }
- }
- 
- if CheckIfAllLettersCollected()=1
- {
-    con.alarm[0]=-1
-    con.alarm[1]=con.matchTIME
- }
- instance_destroy()
+if x&gt;=room_width-(sprite_width*2) {return 0}
+
+with (other) 
+{
+  //generate player projectile hitsparks.
+  part_particles_create(global.Psystem, x, y, vfxm.particle_hitspark1, 10);
+  part_particles_create(global.Psystem, x, y, vfxm.particle_hitspark2, 1);
+  instance_destroy()
+}
+
+if p1.visible=true and p1.come_back=0 and p1.invincible=0
+{ DestroyPlayer(1) }
+
+    instance_destroy()
+
 </string>
           </argument>
         </arguments>

@@ -29,83 +29,8 @@
 image_xscale=0.20 image_yscale=0.20
 thumbstickDS=0.2 blink=0 stop_input=0
 invincible=0 come_back=0 recovery=0
+shield=0 praise=0
 
-</string>
-          </argument>
-        </arguments>
-      </action>
-    </event>
-    <event eventtype="2" enumb="2">
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>if lives&gt;0 
-{
-   lives-- visible=true come_back=1 exit;
-}
-
-if lives=0 {room_goto(rm_titlescreen)}
-</string>
-          </argument>
-        </arguments>
-      </action>
-    </event>
-    <event eventtype="2" enumb="1">
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>
-if lives&gt;0 {lives-- room_restart() exit; }
-if lives=0 {room_goto(rm_titlescreen)}
-</string>
-          </argument>
-        </arguments>
-      </action>
-    </event>
-    <event eventtype="2" enumb="0">
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>visible=false x=-128 
 </string>
           </argument>
         </arguments>
@@ -128,15 +53,16 @@ if lives=0 {room_goto(rm_titlescreen)}
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>var ukey,dkey,lkey,rkey,firekey,letfull=0,letterkey,oldletterkey,con=obj_gameplay_manager;
+            <string>var ukey,dkey,lkey,rkey,firekey,letfull=0,letterkey,oldletterkey;
+var con=obj_gameplay_manager, vfxm=VFX_Manager;
 var colall=0,stop=0;
 var ujoy,djoy,ljoy,rjoy;
 
 //player movement/shooting controls.
 ukey=keyboard_check(vk_up) or gamepad_button_check(0,gp_padu)
 dkey=keyboard_check(vk_down) or gamepad_button_check(0,gp_padd)
-lkey=keyboard_check(vk_left) or gamepad_button_check(0,gp_padl) or gamepad_button_check(0,gp_face3)
-rkey=keyboard_check(vk_right) or gamepad_button_check(0,gp_padr) or gamepad_button_check(0,gp_face4)
+lkey=keyboard_check(vk_left) or gamepad_button_check(0,gp_padl) 
+rkey=keyboard_check(vk_right) or gamepad_button_check(0,gp_padr)
 
 leftstickH=gamepad_axis_value(0, gp_axislh)
 leftstickV=gamepad_axis_value(0, gp_axislv)
@@ -148,12 +74,20 @@ oldletterkey=false
 if fire_delay&gt;0 {fire_delay--}
 if button_delay&gt;0 {button_delay--}
 
+if x&gt;=160 {x=160}
+if y&lt;30 {y=30}
+
+if shield=0 {sprite_index=spr_player_ship}
+if shield&gt;0 {sprite_index=spr_shielded_ship}
+
 if come_back=1 and con.game_paused=0
 {
-   if x&lt;200 {x+=10}
-   if x&gt;=200 {x=200 come_back=0 stop_input=0 recovery=room_speed*2}
+   if x&lt;160 {x+=9}
+   if x&gt;=160 {x=160 come_back=0 fire_delay=0 stop_input=0 recovery=room_speed*2}
 }
-if con.game_paused=1 or come_back=1 {return 0;}
+
+if con.game_paused=1 {return 0;}
+if come_back=1 {fire_delay=100 return 0;}
 
 if recovery&gt;0
 {
@@ -161,21 +95,27 @@ if recovery&gt;0
     if blink&gt;10 {blink=0}
 }
 if recovery=0
- {blink=0 invincible=0}
+ {blink=0 invincible=0 visible=true}
 if blink&lt;=5 {visible=true}
 if blink&gt;5 {visible=false}
 
-//
-if stop_input=1 {return 0}
+if stop_input=1 {return 0;}
 
 if leftstickV&lt;-thumbstickDS {ukey=true}
 if leftstickV&gt;thumbstickDS {dkey=true}
 if (ukey) {y-=move_speed}
 if (dkey) {y+=move_speed}
 
-if CheckIfAllLettersCollected()=1
- {
- 
+//if the player touched the ground.
+if y&gt;852
+{
+    y=852
+    if visible=true and come_back=0 and invincible=0
+    { DestroyPlayer(1) }
+}
+
+if CheckIfAllLettersCollected()=1 and con.matchCLOCK&gt;0 and con.stop_spawning_minions=0
+ { 
    if leftstickH&lt;-thumbstickDS {lkey=true}
    if leftstickH&gt;thumbstickDS {rkey=true}
 
@@ -196,10 +136,14 @@ if CheckIfAllLettersCollected()=1
     {con.letcursorstate=0 oldletterkey=false}
  }
 
-if (firekey) and fire_delay=0
+if (firekey) and fire_delay=0 and come_back=0
  {
     fire_delay=6
-    instance_create(x+50,y+15,obj_pbullet)
+    
+   //generate player muzzle flash.
+   part_particles_create(global.Psystem, x+60, y+3, vfxm.prt_player_muzzle_flash, 1); 
+    
+    instance_create(x+250,y+7,obj_pbullet)
  }
 
 
@@ -214,7 +158,7 @@ if (firekey) and fire_delay=0
         </arguments>
       </action>
     </event>
-    <event eventtype="4" ename="obj_ebullet">
+    <event eventtype="4" ename="obj_enemy_bad_touch">
       <action>
         <libid>1</libid>
         <id>603</id>
@@ -231,17 +175,18 @@ if (firekey) and fire_delay=0
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>if visible=true and come_back=0 and invincible=0
-{
-    DestroyPlayer(1)
-}
+            <string>
+if shield&gt;0 {shield=0 recovery=room_speed*4 exit;}
+
+if visible=true and come_back=0 and invincible=0 and shield=0
+{ DestroyPlayer(1) }
 
 </string>
           </argument>
         </arguments>
       </action>
     </event>
-    <event eventtype="4" ename="obj_enemy01">
+    <event eventtype="4" ename="obj_letter">
       <action>
         <libid>1</libid>
         <id>603</id>
@@ -258,10 +203,35 @@ if (firekey) and fire_delay=0
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>if visible=true and come_back=0 and invincible=0
-{
-    DestroyPlayer(1)
-}
+            <string>var letval=0, val=0, con=obj_gameplay_manager;
+with (other)
+{val=value}
+
+letval=val
+
+ for (p=0;p&lt;con.tls;p++)
+ {
+   if letval=con.letters_assigned[p]-1 and con.letters_collected[p]=0
+    {
+      con.letters_collected[p]=1
+      /*
+      con.letters_collect_order[p]=con.collect_order
+      con.letters_collected_list[con.collect_order]=con.letters_assigned[con.letters_collect_order[p]]
+      */
+      ds_list_add(global.letters_found_list, letval)
+      //con.collect_order++
+      break;
+    }
+ }
+ 
+ if CheckIfAllLettersCollected()=1
+ {
+    con.collectCLOCK=-1 con.matchCLOCK=con.matchTIME
+ }
+ 
+ 
+with (other)
+{instance_destroy()}
 
 </string>
           </argument>

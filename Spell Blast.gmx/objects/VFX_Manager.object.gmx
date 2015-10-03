@@ -29,25 +29,313 @@
 global.Psystem = part_system_create();
 part_system_depth(global.Psystem, -1);
 
-//creates a particle type to be used when needed.
-global.explosionpart = part_type_create();
+global.STARFIELDsystem = part_system_create();
+part_system_depth(global.STARFIELDsystem, 1);
 
-//sets the base shape of the particle.
-//part_type_sprite(global.explosionpart, spr_spark, false, false, false)
-part_type_sprite(global.explosionpart,spr_explosion, true, true, false);
+//for letter destruction.
+//hitspark particle sprite+parameters.
+particle_hitspark1 = part_type_create();
+part_type_sprite(particle_hitspark1,Particle_Spark_4,0,0,0);
+part_type_size(particle_hitspark1,0.10,0.10,0.03,0);
+part_type_scale(particle_hitspark1,1,1);
+part_type_color1(particle_hitspark1,16777215);
+part_type_alpha3(particle_hitspark1,1,0.50,0);
+part_type_speed(particle_hitspark1,0.10,0.10,0,0);
+part_type_direction(particle_hitspark1,0,359,0,0);
+part_type_gravity(particle_hitspark1,0,270);
+part_type_orientation(particle_hitspark1,0,0,0,0,1);
+part_type_blend(particle_hitspark1,1);
+part_type_life(particle_hitspark1,20,20);
 
-//==
-//sets particle type properties for explosion.
-part_type_scale(global.explosionpart, 1.35, 1.6);
-part_type_size(global.explosionpart, 1.1,1.35,0,0);
-part_type_life(global.explosionpart, round(room_speed*0.4), round(room_speed));
-//part_type_alpha2(global.explosionpart, 1, 0.2);
-part_type_speed(global.explosionpart, 0.4,0.6,0,0);
-part_type_orientation(global.explosionpart, 0,0, 0,0,true);
-part_type_direction(global.explosionpart, 0, 360, 0, 0);
-//part_type_gravity(global.explosionpart, 0, 270);
-//part_type_colour_rgb(global.explosionpart, 255,255, 180,180,30,30);
+//explosion hitspark ring particle sprite+parameters.
+particle_hitspark2 = part_type_create();
+part_type_sprite(particle_hitspark2,Particle_ExplosionWave_3,0,0,0);
+part_type_size(particle_hitspark2,0.01,0.01,0.02,0);
+part_type_scale(particle_hitspark2,1,1);
+part_type_color1(particle_hitspark2,16777215);
+part_type_alpha1(particle_hitspark2,1);
+part_type_speed(particle_hitspark2,0.01,0.01,0,0);
+part_type_direction(particle_hitspark2,0,359,0,0);
+part_type_gravity(particle_hitspark2,0,270);
+part_type_orientation(particle_hitspark2,0,0,0,0,1);
+part_type_blend(particle_hitspark2,1);
+part_type_life(particle_hitspark2,20,20);
 
+//emitter for the hitspark.
+/*
+global.emitter_hitspark1 = part_emitter_create(global.Psystem);
+part_emitter_region(global.Psystem,emitter1,x,x,y,y,0,0);
+part_emitter_stream(global.Psystem,emitter1,particle1,20);
+*/
+
+/*
+for starfield effect.
+*/
+prt_starfield = part_type_create();
+part_type_sprite(prt_starfield,spr_light_line,0,0,0);
+part_type_size(prt_starfield,0.10,0.03,0,0);
+part_type_scale(prt_starfield,1,1);
+part_type_color1(prt_starfield,16777215);
+part_type_alpha3(prt_starfield,1,0.50,0);
+part_type_speed(prt_starfield,4,25,0,0);
+part_type_direction(prt_starfield,180,180,0,0);
+part_type_gravity(prt_starfield,0,0);
+part_type_orientation(prt_starfield,0,0,0,0,1);
+part_type_blend(prt_starfield,1);
+part_type_life(prt_starfield,100,50);
+
+/*
+==============
+for asteroid poof explosion
+==============
+*/
+//for asteroid poof particle.
+prt_asteroid_poof = part_type_create();
+part_type_sprite(prt_asteroid_poof,spr_asteroid_poof,0,0,0);
+part_type_size(prt_asteroid_poof,0.10,0.10,0.01,0);
+part_type_scale(prt_asteroid_poof,1,1);
+part_type_color1(prt_asteroid_poof,5269372);
+part_type_alpha3(prt_asteroid_poof,1,1,0);
+part_type_speed(prt_asteroid_poof,0,3,-0.10,0);
+part_type_direction(prt_asteroid_poof,0,359,0,0);
+part_type_gravity(prt_asteroid_poof,0,0);
+part_type_orientation(prt_asteroid_poof,0,359,0,0,1);
+part_type_blend(prt_asteroid_poof,1);
+part_type_life(prt_asteroid_poof,50,30);
+
+/*
+==============
+for boss death explosion
+==============
+*/
+// for boss splat effect.
+prt_boss_splat=part_type_create();
+part_type_sprite(prt_boss_splat,spr_boss_splat,0,0,0);
+part_type_size(prt_boss_splat,0.10,0.10,0.02,0);
+part_type_scale(prt_boss_splat,1,1);
+part_type_color1(prt_boss_splat,16777215);
+part_type_alpha3(prt_boss_splat,1,1,0.10);
+part_type_speed(prt_boss_splat,0,0.50,0,0);
+part_type_direction(prt_boss_splat,0,359,0,0);
+part_type_gravity(prt_boss_splat,0,270);
+part_type_orientation(prt_boss_splat,0,359,0,0,0);
+part_type_blend(prt_boss_splat,1);
+part_type_life(prt_boss_splat,30,30);
+
+//for boos sploosh effect.
+prt_boss_sploosh = part_type_create();
+part_type_sprite(prt_boss_sploosh,spr_boss_sploosh,0,0,0);
+part_type_size(prt_boss_sploosh,0.40,0.10,-0.01,0);
+part_type_scale(prt_boss_sploosh,1,1);
+part_type_color1(prt_boss_sploosh,16777215);
+part_type_alpha1(prt_boss_sploosh,1);
+part_type_speed(prt_boss_sploosh,1,10,0,0);
+part_type_direction(prt_boss_sploosh,0,359,0,0);
+part_type_gravity(prt_boss_sploosh,0.10,270);
+part_type_orientation(prt_boss_sploosh,0,0,0,0,1);
+part_type_blend(prt_boss_sploosh,1);
+part_type_life(prt_boss_sploosh,60,60);
+
+//for jelly ring effect. this is to be used for the boss explosion too.
+prt_jelly_ring = part_type_create();
+part_type_sprite(prt_jelly_ring,spr_jelly_ring,0,0,0);
+part_type_size(prt_jelly_ring,0.01,0.01,0.10,0);
+part_type_scale(prt_jelly_ring,1,1);
+part_type_color1(prt_jelly_ring,32768);
+part_type_alpha3(prt_jelly_ring,1,0.50,0);
+part_type_speed(prt_jelly_ring,1,1,0,0);
+part_type_direction(prt_jelly_ring,0,359,0,0);
+part_type_gravity(prt_jelly_ring,0,270);
+part_type_orientation(prt_jelly_ring,0,359,0,0,1);
+part_type_blend(prt_jelly_ring,1);
+part_type_life(prt_jelly_ring,20,20);
+
+/*
+==============
+for jellyfish death explosion
+==============
+*/
+//for jelly splat effect.
+prt_jelly_splat = part_type_create();
+part_type_sprite(prt_jelly_splat,spr_jelly_splat,0,0,0);
+part_type_size(prt_jelly_splat,0.10,0.30,0.02,0);
+part_type_scale(prt_jelly_splat,1,1);
+part_type_color1(prt_jelly_splat,16777215);
+part_type_alpha3(prt_jelly_splat,1,1,0);
+part_type_speed(prt_jelly_splat,0,1,0,0);
+part_type_direction(prt_jelly_splat,0,359,0,0);
+part_type_gravity(prt_jelly_splat,0,0);
+part_type_orientation(prt_jelly_splat,0,359,0,0,1);
+part_type_blend(prt_jelly_splat,1);
+part_type_life(prt_jelly_splat,20,30);
+
+//for jelly spurt effect.
+prt_jelly_spurt = part_type_create();
+part_type_sprite(prt_jelly_spurt,spr_jelly_spurt,0,0,0);
+part_type_size(prt_jelly_spurt,0.10,0.50,-0.01,0);
+part_type_scale(prt_jelly_spurt,1,1);
+part_type_color1(prt_jelly_spurt,16777215);
+part_type_alpha1(prt_jelly_spurt,1);
+part_type_speed(prt_jelly_spurt,3,5,0,0);
+part_type_direction(prt_jelly_spurt,0,359,0,0);
+part_type_gravity(prt_jelly_spurt,0.10,270);
+part_type_orientation(prt_jelly_spurt,0,0,0,0,1);
+part_type_blend(prt_jelly_spurt,1);
+part_type_life(prt_jelly_spurt,60,60);
+
+//the jelly ring effect for the jellyfish explosion.
+prt_jelly_ring2 = part_type_create();
+part_type_sprite(prt_jelly_ring2,spr_jelly_ring,0,0,0);
+part_type_size(prt_jelly_ring2,0.02,0.02,0.06,0);
+part_type_scale(prt_jelly_ring2,1,1);
+part_type_color1(prt_jelly_ring2,16777215);
+part_type_alpha3(prt_jelly_ring2,1,0.50,0);
+part_type_speed(prt_jelly_ring2,0,0,0,0);
+part_type_direction(prt_jelly_ring2,0,0,0,0);
+part_type_gravity(prt_jelly_ring2,0,270);
+part_type_orientation(prt_jelly_ring2,0,0,0,0,1);
+part_type_blend(prt_jelly_ring2,1);
+part_type_life(prt_jelly_ring2,20,20);
+
+/*
+==============
+for one eye vomitron death explosion
+==============
+*/
+//for green splat effect.
+prt_green_splat = part_type_create();
+part_type_sprite(prt_green_splat,spr_green_splat,0,0,0);
+part_type_size(prt_green_splat,0.10,0.10,0.01,0);
+part_type_scale(prt_green_splat,1,1);
+part_type_color1(prt_green_splat,3361347);
+part_type_alpha3(prt_green_splat,1,0.70,0);
+part_type_speed(prt_green_splat,1,3,0,0);
+part_type_direction(prt_green_splat,0,359,0,0);
+part_type_gravity(prt_green_splat,0,0);
+part_type_orientation(prt_green_splat,0,359,0,0,1);
+part_type_blend(prt_green_splat,1);
+part_type_life(prt_green_splat,20,30);
+
+//for green spray effect.
+prt_green_spray= part_type_create();
+part_type_sprite(prt_green_spray,spr_green_spray,0,0,0);
+part_type_size(prt_green_spray,0.10,0.50,-0.01,0);
+part_type_scale(prt_green_spray,1,1);
+part_type_color1(prt_green_spray,4227200);
+part_type_alpha1(prt_green_spray,1);
+part_type_speed(prt_green_spray,3,5,0,0);
+part_type_direction(prt_green_spray,0,359,0,0);
+part_type_gravity(prt_green_spray,0.10,270);
+part_type_orientation(prt_green_spray,0,0,0,0,1);
+part_type_blend(prt_green_spray,1);
+part_type_life(prt_green_spray,60,60);
+
+/*
+==============
+for player death explosion
+==============
+*/
+//for plr death ring effect.
+prt_player_death_ring=part_type_create();
+part_type_sprite(prt_player_death_ring,spr_player_death_ring,0,0,0);
+part_type_size(prt_player_death_ring,0.10,0.10,0.04,0);
+part_type_scale(prt_player_death_ring,1,1);
+part_type_color1(prt_player_death_ring,16777215);
+part_type_alpha3(prt_player_death_ring,1,0.50,0);
+part_type_speed(prt_player_death_ring,0,0,0,0);
+part_type_direction(prt_player_death_ring,0,359,20,0);
+part_type_gravity(prt_player_death_ring,0,0);
+part_type_orientation(prt_player_death_ring,0,359,0,0,1);
+part_type_blend(prt_player_death_ring,1);
+part_type_life(prt_player_death_ring,30,20);
+
+//for particle explosion wave effect.
+prt_player_exp_wave = part_type_create();
+part_type_sprite(prt_player_exp_wave,Particle_ExplosionWave_3,0,0,0);
+part_type_size(prt_player_exp_wave,0.20,0.20,0.02,0);
+part_type_scale(prt_player_exp_wave,1,1);
+part_type_color1(prt_player_exp_wave,16777215);
+part_type_alpha3(prt_player_exp_wave,1,1,0);
+part_type_speed(prt_player_exp_wave,0,0,0,0);
+part_type_direction(prt_player_exp_wave,0,359,20,0);
+part_type_gravity(prt_player_exp_wave,0,0);
+part_type_orientation(prt_player_exp_wave,0,359,0,0,1);
+part_type_blend(prt_player_exp_wave,1);
+part_type_life(prt_player_exp_wave,30,20);
+
+//for plr death pool effect.
+prt_player_death_poof = part_type_create();
+part_type_sprite(prt_player_death_poof,spr_player_death_pool,0,0,0);
+part_type_size(prt_player_death_poof,0.10,0.10,0.04,0);
+part_type_scale(prt_player_death_poof,1,1);
+part_type_color1(prt_player_death_poof,16777215);
+part_type_alpha3(prt_player_death_poof,1,1,0);
+part_type_speed(prt_player_death_poof,0,0,0,0);
+part_type_direction(prt_player_death_poof,0,359,0,0);
+part_type_gravity(prt_player_death_poof,0,270);
+part_type_orientation(prt_player_death_poof,0,359,0,0,1);
+part_type_blend(prt_player_death_poof,1);
+part_type_life(prt_player_death_poof,5,35);
+
+/*
+==============
+for player projectile impact burst explosion
+==============
+*/
+//for the particle spark effect, use particle_hitspark1.
+//for the ring effect, use particle_hitspark2.
+
+/*
+==============
+for player projectile trail explosion
+==============
+*/
+prt_player_projectile_trail = part_type_create();
+part_type_sprite(prt_player_projectile_trail,spr_player_thruster,0,0,0);
+part_type_size(prt_player_projectile_trail,0.15,0.15,-0.03,0);
+part_type_scale(prt_player_projectile_trail,1,1);
+part_type_color1(prt_player_projectile_trail,16777215);
+part_type_alpha3(prt_player_projectile_trail,1,0.50,0);
+part_type_speed(prt_player_projectile_trail,10,20,0,0);
+part_type_direction(prt_player_projectile_trail,180,180,0,0);
+part_type_gravity(prt_player_projectile_trail,0,0);
+part_type_orientation(prt_player_projectile_trail,0,0,0,0,1);
+part_type_blend(prt_player_projectile_trail,1);
+part_type_life(prt_player_projectile_trail,6,6);
+
+/*
+==============
+for player muzzle flash
+==============
+*/
+prt_player_muzzle_flash = part_type_create();
+part_type_sprite(prt_player_muzzle_flash,spr_player_muzzle_flash,0,0,0);
+part_type_size(prt_player_muzzle_flash,0.4,0.4,0.06,0);
+part_type_scale(prt_player_muzzle_flash,1,1);
+part_type_color1(prt_player_muzzle_flash,16777215);
+part_type_alpha2(prt_player_muzzle_flash,1,0.1);
+part_type_speed(prt_player_muzzle_flash,0,0,0,0);
+part_type_direction(prt_player_muzzle_flash,0,0,0,0);
+part_type_gravity(prt_player_muzzle_flash,0,0);
+part_type_orientation(prt_player_muzzle_flash,0,0,0,0,1);
+part_type_blend(prt_player_muzzle_flash,1);
+part_type_life(prt_player_muzzle_flash,10,10);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//====================================
 /*
 PARTICLE TYPES:
 pt_shape_pixel:
@@ -135,9 +423,15 @@ if instance_exists(obj_gameplay_manager)=true
 {
     con=obj_gameplay_manager
     if con.game_paused=0
-    {part_system_automatic_update(global.Psystem,true)}
+    {
+       part_system_automatic_update(global.Psystem,true)
+       part_system_automatic_update(global.STARFIELDsystem,true)
+    }
     if con.game_paused=1
-    {part_system_automatic_update(global.Psystem,false)}
+    {
+       part_system_automatic_update(global.Psystem,false)
+       part_system_automatic_update(global.STARFIELDsystem,false)
+    }
 }
 
 x=view_xview[0]+32 y=view_yview[0]+32
@@ -170,7 +464,27 @@ destroys the VFX Manager's particle system and all
 associated particle types to avoid memory leaks.
 */
 part_system_destroy(global.Psystem); 
-part_type_destroy(global.explosionpart); 
+part_system_destroy(global.STARFIELDsystem); 
+
+//hitspark for letter destruction.
+part_type_destroy(particle_hitspark1); 
+part_type_destroy(particle_hitspark2); 
+part_type_destroy(prt_asteroid_poof);
+part_type_destroy(prt_boss_splat);
+part_type_destroy(prt_boss_sploosh);
+part_type_destroy(prt_jelly_ring);
+part_type_destroy(prt_jelly_splat);
+part_type_destroy(prt_jelly_spurt);
+part_type_destroy(prt_jelly_ring2);
+part_type_destroy(prt_green_splat);
+part_type_destroy(prt_green_spray);
+part_type_destroy(prt_player_death_ring);
+part_type_destroy(prt_player_exp_wave);
+part_type_destroy(prt_player_muzzle_flash);
+part_type_destroy(prt_player_death_poof);
+part_type_destroy(prt_player_projectile_trail);
+
+
 
 </string>
           </argument>

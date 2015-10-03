@@ -4,44 +4,81 @@
     <Config>Configs\Default</Config>
   </Configs>
   <NewExtensions/>
-  <sounds name="sound"/>
+  <sounds name="sound">
+    <sound>sound\bgm_titlescreen</sound>
+    <sound>sound\bgm_gameplay01</sound>
+    <sound>sound\bgm_gameplay02</sound>
+    <sound>sound\bgm_gameplay03</sound>
+  </sounds>
   <sprites name="sprites">
     <sprites name="PLACEHOLDERS">
+      <sprite>sprites\spr_letters</sprite>
       <sprite>sprites\spr_player_ship</sprite>
-      <sprite>sprites\spr_enemy01</sprite>
-      <sprite>sprites\spr_mini_enemy01</sprite>
-      <sprite>sprites\spr_enemy_bullet</sprite>
-      <sprite>sprites\spr_enemy02</sprite>
-      <sprite>sprites\spr_enemy03</sprite>
+      <sprite>sprites\spr_shielded_ship</sprite>
       <sprite>sprites\spr_explosion</sprite>
       <sprite>sprites\spr_player_bullet</sprite>
       <sprites name="boss01 sprites">
-        <sprite>sprites\spr_boss01_idle</sprite>
-        <sprite>sprites\spr_boss01_eyes</sprite>
-        <sprite>sprites\spr_boss01_jaw</sprite>
-        <sprite>sprites\spr_boss01_gun</sprite>
-        <sprite>sprites\spr_boss01_blackeyes</sprite>
+        <sprite>sprites\spr_boss01_laser</sprite>
+        <sprite>sprites\spr_boss01_state01</sprite>
+        <sprite>sprites\spr_boss01_damaged</sprite>
+        <sprite>sprites\spr_boss01_state02</sprite>
+        <sprite>sprites\spr_boss01_state03</sprite>
+        <sprite>sprites\spr_boss01_state04</sprite>
       </sprites>
-    </sprites>
-    <sprites name="PROTOTYPE">
-      <sprite>sprites\spr_letters</sprite>
-      <sprite>sprites\spr_pbullet</sprite>
-      <sprite>sprites\spr_enemy</sprite>
-      <sprite>sprites\spr_player</sprite>
-      <sprite>sprites\spr_boss01</sprite>
-      <sprite>sprites\spr_boss_arm</sprite>
+      <sprites name="particles">
+        <sprite>sprites\Particle_Spark_4</sprite>
+        <sprite>sprites\Particle_ExplosionWave_3</sprite>
+        <sprite>sprites\spr_asteroid_poof</sprite>
+        <sprite>sprites\spr_boss_splat</sprite>
+        <sprite>sprites\spr_boss_sploosh</sprite>
+        <sprite>sprites\spr_green_splat</sprite>
+        <sprite>sprites\spr_green_spray</sprite>
+        <sprite>sprites\spr_jelly_ring</sprite>
+        <sprite>sprites\spr_jelly_splat</sprite>
+        <sprite>sprites\spr_jelly_spurt</sprite>
+        <sprite>sprites\spr_light_line</sprite>
+        <sprite>sprites\spr_player_death_pool</sprite>
+        <sprite>sprites\spr_player_death_ring</sprite>
+        <sprite>sprites\spr_player_projectile_head</sprite>
+        <sprite>sprites\spr_player_projectile_trail</sprite>
+        <sprite>sprites\spr_player_muzzle_flash</sprite>
+        <sprite>sprites\spr_player_shot</sprite>
+        <sprite>sprites\spr_player_thruster</sprite>
+      </sprites>
+      <sprites name="BGs">
+        <sprite>sprites\spr_titleBG01</sprite>
+        <sprite>sprites\spr_titlecard</sprite>
+        <sprite>sprites\spr_gameplayBG01</sprite>
+      </sprites>
+      <sprites name="Enemies">
+        <sprite>sprites\spr_enemy_bullet</sprite>
+        <sprite>sprites\spr_enemy02</sprite>
+        <sprite>sprites\spr_enemy03</sprite>
+        <sprite>sprites\spr_enemy04_idle</sprite>
+        <sprite>sprites\spr_enemy04_shoot</sprite>
+        <sprite>sprites\spr_enemy04_bullet</sprite>
+        <sprite>sprites\spr_enemy03_attack</sprite>
+        <sprite>sprites\spr_ground_tile</sprite>
+      </sprites>
+      <sprite>sprites\spr_spritefont</sprite>
+      <sprite>sprites\spr_numberfont</sprite>
+      <sprite>sprites\spr_HUD_labels</sprite>
     </sprites>
   </sprites>
   <backgrounds name="background">
-    <background>background\bg_titlescreen</background>
-    <background>background\bg_gameplay</background>
-    <background>background\bg_title</background>
+    <background>background\bg_ground_tile</background>
+    <background>background\bg_gameplay01</background>
+    <background>background\bg_gameplay02</background>
+    <background>background\bg_gameplay03</background>
+    <background>background\bg_gameplay04</background>
+    <background>background\bg_gameplay05</background>
   </backgrounds>
   <paths name="paths">
     <path>paths\pth_jellyfish</path>
   </paths>
   <scripts name="scripts">
     <script>scripts\ConvertLetterToValue.gml</script>
+    <script>scripts\ConvertCharToValue.gml</script>
     <script>scripts\CheckIfAllLettersCollected.gml</script>
     <script>scripts\MoveLetterCursor.gml</script>
     <script>scripts\findpercentvalue.gml</script>
@@ -49,35 +86,47 @@
     <script>scripts\CheckIfPlayerMatchedAllLetters.gml</script>
     <script>scripts\ToggleValue.gml</script>
     <script>scripts\DestroyPlayer.gml</script>
+    <script>scripts\PlayBGM.gml</script>
+    <script>scripts\DrawSpriteChar.gml</script>
+    <script>scripts\DrawSpriteText.gml</script>
+    <script>scripts\DisplayNumberSprite.gml</script>
+    <script>scripts\draw_background_tiled_area.gml</script>
+    <script>scripts\ShakeCamera.gml</script>
   </scripts>
   <fonts name="fonts">
     <font>fonts\font0</font>
   </fonts>
   <objects name="objects">
-    <objects name="general stuff">
+    <objects name="player stuff">
       <object>objects\obj_player</object>
+      <object>objects\obj_letter</object>
+      <object>objects\obj_pbullet</object>
+    </objects>
+    <objects name="enemy stuff">
       <object>objects\obj_mini_enemy02</object>
       <object>objects\obj_enemy02</object>
       <object>objects\obj_enemy03</object>
       <object>objects\obj_ebullet</object>
-      <object>objects\obj_letter</object>
-      <object>objects\obj_pbullet</object>
-      <object>objects\obj_enemy01</object>
+      <object>objects\obj_enemy04_bullet</object>
+      <object>objects\obj_enemy04</object>
+      <object>objects\obj_enemy_bad_touch</object>
     </objects>
     <objects name="boss01 stuff">
       <object>objects\obj_boss01</object>
-      <object>objects\obj_boss01_eyes</object>
+      <object>objects\obj_boss01_laser</object>
     </objects>
     <objects name="managers">
       <object>objects\obj_gameplay_manager</object>
       <object>objects\obj_titlescreen_manager</object>
       <object>objects\VFX_Manager</object>
       <object>objects\obj_system_manager</object>
+      <object>objects\obj_font_text_manager</object>
     </objects>
   </objects>
   <rooms name="rooms">
     <room>rooms\rm_titlescreen</room>
     <room>rooms\rm_gameplay</room>
+    <room>rooms\font_test</room>
   </rooms>
   <help>
     <rtf>help.rtf</rtf>

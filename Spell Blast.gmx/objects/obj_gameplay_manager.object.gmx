@@ -25,16 +25,30 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>spawn_delay=0 cw=0 tls=0 chosen_word=""
+            <string>//give the player a default number of lives.
+spawn_delay=0 cw=0 tls=0 chosen_word=""
 collect_order=0 letselected=0
 letcursor=0 letcursorstate=0
 letcursorlastpos=0 game_paused=0
 stop_updating_letters=0
+var sys=obj_system_manager;
+sys.bg_scrollX=0
+
+correct_match=0
+
+//cam shake stuff
+cam_shake_intensity=0 cam_shake_time=0
+cam_shakeX=0 cam_shakeY=0
 
 can_pause=30
+//where the timers+letter boxes go.
+bottomHUD=room_height-240
 
 collectTIME=round(room_speed*45)
-matchTIME=round(room_speed*10)
+matchTIME=round(room_speed*20)
+collectCLOCK=-1 matchCLOCK=-1
+boss_arrivalCLOCK=-1 boss_defeatCLOCK=0
+game_overCLOCK=0
 
 stop_spawning_minions=0
 
@@ -73,87 +87,17 @@ for (p=0;p&lt;9;p++)
  //=string_pos(substr, str);
  //=string_delete(chosen_word,index,1);
 
-alarm[0]=collectTIME
+ PlayBGM("gameplay")
+ 
+ background_index[0]=choose(bg_gameplay01,bg_gameplay02,bg_gameplay03,bg_gameplay04,bg_gameplay05);
+ background_htiled[0]=true
+ background_xscale[0]=6 background_yscale[0]=6
+ background_hspeed[0]=-0.03 background_hspeed[1]=-0.7
+ background_alpha[0]=0.7
   
   
   
   
-</string>
-          </argument>
-        </arguments>
-      </action>
-    </event>
-    <event eventtype="2" enumb="2">
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>   instance_create(room_width,0, obj_boss01)
-</string>
-          </argument>
-        </arguments>
-      </action>
-    </event>
-    <event eventtype="2" enumb="1">
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>
-//if CheckIfAllLettersCollected()=1 and CheckIfPlayerMatchedAllLetters()=1 and stop_spawning_minions=0
-//{
-//}
-
-  if stop_spawning_minions=0
-  { stop_spawning_minions=1 alarm[2]=room_speed*4}
-</string>
-          </argument>
-        </arguments>
-      </action>
-    </event>
-    <event eventtype="2" enumb="0">
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>var p1=obj_player;
-p1.stop_input=1 DestroyPlayer(0)
 </string>
           </argument>
         </arguments>
@@ -177,7 +121,8 @@ p1.stop_input=1 DestroyPlayer(0)
           <argument>
             <kind>1</kind>
             <string>var rndnum=0,rndenemy=0, rndlet, fndlet=0,iv=0;
-var pausekey=0,gp_pausekey=0;
+var pausekey=0,gp_pausekey=0, p1=obj_player;
+var b01=0, sys=obj_system_manager;
 
 //puase the gameplay.
 pausekey=keyboard_check_pressed(vk_enter)
@@ -189,25 +134,80 @@ if global.gamepad_enabled[0]=true
 if can_pause&gt;0 {can_pause--}
 if can_pause=0
 {
- if (pausekey) or (gp_pausekey)
- { game_paused=ToggleValue(game_paused) } 
+   if (pausekey) or (gp_pausekey)
+   { game_paused=ToggleValue(game_paused) }
 }
 
 if game_paused=1 {return 0;}
+
+//shake camera.
+ if cam_shake_time&gt;0
+  {
+    cam_shake_time--
+    if cam_shake_time&lt;=room_speed {csa=1.4}
+    if cam_shake_time&lt;=room_speed/2 {csa=2}
+    cam_shakeX=random_range(-(cam_shake_intensity/csa),(cam_shake_intensity/csa))
+    cam_shakeY=random_range(-(cam_shake_intensity/csa),(cam_shake_intensity/csa))
+  }
+  
+ if cam_shake_time=0
+  {cam_shakeX=0 cam_shakeY=0}
+        
+  view_xview[0]=0+cam_shakeX
+  view_yview[0]=0+cam_shakeY
+    
+if collectCLOCK&gt;-1 {collectCLOCK--}
+if matchCLOCK&gt;-1 {matchCLOCK--}
+if boss_arrivalCLOCK&gt;-1 {boss_arrivalCLOCK--}
+if boss_defeatCLOCK&gt;-1 {boss_defeatCLOCK--}
+if game_overCLOCK&gt;-1 {can_pause=1000 game_overCLOCK--}
+
+if boss_defeatCLOCK=0 
+{
+  if sys.level=0 {sys.level=1 sys.tutorial=1 sys.level++ room_restart() exit;}
+  if sys.level=1 {sys.tutorial=0 sys.level=0 room_goto(rm_titlescreen) exit;}
+}
+if game_overCLOCK=0
+{
+   part_particles_clear(global.Psystem)
+   part_particles_clear(global.STARFIELDsystem)
+   room_goto(rm_titlescreen)
+}
+      
+//if player dosen't collect all the letters.
+/*
+if collectCLOCK=0
+{p1.stop_input=1 DestroyPlayer(0)}
+*/
+if matchCLOCK=0
+{
+  if stop_spawning_minions=0
+  {
+    if CheckIfPlayerMatchedAllLetters()=0 {correct_match=0}
+    if CheckIfPlayerMatchedAllLetters()=1 {correct_match=1}
+    stop_spawning_minions=1 boss_arrivalCLOCK=room_speed*5
+    ShakeCamera(40,room_speed*5)
+  }
+}
+if boss_arrivalCLOCK=0
+{
+   instance_create(room_width,(room_height/2)+80, obj_boss01)
+}
+
 if spawn_delay&gt;0 {spawn_delay--}
 if stop_updating_letters&gt;0 {stop_updating_letters--}
 if spawn_delay&lt;=0 and stop_spawning_minions=0
 {
    spawn_delay=room_speed/1.8
-   rndnum=irandom(2)
-   if rndnum!=2
+   rndnum=irandom(1)
+   if rndnum!=1
    {
        rndenemy=irandom(2)
-       if rndenemy=0 {instance_create(room_width+36,irandom_range(10,room_height-30),obj_enemy01)}
-       if rndenemy=1 {instance_create(room_width+36,irandom_range(10,room_height-30),obj_enemy02)}
-       if rndenemy=2 {instance_create(room_width+36,irandom_range(10,room_height-30),obj_enemy03)}
+       if rndenemy=0 {instance_create(room_width+36,irandom_range(30,800),obj_enemy02)}
+       if rndenemy=1 {instance_create(room_width+36,irandom_range(30,632),obj_enemy03)}
+       if rndenemy=2 {instance_create(room_width+36,irandom_range(30,632),obj_enemy04)}
    }
-   if rndnum=2 and instance_number(obj_letter)=0
+   if rndnum=1 and instance_number(obj_letter)=0
    {     
        while (fndlet=0)
         {
@@ -218,7 +218,7 @@ if spawn_delay&lt;=0 and stop_spawning_minions=0
             if letters_collected[rndlet]=0
             {
               var target=letters_assigned[rndlet]-1
-              var let=instance_create(room_width+36,irandom_range(10,room_height-30),obj_letter)
+              var let=instance_create(room_width+36,irandom_range(30,800),obj_letter)
               with let
               {
                value=target fndlet=1
@@ -253,30 +253,36 @@ if spawn_delay&lt;=0 and stop_spawning_minions=0
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>var total_letter_width=(67*string_length(chosen_word))+1
+            <string>var total_letter_width=(140*string_length(chosen_word))+1
 var num=0, num2=0;
+var boss=0, sys=obj_system_manager;
             
 draw_set_color(c_gray)
 draw_set_font(font0)
 
-draw_text(11,11,"LIVES: "+string(lives))
-draw_set_halign(fa_center)
-draw_text(room_width/2+1,11,"SCORE: "+string(score))
-draw_text(room_width/2+1,room_height-99,"LETTERS ")
-draw_set_halign(fa_left)
+draw_sprite_ext(spr_HUD_labels,3, 5,5, 0.6,0.6, 0,c_white,1)
+DisplayNumberSprite(lives,290,2)
 
-draw_set_color(c_white)
+draw_sprite_ext(spr_HUD_labels,5, (room_width/2)-200,5, 0.6,0.6, 0,c_white,1)
+DisplayNumberSprite(score,(room_width/2)+100,2)
 
-draw_text(10,10,"LIVES: "+string(lives))
-draw_set_halign(fa_center)
-draw_text(room_width/2,10,"SCORE: "+string(score))
-draw_text(room_width/2,room_height-100,"LETTERS ")
+if instance_exists(obj_boss01)=false
+{ draw_sprite_ext(spr_HUD_labels,2, (room_width/2)-201,bottomHUD+42, 0.6,0.6, 0,c_white,1) }
+
+if instance_exists(obj_boss01)=true
+{ 
+  if CheckIfPlayerMatchedAllLetters()=0
+  {draw_sprite_ext(spr_HUD_labels,9, (room_width/2)-201,bottomHUD+42, 0.6,0.6, 0,c_white,1) }
+  if CheckIfPlayerMatchedAllLetters()=1
+  {draw_sprite_ext(spr_HUD_labels,8, (room_width/2)-201,bottomHUD+42, 0.6,0.6, 0,c_white,1) }
+}
 
 var TLW=room_width/2-(total_letter_width/2)
 for (p=0;p&lt;string_length(chosen_word);p++)
   {
     num=0
-    draw_rectangle(TLW+(p*70),room_height-75,TLW+(p*70)+64,room_height-75+64,true)
+    //128+12
+    draw_rectangle(TLW+(p*140),bottomHUD+90,TLW+(p*140)+128,bottomHUD+90+128,true)
    /*
     draw_sprite(spr_letters,letters_assigned[p]-1,TLW+(p*43),room_height-140)
     
@@ -296,72 +302,106 @@ for (p=0;p&lt;string_length(chosen_word);p++)
   }
   
   //display the collected letters.
-  for (p2=0;p2&lt;ds_list_size(global.letters_found_list);p2++)
-  {
-    num=ds_list_find_value(global.letters_found_list,p2)
-    
-    //draw_sprite(spr_letters,letters_assigned[p]-1,TLW+(letters_collect_order[p]*43),room_height-75)
-    draw_sprite(spr_letters,num,TLW+(p2*70),room_height-75)   
-     /*
-    draw_set_color(c_blue)
-    draw_text(TLW+(p2*43)+10,room_height-75,string(num))
-    draw_set_color(c_white) 
-    */  
-   }
-  
+ if CheckIfAllLettersCollected()=1 and game_paused=0
+ {
+    for (p2=0;p2&lt;ds_list_size(global.letters_found_list);p2++)
+     {
+      num=ds_list_find_value(global.letters_found_list,p2)
+        
+      //draw_sprite(spr_letters,letters_assigned[p]-1,TLW+(letters_collect_order[p]*43),room_height-75)
+      draw_sprite_ext(spr_letters,num,TLW+(p2*140),bottomHUD+90, 0.16,0.16, 0,c_white,1)   
+      /*
+      draw_set_color(c_blue)
+      draw_text(TLW+(p2*43)+10,room_height-75,string(num))
+      draw_set_color(c_white) 
+      */  
+    }
+  }
      
  if CheckIfAllLettersCollected()=0
  {
      //display timer.
+     /*
      draw_set_color(c_gray)
-     draw_text(room_width/2,room_height-180,"TIME")//+string(alarm[0]))
+     draw_text(room_width/2,bottomHUD-10,"TIME")//+string(alarm[0]))
      draw_set_color(c_white)
-     draw_text(room_width/2,room_height-180,"TIME")//+string(alarm[0]))
-     var tpc=findtotalpercent(alarm[0],round(collectTIME));
-     
-     draw_healthbar(100,room_height-150,room_width-100,room_height-156,tpc, c_black, c_white,c_white,0,true,true)
+     draw_text(room_width/2,bottomHUD,"TIME")//+string(alarm[0]))
+     */
+     //var tpc=findtotalpercent(collectCLOCK,round(collectTIME));
+     //draw_healthbar(100,bottomHUD+38,room_width-100,bottomHUD+45,tpc, c_black, c_white,c_white,0,true,true)
+   
+    //display the collected letters.
+    for (p2=0;p2&lt;ds_list_size(global.letters_found_list);p2++)
+     {
+      num=ds_list_find_value(global.letters_found_list,p2)
+        
+      //draw_sprite(spr_letters,letters_assigned[p]-1,TLW+(letters_collect_order[p]*43),room_height-75)
+      draw_sprite_ext(spr_letters,num,TLW+(p2*140),bottomHUD+90, 0.16,0.16, 0,c_white,1)   
+      /*
+      draw_set_color(c_blue)
+      draw_text(TLW+(p2*43)+10,room_height-75,string(num))
+      draw_set_color(c_white) 
+      */  
+    }
  }
-       
+
  //if CheckIfAllLettersCollected()=1 and CheckIfPlayerMatchedAllLetters()=0
  if CheckIfAllLettersCollected()=1 and stop_spawning_minions=0
  {
        //display timer.
-       draw_set_color(c_gray)
-       draw_text(room_width/2,room_height-180,"TIME")//+string(alarm[0]))
-       draw_set_color(c_white)
-       draw_text(room_width/2,room_height-180,"TIME")//+string(alarm[0]))
-       var tpc=findtotalpercent(alarm[1],round(matchTIME));
+       draw_sprite_ext(spr_HUD_labels,6, (room_width/2)-(220/2),bottomHUD-25, 0.6,0.6, 0,c_white,1)
+      
+       var tpc=findtotalpercent(matchCLOCK,round(matchTIME));
        
        draw_set_color(c_orange)
-       draw_healthbar(100,room_height-150,room_width-100,room_height-156,tpc, c_black, c_orange,c_orange,0,true,true)
+       draw_healthbar(100,bottomHUD+23,room_width-100,bottomHUD+30,tpc, c_black, c_orange,c_orange,0,true,true)
      
+       draw_set_alpha(0.45)
      if letcursorstate=0
      {
         draw_set_color(c_yellow)
-        draw_rectangle(TLW+(letcursor*70),room_height-75,TLW+(letcursor*70)+64,room_height-75+64,true)
-        draw_rectangle(TLW+(letcursor*70)+2,room_height-73,TLW+(letcursor*70)+64-2,room_height-75+62,true)
+        draw_rectangle(TLW+(letcursor*140),bottomHUD+90,TLW+(letcursor*140)+128,bottomHUD+90+128,false)
      }
      if letcursorstate=1
      {
         draw_set_color(c_lime)
-        draw_rectangle(TLW+(letcursor*70),room_height-75,TLW+(letcursor*70)+64,room_height-75+64,true)
-        draw_rectangle(TLW+(letcursor*70)+2,room_height-73,TLW+(letcursor*70)+64-2,room_height-75+62,true)
-     }
+        draw_rectangle(TLW+(letcursor*140),bottomHUD+90,TLW+(letcursor*140)+128,bottomHUD+90+128,false)
+      }
  }
    
+draw_set_alpha(1)
 draw_set_halign(fa_left)
+
+if boss_arrivalCLOCK&gt;0
+{
+   draw_sprite_ext(spr_HUD_labels,10, (room_width/2)-(473/2),room_height/2-100, 0.6,0.6, 0,c_white,1)
+}
+if boss_defeatCLOCK&gt;0
+{
+  if sys.level=0
+  { draw_sprite_ext(spr_HUD_labels,12, (room_width/2)-(702/2),room_height/2-100, 0.6,0.6, 0,c_white,1)}
+  if sys.level=1
+  { draw_sprite_ext(spr_HUD_labels,7, (room_width/2)-(702/2),room_height/2-100, 0.6,0.6, 0,c_white,1)}
+}
+if game_overCLOCK&gt;0
+{
+   draw_sprite_ext(spr_HUD_labels,0, (room_width/2)-(473/2),room_height/2-100, 0.6,0.6, 0,c_white,1)
+}
 
 if game_paused=1
 {
-   draw_set_halign(fa_center)
-   draw_set_color(c_black) draw_set_alpha(0.3)
-   draw_rectangle(0,0,view_wview[0],view_hview[0],true)
-   draw_set_color(c_white)
-   draw_text(room_width/2,room_height/2-30,"GAME IS PAUSED")
+   draw_set_color(c_black) draw_set_alpha(0.4)
+   draw_rectangle(0,0,view_wview[0],view_hview[0],false)
    draw_set_alpha(1)
-   draw_set_halign(fa_left)
-     
+   draw_set_color(c_white)
+  
+   draw_sprite_ext(spr_HUD_labels,1, (room_width/2)-(514/2),room_height/2-20, 0.6,0.6, 0,c_white,1)
+ 
 }
+
+
+
+
 
 </string>
           </argument>
