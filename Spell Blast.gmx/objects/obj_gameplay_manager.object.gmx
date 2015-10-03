@@ -184,7 +184,7 @@ if matchCLOCK=0
   if stop_spawning_minions=0
   {
     if CheckIfPlayerMatchedAllLetters()=0 {correct_match=0}
-    if CheckIfPlayerMatchedAllLetters()=1 {correct_match=1}
+    if CheckIfPlayerMatchedAllLetters()=1 {correct_match=1 p1.praise=1}
     stop_spawning_minions=1 boss_arrivalCLOCK=room_speed*5
     ShakeCamera(40,room_speed*5)
   }
@@ -255,7 +255,7 @@ if spawn_delay&lt;=0 and stop_spawning_minions=0
             <kind>1</kind>
             <string>var total_letter_width=(140*string_length(chosen_word))+1
 var num=0, num2=0;
-var boss=0, sys=obj_system_manager;
+var boss=0, sys=obj_system_manager,con=obj_gameplay_manager;
             
 draw_set_color(c_gray)
 draw_set_font(font0)
@@ -266,14 +266,14 @@ DisplayNumberSprite(lives,290,2)
 draw_sprite_ext(spr_HUD_labels,5, (room_width/2)-200,5, 0.6,0.6, 0,c_white,1)
 DisplayNumberSprite(score,(room_width/2)+100,2)
 
-if instance_exists(obj_boss01)=false
+if instance_exists(obj_boss01)=false and con.boss_arrivalCLOCK&lt;1
 { draw_sprite_ext(spr_HUD_labels,2, (room_width/2)-201,bottomHUD+42, 0.6,0.6, 0,c_white,1) }
 
-if instance_exists(obj_boss01)=true
+if instance_exists(obj_boss01)=true or con.boss_arrivalCLOCK&gt;0
 { 
-  if CheckIfPlayerMatchedAllLetters()=0
+  if con.correct_match=0
   {draw_sprite_ext(spr_HUD_labels,9, (room_width/2)-201,bottomHUD+42, 0.6,0.6, 0,c_white,1) }
-  if CheckIfPlayerMatchedAllLetters()=1
+  if con.correct_match=1
   {draw_sprite_ext(spr_HUD_labels,8, (room_width/2)-201,bottomHUD+42, 0.6,0.6, 0,c_white,1) }
 }
 

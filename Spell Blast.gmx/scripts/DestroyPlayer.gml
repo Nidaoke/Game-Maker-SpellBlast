@@ -15,4 +15,3 @@ var con=obj_gameplay_manager;
         
     if lives=0 and p1.come_back=0
     {con.game_overCLOCK=room_speed*4 }
-

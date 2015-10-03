@@ -89,6 +89,9 @@ if come_back=1 and con.game_paused=0
 if con.game_paused=1 {return 0;}
 if come_back=1 {fire_delay=100 return 0;}
 
+if praise=1 and lives=0 and instance_exists(obj_boss01)
+ {recovery=30 shield=1 praise=0}
+
 if recovery&gt;0
 {
     blink++ recovery-- invincible=1
