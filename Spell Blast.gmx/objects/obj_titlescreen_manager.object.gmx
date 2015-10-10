@@ -26,6 +26,8 @@
           <argument>
             <kind>1</kind>
             <string>PlayBGM("title screen")
+
+global.TitleScreenTap = virtual_key_add(0, 0, room_width, room_height, vk_enter);
 </string>
           </argument>
         </arguments>
@@ -53,7 +55,11 @@
 //start game control.
 startgamekey=keyboard_check(vk_enter) or gamepad_button_check(0,gp_start)
 
-if (startgamekey) {room_goto(rm_gameplay)}
+if (startgamekey) {
+
+    room_goto(rm_gameplay);
+    virtual_key_delete(global.TitleScreenTap);
+}
 </string>
           </argument>
         </arguments>
