@@ -154,6 +154,16 @@ if (firekey) and fire_delay=0 and come_back=0
     
     instance_create(x+250,y+7,obj_pbullet)
  }
+ 
+ if (mouse_check_button(mb_left) &amp;&amp; position_meeting(mouse_x, mouse_y, obj_shoot)) and fire_delay=0 and come_back=0{
+ 
+    fire_delay=8
+    PlaySFX("player shoot")
+    //generate player muzzle flash.
+    part_particles_create(global.Psystem, x+60, y+3, vfxm.prt_player_muzzle_flash, 1); 
+    
+    instance_create(x+250,y+7,obj_pbullet)
+ }
 
 
 

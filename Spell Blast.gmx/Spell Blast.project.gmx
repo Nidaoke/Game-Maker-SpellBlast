@@ -74,6 +74,9 @@
       <sprite>sprites\spr_spritefont</sprite>
       <sprite>sprites\spr_numberfont</sprite>
       <sprite>sprites\spr_HUD_labels</sprite>
+      <sprites name="Android UI">
+        <sprite>sprites\spr_Shoot</sprite>
+      </sprites>
     </sprites>
   </sprites>
   <backgrounds name="background">
@@ -133,6 +136,9 @@
       <object>objects\VFX_Manager</object>
       <object>objects\obj_system_manager</object>
       <object>objects\obj_font_text_manager</object>
+    </objects>
+    <objects name="Android UI">
+      <object>objects\obj_shoot</object>
     </objects>
   </objects>
   <rooms name="rooms">
