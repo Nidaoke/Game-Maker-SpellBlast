@@ -76,6 +76,7 @@
       <sprite>sprites\spr_HUD_labels</sprite>
       <sprites name="Android UI">
         <sprite>sprites\spr_Shoot</sprite>
+        <sprite>sprites\sprite44</sprite>
       </sprites>
     </sprites>
   </sprites>
@@ -139,6 +140,7 @@
     </objects>
     <objects name="Android UI">
       <object>objects\obj_shoot</object>
+      <object>objects\obj_move</object>
     </objects>
   </objects>
   <rooms name="rooms">

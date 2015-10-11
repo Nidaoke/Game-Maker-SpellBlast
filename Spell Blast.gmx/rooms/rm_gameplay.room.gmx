@@ -12,7 +12,10 @@
   <showcolour>-1</showcolour>
   <code>if(os_type = os_android){
 
-    instance_create(1536, 128, obj_shoot);
+    instance_create(1750, 800, obj_shoot);
+    instance_create(0, 0, obj_move);
+    
+    global.ScreenShoot = virtual_key_add(1750, 800, 128, 128, vk_decimal);
 }</code>
   <enableViews>-1</enableViews>
   <clearViewBackground>-1</clearViewBackground>
