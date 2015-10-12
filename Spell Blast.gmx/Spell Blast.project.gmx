@@ -316,9 +316,17 @@
       </sprites>
       <sprite>sprites\spr_spritefont</sprite>
       <sprite>sprites\spr_numberfont</sprite>
+<<<<<<< HEAD
       <sprite>sprites\spr_howtoplay_labels</sprite>
       <sprite>sprites\spr_letterbox</sprite>
       <sprite>sprites\spr_control_icons</sprite>
+=======
+      <sprite>sprites\spr_HUD_labels</sprite>
+      <sprites name="Android UI">
+        <sprite>sprites\spr_Shoot</sprite>
+        <sprite>sprites\sprite44</sprite>
+      </sprites>
+>>>>>>> origin/master
     </sprites>
   </sprites>
   <backgrounds name="background">
@@ -387,6 +395,10 @@
       <object>objects\obj_system_manager</object>
       <object>objects\obj_font_text_manager</object>
       <object>objects\obj_mainmenu_manager</object>
+    </objects>
+    <objects name="Android UI">
+      <object>objects\obj_shoot</object>
+      <object>objects\obj_move</object>
     </objects>
   </objects>
   <rooms name="rooms">
