@@ -31,6 +31,7 @@
 force_letter_spawn=0
 global.force_letter_spawnMAX=5
 
+TLW=0
 tutorial_phase=0 tutorialCLOCK=room_speed*2
 tutorial_prompt=0
 
@@ -106,29 +107,17 @@ for (p=0;p&lt;9;p++)
     }
 }
 
- game_word[0]="cage" game_word[1]="shape"
- game_word[2]="graze" game_word[3]="psycho"
- game_word[4]="shrine" game_word[5]="stripe"
- game_word[6]="knight" game_word[7]="wreck"
- game_word[8]="priest" game_word[9]="frozen"
- 
- //select a word to use.
- //cw=irandom_range(0,9) 
-
  //choose the word to be solved.
  if rm != "rm_tutorial" {chosen_word=string_lower(dict_randomWordLength(6))}
- //game_word[cw]
  if rm="rm_tutorial" {chosen_word="cage"}
  
  tls=string_length(chosen_word)
  //assign all the letters to this array.
-  for (p2=0;p2&lt;tls;p2++)
-  {
-     letters_assigned[p2]=ConvertLetterToValue(string_char_at(chosen_word,p2+1))
-     letters_arranged[p2]=letters_assigned[p2]
-  }
- //=string_pos(substr, str);
- //=string_delete(chosen_word,index,1);
+ for (p2=0;p2&lt;tls;p2++)
+ {
+    letters_assigned[p2]=ConvertLetterToValue(string_char_at(chosen_word,p2+1))
+    letters_arranged[p2]=letters_assigned[p2]
+ }
 
  PlayBGM("gameplay")
  
@@ -137,14 +126,28 @@ for (p=0;p&lt;9;p++)
  background_xscale[0]=6 background_yscale[0]=6
  background_hspeed[0]=-0.03 background_hspeed[1]=-0.7
  background_alpha[0]=0.7
-  
+ 
  can_pause=20
  if rm="rm_tutorial"
- { 
+ {
     global.force_letter_spawMAX=4
     global.spawn_frequency=2 global.letter_spawn_frequency=7
     stop_enemy_spawn=1 stop_letter_spawn=1 game_paused=1 
  }
+ 
+ for (p2=0;p2&lt;tls;p2++)
+ {
+   var p3=p2
+   var mst=instance_create(-900,-900, obj_letter_slot)
+   with mst
+   {index=p3}
+   
+   var mst2=instance_create(-900,-900, obj_letter_filler)
+   with mst2
+   {index=p3}
+ }
+  
+  
   
 </string>
           </argument>
@@ -445,13 +448,11 @@ if con.boss_arrivalCLOCK&gt;0 and con.correct_match=0
     }
  }
  
-var TLW=room_width/2-(total_letter_width/2)
 for (p=0;p&lt;string_length(chosen_word);p++)
   {
     num=0
     //128+12
-    draw_sprite(spr_letterbox,0,TLW+(p*140),bottomHUD+90)
-
+   // draw_sprite(spr_letterbox,0,TLW+(p*140),bottomHUD+90)
   }
   
   //display the collected letters.
@@ -461,8 +462,7 @@ for (p=0;p&lt;string_length(chosen_word);p++)
      {
       num=ds_list_find_value(global.letters_found_list,p2)
         
-      draw_sprite_ext(spr_letters,num,TLW+(p2*140),bottomHUD+90, 1,1, 0,c_white,1)   
-  
+      //draw_sprite_ext(spr_letters,num,TLW+(p2*140),bottomHUD+90, 1,1, 0,c_white,1)   
     }
   }
      
@@ -473,7 +473,7 @@ for (p=0;p&lt;string_length(chosen_word);p++)
      {
       num=ds_list_find_value(global.letters_found_list,p2)
         
-      draw_sprite_ext(spr_letters,num,TLW+(p2*140),bottomHUD+90, 1,1, 0,c_white,1)   
+      //draw_sprite_ext(spr_letters,num,TLW+(p2*140),bottomHUD+90, 1,1, 0,c_white,1)   
     }
  }
 
