@@ -226,7 +226,7 @@ if rm = "rm_tutorial"
                stop_enemy_spawn=0 actionLOCK[0]=0 actionLOCK[1]=0
                stop_enemy_spawnCLOCK=round(room_speed*10)
                tutorial_phase++
-             break;             
+             break;
              case 1:
                game_paused=0 tutorial_prompt=0
                stop_enemy_spawn=1 stop_letter_spawn=0
@@ -234,8 +234,9 @@ if rm = "rm_tutorial"
              break;
              case 4:
                game_paused=0 tutorial_prompt=0
+               actionLOCK[0]=0 actionLOCK[1]=0 actionLOCK[2]=0 actionLOCK[3]=0
              break;
-            }   
+            }
         }
     }
     
@@ -243,7 +244,7 @@ if rm = "rm_tutorial"
    //for phase 1.
    if stop_enemy_spawnCLOCK&gt;-1 {stop_enemy_spawnCLOCK--}
    if stop_enemy_spawnCLOCK=0 {stop_enemy_spawn=1 tutorialCLOCK=round(room_speed*3.2) }
-    
+   
    //for phase 2.
    if CheckIfAllLettersCollected()=1 and tutorial_phase=2 and tutorial_prompt=0 and tut_p3_proceed=0 and tut_p3_proceed2=0
    {
@@ -251,8 +252,8 @@ if rm = "rm_tutorial"
       actionLOCK[0]=1 actionLOCK[1]=1 actionLOCK[2]=0
       tut_p3_proceed=0 tut_p3_proceed2=0
    }
-    
 }
+
 //pause menu controls.
 if button_delay&gt;0 {button_delay--}
 if game_paused=1
@@ -303,11 +304,15 @@ if boss_defeatCLOCK&gt;-1 {boss_defeatCLOCK--}
 if game_overCLOCK&gt;-1 {game_overCLOCK--}
 if game_overCLOCK&gt;0 {can_pause=1000}
 if correct_matchCLOCK&gt;0 {correct_matchCLOCK--}
-  
+
 if boss_defeatCLOCK=0 
 {
-  if sys.level=0 {sys.level=1 sys.tutorial=1 sys.level++ room_restart() exit;}
-  if sys.level=1 {sys.tutorial=0 sys.level=0 room_goto(rm_titlescreen) exit;}
+  if sys.level=0
+  {sys.level=1 sys.level++ room_restart() exit;}
+  if sys.level=1
+  {sys.level=0 room_goto(rm_titlescreen) exit;}
+  if rm="rm_tutorial"
+  {sys.tutorial_lock=0 sys.level=0 room_goto(rm_titlescreen) exit;}
 }
 if game_overCLOCK=0
 {
@@ -491,7 +496,8 @@ for (p=0;p&lt;string_length(chosen_word);p++)
        draw_healthbar(100,bottomHUD-10,room_width-100,bottomHUD-2,tpc, c_black, c_orange,c_orange,0,true,true)
      }
      
-     var col=0;
+ var col=0;
+ /*
  //display letterbox cursor.     
  if stop_letter_input=0 and CheckIfAllLettersCollected()=1
   {
@@ -510,6 +516,7 @@ for (p=0;p&lt;string_length(chosen_word);p++)
         //draw_rectangle(TLW+(letcursor*140),bottomHUD+90,TLW+(letcursor*140)+128,bottomHUD+90+128,false)
       }
   }
+ */
    
 draw_set_alpha(1)
 draw_set_halign(fa_left)
@@ -535,7 +542,7 @@ if boss_defeatCLOCK&gt;0
   {
     //display "you win!" label.
     sc2=GetSpriteTextWidth("you win!",0.8)    
-    DrawSpriteText("you win!", (room_width/2)-(sc2/1.5),room_height/2-100,0.8) 
+    DrawSpriteText("you win!", (room_width/2)-(sc2/1.5), room_height/2-100,0.8) 
     //draw_sprite_ext(spr_HUD_labels,7, (room_width/2)-(702/2),room_height/2-100, 0.6,0.6, 0,c_white,1)
   }
 }
@@ -558,12 +565,12 @@ if game_paused=1 and rm != "rm_tutorial"
    sc2=GetSpriteTextWidth("game is paused",0.8)    
    DrawSpriteText("game is paused",(room_width/2)-(sc2/1.5),200,0.8) 
    //draw_sprite_ext(spr_HUD_labels,1, (room_width/2)-(514/2),200, 0.6,0.6, 0,c_white,1)
-    
+   
    draw_set_color(c_white)
    DrawSpriteText("resume game",450,480,0.5) 
    DrawSpriteText("options",450,560,0.5)
    DrawSpriteText("go to title screen",450,640,0.5)
-     
+   
    draw_arrow(390,520+(cursorY*80), 440,520+(cursorY*80),64)
 }
 
