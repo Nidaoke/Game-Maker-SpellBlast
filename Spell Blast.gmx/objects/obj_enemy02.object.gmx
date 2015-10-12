@@ -25,10 +25,10 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>hp=1 move_speed=-3.6 fire_delay=room_speed
+            <string>hp=1 move_speed=-3.9 fire_delay=room_speed
 image_xscale=0.35 image_yscale=0.35
 path_used=irandom(3)
-old_path_speed=0
+old_path_speed=0 runup=15
 
 </string>
           </argument>
@@ -57,7 +57,8 @@ old_path_speed=0
 if con.game_paused=0 {path_speed=old_path_speed}
 if con.game_paused=1 {path_speed=0 return 0}
 
-x+=move_speed
+x+=move_speed 
+if runup&gt;0 {runup-- x+=move_speed}
 if x&lt;-96 {instance_destroy()}
 </string>
           </argument>

@@ -3,7 +3,249 @@
   <Configs name="configs">
     <Config>Configs\Default</Config>
   </Configs>
-  <NewExtensions/>
+  <datafiles number="14" name="datafiles">
+    <datafile>
+      <name>eights.txt</name>
+      <exists>-1</exists>
+      <size>361448</size>
+      <exportAction>2</exportAction>
+      <exportDir></exportDir>
+      <overwrite>0</overwrite>
+      <freeData>-1</freeData>
+      <removeEnd>0</removeEnd>
+      <store>0</store>
+      <ConfigOptions>
+        <Config name="Default">
+          <CopyToMask>9223372036854775807</CopyToMask>
+        </Config>
+      </ConfigOptions>
+      <filename>eights.txt</filename>
+    </datafile>
+    <datafile>
+      <name>elevens.txt</name>
+      <exists>-1</exists>
+      <size>334715</size>
+      <exportAction>2</exportAction>
+      <exportDir></exportDir>
+      <overwrite>0</overwrite>
+      <freeData>-1</freeData>
+      <removeEnd>0</removeEnd>
+      <store>0</store>
+      <ConfigOptions>
+        <Config name="Default">
+          <CopyToMask>9223372036854775807</CopyToMask>
+        </Config>
+      </ConfigOptions>
+      <filename>elevens.txt</filename>
+    </datafile>
+    <datafile>
+      <name>fifteens.txt</name>
+      <exists>-1</exists>
+      <size>92111</size>
+      <exportAction>2</exportAction>
+      <exportDir></exportDir>
+      <overwrite>0</overwrite>
+      <freeData>-1</freeData>
+      <removeEnd>0</removeEnd>
+      <store>0</store>
+      <ConfigOptions>
+        <Config name="Default">
+          <CopyToMask>9223372036854775807</CopyToMask>
+        </Config>
+      </ConfigOptions>
+      <filename>fifteens.txt</filename>
+    </datafile>
+    <datafile>
+      <name>fives.txt</name>
+      <exists>-1</exists>
+      <size>74867</size>
+      <exportAction>2</exportAction>
+      <exportDir></exportDir>
+      <overwrite>0</overwrite>
+      <freeData>-1</freeData>
+      <removeEnd>0</removeEnd>
+      <store>0</store>
+      <ConfigOptions>
+        <Config name="Default">
+          <CopyToMask>9223372036854775807</CopyToMask>
+        </Config>
+      </ConfigOptions>
+      <filename>fives.txt</filename>
+    </datafile>
+    <datafile>
+      <name>fours.txt</name>
+      <exists>-1</exists>
+      <size>27629</size>
+      <exportAction>2</exportAction>
+      <exportDir></exportDir>
+      <overwrite>0</overwrite>
+      <freeData>-1</freeData>
+      <removeEnd>0</removeEnd>
+      <store>0</store>
+      <ConfigOptions>
+        <Config name="Default">
+          <CopyToMask>9223372036854775807</CopyToMask>
+        </Config>
+      </ConfigOptions>
+      <filename>fours.txt</filename>
+    </datafile>
+    <datafile>
+      <name>fourteens.txt</name>
+      <exists>-1</exists>
+      <size>136739</size>
+      <exportAction>2</exportAction>
+      <exportDir></exportDir>
+      <overwrite>0</overwrite>
+      <freeData>-1</freeData>
+      <removeEnd>0</removeEnd>
+      <store>0</store>
+      <ConfigOptions>
+        <Config name="Default">
+          <CopyToMask>9223372036854775807</CopyToMask>
+        </Config>
+      </ConfigOptions>
+      <filename>fourteens.txt</filename>
+    </datafile>
+    <datafile>
+      <name>nines.txt</name>
+      <exists>-1</exists>
+      <size>407269</size>
+      <exportAction>2</exportAction>
+      <exportDir></exportDir>
+      <overwrite>0</overwrite>
+      <freeData>-1</freeData>
+      <removeEnd>0</removeEnd>
+      <store>0</store>
+      <ConfigOptions>
+        <Config name="Default">
+          <CopyToMask>9223372036854775807</CopyToMask>
+        </Config>
+      </ConfigOptions>
+      <filename>nines.txt</filename>
+    </datafile>
+    <datafile>
+      <name>sevens.txt</name>
+      <exists>-1</exists>
+      <size>263271</size>
+      <exportAction>2</exportAction>
+      <exportDir></exportDir>
+      <overwrite>0</overwrite>
+      <freeData>-1</freeData>
+      <removeEnd>0</removeEnd>
+      <store>0</store>
+      <ConfigOptions>
+        <Config name="Default">
+          <CopyToMask>9223372036854775807</CopyToMask>
+        </Config>
+      </ConfigOptions>
+      <filename>sevens.txt</filename>
+    </datafile>
+    <datafile>
+      <name>sixes.txt</name>
+      <exists>-1</exists>
+      <size>155098</size>
+      <exportAction>2</exportAction>
+      <exportDir></exportDir>
+      <overwrite>0</overwrite>
+      <freeData>-1</freeData>
+      <removeEnd>0</removeEnd>
+      <store>0</store>
+      <ConfigOptions>
+        <Config name="Default">
+          <CopyToMask>9223372036854775807</CopyToMask>
+        </Config>
+      </ConfigOptions>
+      <filename>sixes.txt</filename>
+    </datafile>
+    <datafile>
+      <name>tens.txt</name>
+      <exists>-1</exists>
+      <size>390818</size>
+      <exportAction>2</exportAction>
+      <exportDir></exportDir>
+      <overwrite>0</overwrite>
+      <freeData>-1</freeData>
+      <removeEnd>0</removeEnd>
+      <store>0</store>
+      <ConfigOptions>
+        <Config name="Default">
+          <CopyToMask>9223372036854775807</CopyToMask>
+        </Config>
+      </ConfigOptions>
+      <filename>tens.txt</filename>
+    </datafile>
+    <datafile>
+      <name>thirteens.txt</name>
+      <exists>-1</exists>
+      <size>193997</size>
+      <exportAction>2</exportAction>
+      <exportDir></exportDir>
+      <overwrite>0</overwrite>
+      <freeData>-1</freeData>
+      <removeEnd>0</removeEnd>
+      <store>0</store>
+      <ConfigOptions>
+        <Config name="Default">
+          <CopyToMask>9223372036854775807</CopyToMask>
+        </Config>
+      </ConfigOptions>
+      <filename>thirteens.txt</filename>
+    </datafile>
+    <datafile>
+      <name>threes.txt</name>
+      <exists>-1</exists>
+      <size>5239</size>
+      <exportAction>2</exportAction>
+      <exportDir></exportDir>
+      <overwrite>0</overwrite>
+      <freeData>-1</freeData>
+      <removeEnd>0</removeEnd>
+      <store>0</store>
+      <ConfigOptions>
+        <Config name="Default">
+          <CopyToMask>9223372036854775807</CopyToMask>
+        </Config>
+      </ConfigOptions>
+      <filename>threes.txt</filename>
+    </datafile>
+    <datafile>
+      <name>twelves.txt</name>
+      <exists>-1</exists>
+      <size>263860</size>
+      <exportAction>2</exportAction>
+      <exportDir></exportDir>
+      <overwrite>0</overwrite>
+      <freeData>-1</freeData>
+      <removeEnd>0</removeEnd>
+      <store>0</store>
+      <ConfigOptions>
+        <Config name="Default">
+          <CopyToMask>9223372036854775807</CopyToMask>
+        </Config>
+      </ConfigOptions>
+      <filename>twelves.txt</filename>
+    </datafile>
+    <datafile>
+      <name>twos.txt</name>
+      <exists>-1</exists>
+      <size>302</size>
+      <exportAction>2</exportAction>
+      <exportDir></exportDir>
+      <overwrite>0</overwrite>
+      <freeData>-1</freeData>
+      <removeEnd>0</removeEnd>
+      <store>0</store>
+      <ConfigOptions>
+        <Config name="Default">
+          <CopyToMask>9223372036854775807</CopyToMask>
+        </Config>
+      </ConfigOptions>
+      <filename>twos.txt</filename>
+    </datafile>
+  </datafiles>
+  <NewExtensions>
+    <extension index="0">extensions\Easy English Dictionary</extension>
+  </NewExtensions>
   <sounds name="sound">
     <sound>sound\bgm_titlescreen</sound>
     <sound>sound\bgm_gameplay01</sound>
@@ -55,6 +297,7 @@
         <sprite>sprites\spr_player_muzzle_flash</sprite>
         <sprite>sprites\spr_player_shot</sprite>
         <sprite>sprites\spr_player_thruster</sprite>
+        <sprite>sprites\spr_mega_weapon_waves</sprite>
       </sprites>
       <sprites name="BGs">
         <sprite>sprites\spr_titleBG01</sprite>
@@ -73,7 +316,9 @@
       </sprites>
       <sprite>sprites\spr_spritefont</sprite>
       <sprite>sprites\spr_numberfont</sprite>
-      <sprite>sprites\spr_HUD_labels</sprite>
+      <sprite>sprites\spr_howtoplay_labels</sprite>
+      <sprite>sprites\spr_letterbox</sprite>
+      <sprite>sprites\spr_control_icons</sprite>
     </sprites>
   </sprites>
   <backgrounds name="background">
@@ -104,6 +349,11 @@
     <script>scripts\draw_background_tiled_area.gml</script>
     <script>scripts\ShakeCamera.gml</script>
     <script>scripts\PlaySFX.gml</script>
+    <script>scripts\dict_init.gml</script>
+    <script>scripts\dict_isValid.gml</script>
+    <script>scripts\dict_randomWordLength.gml</script>
+    <script>scripts\dict_randomWordLetter.gml</script>
+    <script>scripts\GetSpriteTextWidth.gml</script>
   </scripts>
   <fonts name="fonts">
     <font>fonts\font0</font>
@@ -113,6 +363,7 @@
       <object>objects\obj_player</object>
       <object>objects\obj_letter</object>
       <object>objects\obj_pbullet</object>
+      <object>objects\obj_megaweapon01</object>
     </objects>
     <objects name="enemy stuff">
       <object>objects\obj_mini_enemy02</object>
@@ -129,16 +380,23 @@
     </objects>
     <objects name="managers">
       <object>objects\obj_gameplay_manager</object>
+      <object>objects\obj_tutorial_manager</object>
       <object>objects\obj_titlescreen_manager</object>
+      <object>objects\obj_howtoplay_manager</object>
       <object>objects\VFX_Manager</object>
       <object>objects\obj_system_manager</object>
       <object>objects\obj_font_text_manager</object>
+      <object>objects\obj_mainmenu_manager</object>
     </objects>
   </objects>
   <rooms name="rooms">
     <room>rooms\rm_titlescreen</room>
     <room>rooms\rm_gameplay</room>
+    <room>rooms\rm_tutorial</room>
+    <room>rooms\rm_howtoplay</room>
     <room>rooms\font_test</room>
+    <room>rooms\rm_mainmenu</room>
+    <room>rooms\rm_options</room>
   </rooms>
   <help>
     <rtf>help.rtf</rtf>

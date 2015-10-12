@@ -53,7 +53,7 @@
 //start game control.
 startgamekey=keyboard_check(vk_enter) or gamepad_button_check(0,gp_start)
 
-if (startgamekey) {room_goto(rm_gameplay)}
+if (startgamekey) {room_goto(rm_mainmenu)}
 </string>
           </argument>
         </arguments>

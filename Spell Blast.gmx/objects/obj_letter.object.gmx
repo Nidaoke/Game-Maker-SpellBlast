@@ -25,9 +25,9 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>move_speed=-7 image_speed=0 
-value=irandom(25)
-image_xscale=0.16 image_yscale=0.16
+            <string>move_speed=-9 image_speed=0 
+value=irandom(25) runup=7
+image_xscale=0.7 image_yscale=0.7
 </string>
           </argument>
         </arguments>
@@ -56,14 +56,9 @@ var vfxm=VFX_Manager,p1=obj_player;
 if con.game_paused=1 {return 0;}
 
 x+=move_speed
-
+if runup&gt;0 {runup-- x+=move_speed }
 if x&lt;-sprite_width 
-{
-  instance_destroy()
-
-  if p1.visible=true and p1.come_back=0 and p1.invincible=0
-   { DestroyPlayer(1) }
-}
+{ instance_destroy() }
 </string>
           </argument>
         </arguments>
@@ -99,9 +94,9 @@ with (other)
 }
 
 if p1.visible=true and p1.come_back=0 and p1.invincible=0
-{ DestroyPlayer(1) }
+{ ShakeCamera(30,room_speed/3) DestroyPlayer(1) }
 
-    instance_destroy()
+  instance_destroy()
 
 </string>
           </argument>

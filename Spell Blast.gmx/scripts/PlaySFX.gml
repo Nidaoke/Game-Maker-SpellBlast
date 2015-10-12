@@ -25,4 +25,3 @@ if sfx="minion explode"
 { audio_play_sound(sfx_minion_explode, 30, false);}
 if sfx="boss explode"
 { audio_play_sound(sfx_boss_explode, 30, false);}
-

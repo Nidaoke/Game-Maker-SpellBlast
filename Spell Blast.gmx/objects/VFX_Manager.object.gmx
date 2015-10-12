@@ -321,9 +321,70 @@ part_type_orientation(prt_player_muzzle_flash,0,0,0,0,1);
 part_type_blend(prt_player_muzzle_flash,1);
 part_type_life(prt_player_muzzle_flash,10,10);
 
+/*
+==============
+for player mega weapon 01
+==============
+*/
+prt_megaweapon01_laser_waves = part_type_create();
+part_type_sprite(prt_megaweapon01_laser_waves,spr_mega_weapon_waves,0,0,0);
+part_type_size(prt_megaweapon01_laser_waves,0.00,0.00,0.01,0);
+part_type_scale(prt_megaweapon01_laser_waves,1,1);
+part_type_color1(prt_megaweapon01_laser_waves,16777215);
+part_type_alpha3(prt_megaweapon01_laser_waves,1,0.80,0);
+part_type_speed(prt_megaweapon01_laser_waves,0,10,0,0);
+part_type_direction(prt_megaweapon01_laser_waves,0,0,0,0);
+part_type_gravity(prt_megaweapon01_laser_waves,0,270);
+part_type_orientation(prt_megaweapon01_laser_waves,0,359,5,0,1);
+part_type_blend(prt_megaweapon01_laser_waves,1);
+part_type_life(prt_megaweapon01_laser_waves,60,60);
 
+emt_megaweapon01_laser_waves = part_emitter_create(global.Psystem);
+/*
 
+part_emitter_region(global.Psystem,emt_megaweapon01_laser_waves,1280,-1280,0,0,ps_shape_line,1);
+part_emitter_stream(global.Psystem,emt_megaweapon01_laser_waves,prt_megaweapon01_laser_waves,5);
+*/
 
+prt_megaweapon01_spark = part_type_create();
+part_type_sprite(prt_megaweapon01_spark,Particle_Spark_4,0,0,0);
+part_type_size(prt_megaweapon01_spark,0.10,0.30,0.01,0);
+part_type_scale(prt_megaweapon01_spark,1,1);
+part_type_color1(prt_megaweapon01_spark,16777215);
+part_type_alpha3(prt_megaweapon01_spark,1,0.80,0);
+part_type_speed(prt_megaweapon01_spark,0,20,0,0);
+part_type_direction(prt_megaweapon01_spark,359,359,0,0);
+part_type_gravity(prt_megaweapon01_spark,0,270);
+part_type_orientation(prt_megaweapon01_spark,0,0,0,0,1);
+part_type_blend(prt_megaweapon01_spark,1);
+part_type_life(prt_megaweapon01_spark,60,60);
+
+emt_megaweapon01_spark = part_emitter_create(global.Psystem);
+/*
+
+part_emitter_region(global.Psystem,emt_megaweapon01_spark,1280,-1280,0,0,ps_shape_line,1);
+part_emitter_stream(global.Psystem,emt_megaweapon01_spark,prt_megaweapon01_spark,10);
+*/
+
+prt_megaweapon01_pdp = part_type_create();
+part_type_sprite(prt_megaweapon01_pdp ,spr_player_death_pool,0,0,0);
+part_type_size(prt_megaweapon01_pdp ,0.10,0.80,-0.01,0.10);
+part_type_scale(prt_megaweapon01_pdp ,1,1);
+part_type_color1(prt_megaweapon01_pdp ,16777215);
+part_type_alpha3(prt_megaweapon01_pdp ,1,1,0);
+part_type_speed(prt_megaweapon01_pdp ,0,20,0,0);
+part_type_direction(prt_megaweapon01_pdp ,0,0,0,0);
+part_type_gravity(prt_megaweapon01_pdp ,0,270);
+part_type_orientation(prt_megaweapon01_pdp ,0,359,1,0,1);
+part_type_blend(prt_megaweapon01_pdp ,1);
+part_type_life(prt_megaweapon01_pdp ,60,60);
+
+emt_megaweapon01_pdp = part_emitter_create(global.Psystem);
+/*
+
+part_emitter_region(global.Psystem,emt_megaweapon01_pdp,x,x,y,y,0,0);
+part_emitter_stream(global.Psystem,emt_megaweapon01_pdp,prt_megaweapon01_pdp,5);
+*/
 
 
 
@@ -465,6 +526,8 @@ associated particle types to avoid memory leaks.
 */
 part_system_destroy(global.Psystem); 
 part_system_destroy(global.STARFIELDsystem); 
+
+part_emitter_destroy_all(global.Psystem);
 
 //hitspark for letter destruction.
 part_type_destroy(particle_hitspark1); 

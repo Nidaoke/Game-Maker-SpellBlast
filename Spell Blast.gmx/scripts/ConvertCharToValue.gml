@@ -49,5 +49,16 @@ if let="$" {letval=41}
 if let=" " {letval=42}
 if let="+" {letval=43}
 if let="-" {letval=44}
+if let="x" {letval=45}
+
+if let=":" {letval=47}
+if let=";" {letval=48}
+
+if let="\" {letval=49}
+if let="/" {letval=50}
+
+if let="_" {letval=51}
+if let="[" {letval=53}
+if let="]" {letval=54}
 
 return letval
