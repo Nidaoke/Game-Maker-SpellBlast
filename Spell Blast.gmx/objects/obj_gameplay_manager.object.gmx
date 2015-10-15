@@ -26,6 +26,7 @@
           <argument>
             <kind>1</kind>
             <string>cursorY=0 maxY=2 button_delay=0
+thumbstickDS=0.2 
 
 //spawn a letter after so many enemies have been spawned.
 force_letter_spawn=0
@@ -90,10 +91,11 @@ correct_matchCLOCK=-1
 stop_spawning_minions=0
 
 ds_list_clear(global.letters_found_list)
+ds_list_clear(global.letters_spawn_list)
 
 //str1 = "Hello World";
 //str2 = string_char_at(str1, 7); 
- 
+
 for (p=0;p&lt;9;p++)
 {
     game_word[p]=""
@@ -108,17 +110,22 @@ for (p=0;p&lt;9;p++)
 }
 
  //choose the word to be solved.
- if rm != "rm_tutorial" {chosen_word=string_lower(dict_randomWordLength(6))}
+ if rm != "rm_tutorial" {chosen_word=string_lower(dict_randomWordLength(3))}
  if rm="rm_tutorial" {chosen_word="cage"}
  
  tls=string_length(chosen_word)
  //assign all the letters to this array.
  for (p2=0;p2&lt;tls;p2++)
  {
+    lv=ConvertLetterToValue(string_char_at(chosen_word,p2+1)) 
+    ds_list_add(global.letters_spawn_list, lv-1)
+    
     letters_assigned[p2]=ConvertLetterToValue(string_char_at(chosen_word,p2+1))
     letters_arranged[p2]=letters_assigned[p2]
  }
-
+ 
+ ds_list_shuffle(global.letters_spawn_list)
+ 
  PlayBGM("gameplay")
  
  background_index[0]=choose(bg_gameplay01,bg_gameplay02,bg_gameplay03,bg_gameplay04,bg_gameplay05);
@@ -171,28 +178,36 @@ for (p=0;p&lt;9;p++)
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>var rndnum=0,rndenemy=0, rndlet, fndlet=0,iv=0;
+            <string>var rndnum=0,rndenemy=0, rndlet, fndlet=0,iv=0, letfind;
 var pausekey=0,gp_pausekey=0, pause_used=0,p1=obj_player;
 var b01=0, sys=obj_system_manager;
-var pause_ukey,pause_dkey,pause_confirmkey;
+var ukey,dkey,lkey,rkey,pause_confirmkey;
 var rm=room_get_name(room)
 
-pause_ukey=keyboard_check(vk_up)
-pause_dkey=keyboard_check(vk_down)
-pause_confirmkey=keyboard_check(ord("Z"))
+//pause menu controls.
+ukey=keyboard_check(vk_up) or gamepad_button_check(0,gp_padu)
+dkey=keyboard_check(vk_down) or gamepad_button_check(0,gp_padd)
+lkey=keyboard_check(vk_left) or gamepad_button_check(0,gp_padl) 
+rkey=keyboard_check(vk_right) or gamepad_button_check(0,gp_padr)
+
+leftstickH=gamepad_axis_value(0, gp_axislh)
+leftstickV=gamepad_axis_value(0, gp_axislv)
+
+pause_confirmkey=keyboard_check(ord("Z")) or gamepad_button_check_pressed(0,gp_face1)
 
 //puase the gameplay.
-pausekey=keyboard_check_pressed(vk_enter)
+pausekey=keyboard_check_pressed(vk_enter) or gamepad_button_check_pressed(0,gp_start)
+
+/*
 if global.gamepad_enabled[0]=true
-{
-  gp_pausekey=gamepad_button_check_pressed(0,gp_start)
-}
+{gp_pausekey=gamepad_button_check_pressed(0,gp_start) }
+*/
 
 if can_pause&gt;0 and rm != "rm_tutorial" {can_pause--}
 if can_pause=0 and rm != "rm_tutorial"
 {
    if (pausekey) {pause_used=1}
-   if (gp_pausekey) {pause_used=1}
+   //if (gp_pausekey) {pause_used=1}
    if pause_used=1
    {
      game_paused=ToggleValue(game_paused) 
@@ -256,11 +271,15 @@ if rm = "rm_tutorial"
 
 //pause menu controls.
 if button_delay&gt;0 {button_delay--}
+
 if game_paused=1
 {
-   if (pause_ukey) and button_delay=0
+   if leftstickV&lt;-global.thumbstickDS {ukey=true}
+   if leftstickV&gt;global.thumbstickDS {dkey=true}
+    
+   if (ukey) and button_delay=0
     { button_delay=12 cursorY-- if cursorY&lt;0 {cursorY=maxY} }
-   if (pause_dkey) and button_delay=0
+   if (dkey) and button_delay=0
     { button_delay=12 cursorY++ if cursorY&gt;maxY {cursorY=0} }
      
    if (pause_confirmkey) and button_delay=0
@@ -298,7 +317,12 @@ blink++ if blink&gt;9 {blink=0}
   view_yview[0]=0+cam_shakeY
     
 if collectCLOCK&gt;-1 {collectCLOCK--}
-if matchCLOCK&gt;-1 and (tutorial_phase&gt;=4 and tutorial_prompt=0) {matchCLOCK--}
+
+if rm!="rm_tutorial" and matchCLOCK&gt;-1
+{matchCLOCK--}
+if rm="rm_tutorial" and matchCLOCK&gt;-1 and (tutorial_phase&gt;=4 and tutorial_prompt=0) 
+{matchCLOCK--}
+
 if boss_arrivalCLOCK&gt;-1 {boss_arrivalCLOCK--}
 if boss_defeatCLOCK&gt;-1 {boss_defeatCLOCK--}
 if game_overCLOCK&gt;-1 {game_overCLOCK--}
@@ -356,24 +380,16 @@ if spawn_delay&lt;=0 and stop_spawning_minions=0
        if rndenemy=1 {instance_create(room_width+8,irandom_range(30,632),obj_enemy03)}
        if rndenemy=2 {instance_create(room_width+8,irandom_range(30,632),obj_enemy04)}
    }
+  
    if rndnum=1 and stop_letter_spawn=0 and instance_number(obj_letter)=0
    {     
-       while (fndlet=0)
+       if ds_list_size(global.letters_spawn_list)&gt;0
         {
-            //select which letter to spawn.
-            rndlet=irandom(tls-1)
-            //see if that letter has been collected already.
-            //if it hasn't, spawn it.
-            if letters_collected[rndlet]=0
-            {
-              var target=letters_assigned[rndlet]-1
-              var let=instance_create(room_width+36,irandom_range(30,800),obj_letter)
-              with let
-              { value=target fndlet=1 }
-            }
-
-            iv=CheckIfAllLettersCollected()
-            iv=tls {break;}
+           //var target=letters_assigned[rndlet]-1
+           var target=ds_list_find_value(global.letters_spawn_list,0)
+           var let=instance_create(room_width+36,irandom_range(30,800),obj_letter)
+           with let
+           { value=target fndlet=1 }
         }
    }
 }
@@ -437,7 +453,7 @@ if con.boss_arrivalCLOCK&gt;0 and con.correct_match=0
  }
 
 //display correct or INcorrect notification.
- if correct_matchCLOCK&gt;0 and game_overCLOCK=0
+ if correct_matchCLOCK&gt;0 and game_overCLOCK&lt;=0
  { 
     //if correct.
     if match_label=0 
@@ -453,34 +469,14 @@ if con.boss_arrivalCLOCK&gt;0 and con.correct_match=0
     }
  }
  
-for (p=0;p&lt;string_length(chosen_word);p++)
-  {
-    num=0
-    //128+12
-   // draw_sprite(spr_letterbox,0,TLW+(p*140),bottomHUD+90)
-  }
-  
-  //display the collected letters.
- if CheckIfAllLettersCollected()=1 and game_paused=0
- {
-    for (p2=0;p2&lt;ds_list_size(global.letters_found_list);p2++)
-     {
-      num=ds_list_find_value(global.letters_found_list,p2)
-        
-      //draw_sprite_ext(spr_letters,num,TLW+(p2*140),bottomHUD+90, 1,1, 0,c_white,1)   
-    }
-  }
-     
- if CheckIfAllLettersCollected()=0
- {
-    //display the collected letters.
-    for (p2=0;p2&lt;ds_list_size(global.letters_found_list);p2++)
-     {
-      num=ds_list_find_value(global.letters_found_list,p2)
-        
-      //draw_sprite_ext(spr_letters,num,TLW+(p2*140),bottomHUD+90, 1,1, 0,c_white,1)   
-    }
- }
+ //display the collected letters. DEBUG
+ /*
+  for (p3=0;p3&lt;ds_list_size(global.letters_spawn_list);p3++)
+   {
+    num=ds_list_find_value(global.letters_spawn_list,p3)        
+    draw_sprite_ext(spr_letters,num,400+(p3*140),bottomHUD-100, 1,1, 0,c_white,1)   
+  }  
+ */
 
  //if CheckIfAllLettersCollected()=1 and CheckIfPlayerMatchedAllLetters()=0
  if CheckIfAllLettersCollected()=1 and stop_spawning_minions=0

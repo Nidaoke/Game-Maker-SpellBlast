@@ -265,11 +265,6 @@
   </sounds>
   <sprites name="sprites">
     <sprites name="PLACEHOLDERS">
-      <sprite>sprites\spr_letters</sprite>
-      <sprite>sprites\spr_player_ship</sprite>
-      <sprite>sprites\spr_shielded_ship</sprite>
-      <sprite>sprites\spr_explosion</sprite>
-      <sprite>sprites\spr_player_bullet</sprite>
       <sprites name="boss01 sprites">
         <sprite>sprites\spr_boss01_laser</sprite>
         <sprite>sprites\spr_boss01_state01</sprite>
@@ -314,11 +309,19 @@
         <sprite>sprites\spr_enemy03_attack</sprite>
         <sprite>sprites\spr_ground_tile</sprite>
       </sprites>
-      <sprite>sprites\spr_spritefont</sprite>
-      <sprite>sprites\spr_numberfont</sprite>
-      <sprite>sprites\spr_howtoplay_labels</sprite>
-      <sprite>sprites\spr_letterbox</sprite>
-      <sprite>sprites\spr_control_icons</sprite>
+      <sprites name="misc">
+        <sprite>sprites\spr_spritefont</sprite>
+        <sprite>sprites\spr_control_icons</sprite>
+        <sprite>sprites\spr_letterbox</sprite>
+        <sprite>sprites\spr_howtoplay_labels</sprite>
+        <sprite>sprites\spr_numberfont</sprite>
+      </sprites>
+      <sprites name="player gfx">
+        <sprite>sprites\spr_letters</sprite>
+        <sprite>sprites\spr_player_ship</sprite>
+        <sprite>sprites\spr_player_bullet</sprite>
+        <sprite>sprites\spr_shielded_ship</sprite>
+      </sprites>
     </sprites>
   </sprites>
   <backgrounds name="background">
@@ -380,9 +383,7 @@
     </objects>
     <objects name="managers">
       <object>objects\obj_gameplay_manager</object>
-      <object>objects\obj_tutorial_manager</object>
       <object>objects\obj_titlescreen_manager</object>
-      <object>objects\obj_howtoplay_manager</object>
       <object>objects\VFX_Manager</object>
       <object>objects\obj_system_manager</object>
       <object>objects\obj_font_text_manager</object>
@@ -397,7 +398,6 @@
     <room>rooms\rm_titlescreen</room>
     <room>rooms\rm_gameplay</room>
     <room>rooms\rm_tutorial</room>
-    <room>rooms\rm_howtoplay</room>
     <room>rooms\font_test</room>
     <room>rooms\rm_mainmenu</room>
     <room>rooms\rm_options</room>

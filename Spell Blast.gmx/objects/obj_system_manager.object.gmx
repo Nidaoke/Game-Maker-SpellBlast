@@ -26,12 +26,21 @@
           <argument>
             <kind>1</kind>
             <string>global.letters_found_list=ds_list_create()
+global.letters_spawn_list=ds_list_create()
+
 bg_scrollX=0 starfield_delay=0
 tutorial_lock=0 level=0
+
+global.thumbstickDS=0.2 
 
 global.force_letter_spawnMAX=5
 global.spawn_frequency=0
 global.letter_spawn_frequency=0
+
+//sublevel=individual levels, world=group of levels
+//with a specific word count
+global.world=0
+global.sublevel=0
 
 global.gamepad_support = gamepad_is_supported();
 for (p=0;p&lt;4;p++)
@@ -171,6 +180,7 @@ if instance_exists(obj_gameplay_manager)=true
           <argument>
             <kind>1</kind>
             <string>ds_list_destroy(global.letters_found_list)
+ds_list_destroy(global.letters_spawn_list)
 </string>
           </argument>
         </arguments>

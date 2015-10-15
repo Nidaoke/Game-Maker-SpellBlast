@@ -52,10 +52,21 @@ options_locked[0]=1
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>var ukey,dkey,confirmkey;
-ukey=keyboard_check(vk_up)
-dkey=keyboard_check(vk_down)
-confirmkey=keyboard_check(ord("Z"))
+            <string>var ukey,dkey,lkey,rkey,confirmkey;
+
+//pause menu controls.
+ukey=keyboard_check(vk_up) or gamepad_button_check(0,gp_padu)
+dkey=keyboard_check(vk_down) or gamepad_button_check(0,gp_padd)
+lkey=keyboard_check(vk_left) or gamepad_button_check(0,gp_padl) 
+rkey=keyboard_check(vk_right) or gamepad_button_check(0,gp_padr)
+
+leftstickH=gamepad_axis_value(0, gp_axislh)
+leftstickV=gamepad_axis_value(0, gp_axislv)
+
+confirmkey=keyboard_check(ord("Z")) or gamepad_button_check_pressed(0,gp_face1)
+  
+   if leftstickV&lt;-global.thumbstickDS {ukey=true}
+   if leftstickV&gt;global.thumbstickDS {dkey=true}
 
 if button_delay&gt;0 {button_delay--}
 if (ukey) and button_delay=0
