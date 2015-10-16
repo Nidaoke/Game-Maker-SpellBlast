@@ -76,7 +76,7 @@ if (dkey) and button_delay=0
  
 if (confirmkey) and button_delay=0
  {
-    if cursorY=0 {lives=5 room_goto(rm_gameplay) }
+    if cursorY=0 and global.tutorial_lock=0  {lives=5 room_goto(rm_gameplay) }
     if cursorY=1 {lives=5 room_goto(rm_tutorial)}
     if cursorY=2 {room_goto(rm_options)}
     if cursorY=3 {game_end()}
@@ -104,13 +104,17 @@ if (confirmkey) and button_delay=0
           <argument>
             <kind>1</kind>
             <string>
- draw_set_color(c_white)
- DrawSpriteText("play game",450,300,0.5) 
- DrawSpriteText("tutorial",450,380,0.5)
- DrawSpriteText("options",450,460,0.5)
- DrawSpriteText("exit",450,540,0.5)
+ if global.tutorial_lock=0
+ { DrawSpriteText("play game",450,300,0.5,c_white) }
+ if global.tutorial_lock=1 
+ { DrawSpriteText("play game",450,300,0.5,c_dkgray) }
+
+ DrawSpriteText("tutorial",450,380,0.5,c_white)
+ DrawSpriteText("options",450,460,0.5,c_white)
+ DrawSpriteText("exit",450,540,0.5,c_white)
  
- draw_arrow(390,340+(cursorY*80), 440,340+(cursorY*80),64)
+ draw_set_color(c_white)
+ draw_arrow(390,320+(cursorY*80), 440,320+(cursorY*80),64)
 </string>
           </argument>
         </arguments>

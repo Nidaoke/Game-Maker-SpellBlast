@@ -25,7 +25,8 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>hp=1 move_speed=7 fire_delay=room_speed
+            <string>hp=1 move_speed=7.4 fire_delay=room_speed
+image_speed=0
 image_xscale=0.20 image_yscale=0.20
 direction=irandom_range(120,240)
 //90(up)-(up/left)-270(down)

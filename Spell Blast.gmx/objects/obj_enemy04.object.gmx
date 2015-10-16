@@ -25,10 +25,10 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>hp=2 move_speed=-3.6 
+            <string>hp=2 move_speed=-5.7 
 fire_delay=round(room_speed*2.7)
-image_xscale=0.56 image_yscale=0.56
-image_speed=0.1 fired=0 runup=9
+image_xscale=0.6 image_yscale=0.6
+image_speed=0.1 fired=0 runup=18
 old_path_speed=0 image_speed=0.12
 
   path_start(pth_jellyfish, 5.2, 2, false);
@@ -66,8 +66,8 @@ if fire_delay&gt;-1 {fire_delay--}
 if fire_delay=0
 { image_index=0 sprite_index=spr_enemy04_shoot }
 
-if sprite_index=spr_enemy04_shoot and (image_index&gt;=3 and image_index&lt;4) and fired=0
-{ PlaySFX("vomitron shoot") instance_create(x+58,y+90,obj_enemy04_bullet) fired=1 }
+if sprite_index=spr_enemy04_shoot and (image_index&gt;=2 and image_index&lt;3) and fired=0
+{ PlaySFX("vomitron shoot") instance_create(x,y,obj_enemy04_bullet) fired=1 }
 
 if sprite_index=spr_enemy04_shoot and image_index=image_number-1
 {image_index=0 sprite_index=spr_enemy04_idle}

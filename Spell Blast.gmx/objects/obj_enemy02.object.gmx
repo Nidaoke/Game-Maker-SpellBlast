@@ -25,10 +25,10 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>hp=1 move_speed=-3.9 fire_delay=room_speed
-image_xscale=0.35 image_yscale=0.35
-path_used=irandom(3)
-old_path_speed=0 runup=15
+            <string>hp=1 move_speed=-4.5 fire_delay=room_speed
+image_xscale=0.5 image_yscale=0.5
+path_used=irandom(3) image_speed=0
+old_path_speed=0 runup=30
 
 </string>
           </argument>

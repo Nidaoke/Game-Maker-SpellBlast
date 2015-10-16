@@ -93,9 +93,6 @@ stop_spawning_minions=0
 ds_list_clear(global.letters_found_list)
 ds_list_clear(global.letters_spawn_list)
 
-//str1 = "Hello World";
-//str2 = string_char_at(str1, 7); 
-
 for (p=0;p&lt;9;p++)
 {
     game_word[p]=""
@@ -108,9 +105,12 @@ for (p=0;p&lt;9;p++)
       letters_collect_order[p]=0
     }
 }
+ 
+ //update player progress.
+ ChangeLevelParameters()
 
  //choose the word to be solved.
- if rm != "rm_tutorial" {chosen_word=string_lower(dict_randomWordLength(3))}
+ if rm != "rm_tutorial" {chosen_word=string_lower(dict_randomWordLength(global.word_length))}
  if rm="rm_tutorial" {chosen_word="cage"}
  
  tls=string_length(chosen_word)
@@ -135,12 +135,6 @@ for (p=0;p&lt;9;p++)
  background_alpha[0]=0.7
  
  can_pause=20
- if rm="rm_tutorial"
- {
-    global.force_letter_spawMAX=4
-    global.spawn_frequency=2 global.letter_spawn_frequency=7
-    stop_enemy_spawn=1 stop_letter_spawn=1 game_paused=1 
- }
  
  for (p2=0;p2&lt;tls;p2++)
  {
@@ -153,8 +147,7 @@ for (p=0;p&lt;9;p++)
    with mst2
    {index=p3}
  }
-  
-  
+ 
   
 </string>
           </argument>
@@ -331,13 +324,13 @@ if correct_matchCLOCK&gt;0 {correct_matchCLOCK--}
 
 if boss_defeatCLOCK=0 
 {
-  if sys.level=0
-  {sys.level=1 sys.level++ room_restart() exit;}
-  if sys.level=1
-  {sys.level=0 room_goto(rm_titlescreen) exit;}
+  if rm!="rm_tutorial"
+  { global.sublevel++ ChangeLevelParameters() room_restart() }
+
   if rm="rm_tutorial"
-  {sys.tutorial_lock=0 sys.level=0 room_goto(rm_titlescreen) exit;}
+  {global.tutorial_lock=0 global.sublevel=0 global.world=0 room_goto(rm_titlescreen)}
 }
+
 if game_overCLOCK=0
 {
    part_particles_clear(global.Psystem)
@@ -363,7 +356,7 @@ if spawn_delay&gt;0 {spawn_delay--}
 if stop_updating_letters&gt;0 {stop_updating_letters--}
 if spawn_delay&lt;=0 and stop_spawning_minions=0
 {
-   spawn_delay=round(room_speed*3)-(global.spawn_frequency*20)
+   spawn_delay=round(room_speed*3)-(global.spawn_frequency*15)
   
    rndnum=irandom(20)
    if force_letter_spawn&gt;=global.force_letter_spawnMAX and stop_letter_spawn=0
@@ -376,9 +369,9 @@ if spawn_delay&lt;=0 and stop_spawning_minions=0
    {
        force_letter_spawn++
        rndenemy=irandom(2)
-       if rndenemy=0 {instance_create(room_width+8,irandom_range(30,800),obj_enemy02)}
-       if rndenemy=1 {instance_create(room_width+8,irandom_range(30,632),obj_enemy03)}
-       if rndenemy=2 {instance_create(room_width+8,irandom_range(30,632),obj_enemy04)}
+       if rndenemy=0 {instance_create(room_width+64,irandom_range(30,800),obj_enemy02)}
+       if rndenemy=1 {instance_create(room_width+64,irandom_range(30,632),obj_enemy03)}
+       if rndenemy=2 {instance_create(room_width+64,irandom_range(30,632),obj_enemy04)}
    }
   
    if rndnum=1 and stop_letter_spawn=0 and instance_number(obj_letter)=0
@@ -435,7 +428,7 @@ DisplayNumberSprite(score,(room_width/2)+100,2)
 //display "letters" label.
 //draw_sprite_ext(spr_HUD_labels,2, (room_width/2)-201,bottomHUD+12, 0.6,0.6, 0,c_white,1) 
 sc2=GetSpriteTextWidth("letters",0.5)
-DrawSpriteText("letters",(room_width/2)-(sc2/1.5),bottomHUD+12,0.5) 
+DrawSpriteText("letters",(room_width/2)-(sc2/1.5),bottomHUD,0.5) 
 
 //draw_text(10,200, string(chosen_word))
 //notify the player that they've solved the word correctly.
@@ -526,21 +519,9 @@ if boss_arrivalCLOCK&gt;0
 }
 if boss_defeatCLOCK&gt;0
 {
-  if sys.level=0
-  { 
     //display "level complete" label.
     sc2=GetSpriteTextWidth("level complete!",0.8)
     DrawSpriteText("level complete!", (room_width/2)-(sc2/1.5),room_height/2-100,0.8) 
-    //draw_sprite_ext(spr_HUD_labels,12, (room_width/2)-(702/2),room_height/2-100, 0.6,0.6, 0,c_white,1)
-  }
-  
-  if sys.level=1
-  {
-    //display "you win!" label.
-    sc2=GetSpriteTextWidth("you win!",0.8)    
-    DrawSpriteText("you win!", (room_width/2)-(sc2/1.5), room_height/2-100,0.8) 
-    //draw_sprite_ext(spr_HUD_labels,7, (room_width/2)-(702/2),room_height/2-100, 0.6,0.6, 0,c_white,1)
-  }
 }
 if game_overCLOCK&gt;0
 {
@@ -567,7 +548,7 @@ if game_paused=1 and rm != "rm_tutorial"
    DrawSpriteText("options",450,560,0.5)
    DrawSpriteText("go to title screen",450,640,0.5)
    
-   draw_arrow(390,520+(cursorY*80), 440,520+(cursorY*80),64)
+   draw_arrow(390,500+(cursorY*80), 440,500+(cursorY*80),64)
 }
 
 if rm = "rm_tutorial"
@@ -687,9 +668,6 @@ if rm = "rm_tutorial"
          
        }
     }
-      
-    draw_set_font(font0) draw_set_color(c_white)
-    draw_text((room_width/2),580, "pr"+string(tutorial_prompt)+" ph"+string(tutorial_phase)+" "+string(tutorialCLOCK))
 }
 
 

@@ -26,7 +26,7 @@
           <argument>
             <kind>1</kind>
             <string>move_speed=8 fire_delay=0 button_delay=0
-image_xscale=0.7 image_yscale=0.7
+image_xscale=0.6 image_yscale=0.6
 blink=0 stop_input=0
 invincible=0 come_back=0 recovery=0
 shield=0 praise=0 ud_delay=0
@@ -78,16 +78,16 @@ if fire_delay&gt;0 {fire_delay--}
 if button_delay&gt;0 {button_delay--}
 if ud_delay&gt;0 {ud_delay--}
 
-if x&gt;=220 {x=220}
-if y&lt;30 {y=30}
+if x&gt;=280 {x=280}
+if y&lt;100 {y=100}
 
 if shield=0 {sprite_index=spr_player_ship}
 if shield&gt;0 {sprite_index=spr_shielded_ship}
 
 if come_back=1 and con.game_paused=0
 {
-   if x&lt;220 {x+=9}
-   if x&gt;=220 {x=220 come_back=0 fire_delay=0 stop_input=0 recovery=room_speed*2}
+   if x&lt;280 {x+=9}
+   if x&gt;=280 {x=280 come_back=0 fire_delay=0 stop_input=0 recovery=room_speed*2}
 }
 
 if con.game_paused=1 {return 0;}
@@ -133,9 +133,9 @@ if con.actionLOCK[0]=0
 if !ukey and !dkey { image_index=0 }
 
 //if the player touched the ground.
-if y&gt;852
+if y&gt;900
 {
-    y=852
+    y=900
     if visible=true and come_back=0 and invincible=0
     { DestroyPlayer(1) }
 }

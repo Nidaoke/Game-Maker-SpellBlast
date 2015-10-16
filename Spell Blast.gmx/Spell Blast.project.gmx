@@ -303,6 +303,7 @@
         <sprite>sprites\spr_enemy_bullet</sprite>
         <sprite>sprites\spr_enemy02</sprite>
         <sprite>sprites\spr_enemy03</sprite>
+        <sprite>sprites\spr_enemy03_electric</sprite>
         <sprite>sprites\spr_enemy04_idle</sprite>
         <sprite>sprites\spr_enemy04_shoot</sprite>
         <sprite>sprites\spr_enemy04_bullet</sprite>
@@ -357,6 +358,7 @@
     <script>scripts\dict_randomWordLength.gml</script>
     <script>scripts\dict_randomWordLetter.gml</script>
     <script>scripts\GetSpriteTextWidth.gml</script>
+    <script>scripts\ChangeLevelParameters.gml</script>
   </scripts>
   <fonts name="fonts">
     <font>fonts\font0</font>
@@ -372,7 +374,6 @@
       <object>objects\obj_mini_enemy02</object>
       <object>objects\obj_enemy02</object>
       <object>objects\obj_enemy03</object>
-      <object>objects\obj_ebullet</object>
       <object>objects\obj_enemy04_bullet</object>
       <object>objects\obj_enemy04</object>
       <object>objects\obj_enemy_bad_touch</object>

@@ -48,7 +48,7 @@ attack phases:
 5. phase 3 to 4 then back to 3(gun is last weakpoint)
 */
 
-image_speed=0 image_xscale=0.75 image_yscale=0.75
+image_speed=0 image_xscale=0.9 image_yscale=0.9
 
 arrivalCLOCK=round(room_speed*0.9)
 
@@ -109,7 +109,7 @@ if Xspeed=0
    }
    if attackCLOCK&gt;0 {attackCLOCK--}
    if y&lt;150 {Yspeed=1}
-   if y&gt;room_height-300 {Yspeed=-1}
+   if y&gt;room_height-270 {Yspeed=-1}
 } 
 
 //animate the enemy.
