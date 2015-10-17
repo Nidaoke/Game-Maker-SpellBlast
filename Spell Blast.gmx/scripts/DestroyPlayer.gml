@@ -6,7 +6,7 @@ var con=obj_gameplay_manager;
  part_emitter_clear(global.Psystem,vfxm.emt_megaweapon01_spark)
  part_emitter_clear(global.Psystem,vfxm.emt_megaweapon01_pdp)
 
- PlaySFX("player explode") ShakeCamera(30,room_speed/2.8)
+ PlaySFX("player explode") ShakeCamera(40,room_speed/2)
  //generate player death effects.
  part_particles_create(global.Psystem, p1.x, p1.y, vfxm.prt_player_death_ring, 5); 
  part_particles_create(global.Psystem, p1.x, p1.y, vfxm.prt_player_exp_wave, 1); 

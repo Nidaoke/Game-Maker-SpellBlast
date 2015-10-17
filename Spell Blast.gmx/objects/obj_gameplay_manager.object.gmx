@@ -128,10 +128,9 @@ for (p=0;p&lt;9;p++)
  
  PlayBGM("gameplay")
  
- background_index[0]=choose(bg_gameplay01,bg_gameplay02,bg_gameplay03,bg_gameplay04,bg_gameplay05);
+ background_index[0]=choose(bg_gameplay01,bg_gameplay03,bg_gameplay04,bg_gameplay05);
  background_htiled[0]=true
- background_xscale[0]=6 background_yscale[0]=6
- background_hspeed[0]=-0.03 background_hspeed[1]=-0.7
+ background_xscale[0]=2.8 background_yscale[0]=2.8
  background_alpha[0]=0.7
  
  can_pause=20
@@ -344,7 +343,7 @@ if matchCLOCK=0
   {
     if CheckIfPlayerMatchedAllLetters()=0 {correct_match=0}
     stop_spawning_minions=1 boss_arrivalCLOCK=room_speed*5 stop_letter_input=1
-    ShakeCamera(40,room_speed*5)
+    ShakeCamera(45,room_speed*5)
   }
 }
 if boss_arrivalCLOCK=0

@@ -97,7 +97,7 @@ with (other)
 if hp&lt;=0
 {
  PlaySFX("big rock explode")
-  ShakeCamera(20,room_speed/3)
+  ShakeCamera(30,room_speed/2.3)
  //generate asteroid poof hitsparks.
   part_particles_create(global.Psystem, x, y, vfxm.prt_asteroid_poof, 5);
   

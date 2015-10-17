@@ -25,7 +25,7 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>move_speed=8 fire_delay=0 button_delay=0
+            <string>move_speed=8.5 fire_delay=0 button_delay=0
 image_xscale=0.6 image_yscale=0.6
 blink=0 stop_input=0
 invincible=0 come_back=0 recovery=0
@@ -192,6 +192,8 @@ if (firekey) and fire_delay=0 and come_back=0 and con.actionLOCK[1]=0
  {
     fire_delay=5
     PlaySFX("player shoot")
+    ShakeCamera(5,room_speed/7)
+ 
     //generate player muzzle flash.
     part_particles_create(global.Psystem, x, y-1, vfxm.prt_player_muzzle_flash, 1); 
     

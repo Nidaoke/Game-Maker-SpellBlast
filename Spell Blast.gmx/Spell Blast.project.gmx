@@ -328,7 +328,7 @@
   <backgrounds name="background">
     <background>background\bg_ground_tile</background>
     <background>background\bg_gameplay01</background>
-    <background>background\bg_gameplay02</background>
+    <background>background\bg_title</background>
     <background>background\bg_gameplay03</background>
     <background>background\bg_gameplay04</background>
     <background>background\bg_gameplay05</background>

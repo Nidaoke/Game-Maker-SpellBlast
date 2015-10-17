@@ -48,7 +48,8 @@ attack phases:
 5. phase 3 to 4 then back to 3(gun is last weakpoint)
 */
 
-image_speed=0 image_xscale=0.9 image_yscale=0.9
+image_speed=0 
+image_xscale=0.97 image_yscale=0.97
 
 arrivalCLOCK=round(room_speed*0.9)
 
@@ -166,7 +167,10 @@ if anim_time&gt;=room_speed
           //go back to jaw open critical state.
           anim_speed=30 anim_time=0 start_frame=7 end_frame=7 
           anim_frame=start_frame anim_cycle=1 new_phase=5
-          attackCLOCK=critical_attackTIME+(round(5)*irandom_range(0,4))
+          if con.correct_match=0 
+            {attackCLOCK=attackTIME/3}
+          if con.correct_match=1
+            {attackCLOCK=critical_attackTIME+(round(5)*irandom_range(0,4))}
           skip=1
         }
         if boss_state&lt;2
@@ -180,8 +184,11 @@ if anim_time&gt;=room_speed
     
      //attack close
     if attack_phase=4
-    {
-       attackCLOCK=attackTIME+(round(10)*irandom_range(1,8))
+    {   
+        if con.correct_match=0 
+        {attackCLOCK=attackTIME/3}
+        if con.correct_match=1
+        { attackCLOCK=attackTIME+(round(10)*irandom_range(1,8))}
        //set idle animation state.
        anim_speed=40 anim_time=0 start_frame=0 end_frame=2 
        anim_frame=0 anim_cycle=1 new_phase=1
@@ -257,7 +264,7 @@ if boss_state=3
    PlaySFX("boss explode")
    con.boss_defeatCLOCK=round(room_speed*4.5)
    if p1.shield&gt;0 {p1.shield=0 p1.recovery=room_speed*3}
-   ShakeCamera(30,room_speed*1.2)
+   ShakeCamera(40,room_speed*1.7)
    part_particles_create(global.Psystem, x, y, vfxm.prt_boss_splat, 5); 
    part_particles_create(global.Psystem, x, y, vfxm.prt_boss_sploosh, 20); 
    part_particles_create(global.Psystem, x, y, vfxm.prt_jelly_ring, 5); 

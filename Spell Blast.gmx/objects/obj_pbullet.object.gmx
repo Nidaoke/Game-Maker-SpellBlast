@@ -25,7 +25,7 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>move_speed=40
+            <string>move_speed=47
 image_xscale=0.8 image_yscale=0.4
 </string>
           </argument>

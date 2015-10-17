@@ -146,9 +146,13 @@ if instance_exists(obj_gameplay_manager)=true
 {
    con=obj_gameplay_manager;
    if con.game_paused=1
-   {background_hspeed[1]=0 return 0}
-   background_hspeed[1]=2
-   
+   {
+     background_hspeed[1]=0 background_hspeed[2]=0
+     background_hspeed[0]=0 return 0
+   }
+   background_hspeed[1]=-2 background_hspeed[2]=-2
+   background_hspeed[0]=-0.01
+    
    if starfield_delay&gt;0 {starfield_delay--}   
    if starfield_delay=0
    {
@@ -212,22 +216,12 @@ draw_set_color(c_white)
 
 if rm="rm_titlescreen"
   {
-    draw_sprite_ext(spr_titleBG01,0, 0,0, 1.5,1.5, 0,c_white,1)   
     draw_sprite(spr_titlecard,0, (room_width/2),round(room_height/6))
     sc2=GetSpriteTextWidth("press start",0.7)
     DrawSpriteText("press start",(room_width/2)-(sc2/1.75),room_height/1.8,0.7)
     //draw_sprite_ext(spr_HUD_labels,4, (room_width/2)-(536/1.8),room_height/1.8, 0.6,0.6, 0,c_white,1)
   }
-  
-if rm="rm_gameplay"
-  {
-    draw_set_color(make_color_rgb(190,190,190))
-    //draw_sprite_ext(spr_gameplayBG01,0, bg_scrollX,0, 4,4, 0,c_white,1)  
-    //draw_background_tiled_area(bg_ground_tile,0,32,0,room_height-256,room_width,room_height)
-  }
- 
-   draw_set_color(c_white)
- 
+
  
  
  
