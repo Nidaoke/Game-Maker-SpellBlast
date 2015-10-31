@@ -76,7 +76,7 @@ if instance_exists(obj_player)
     }
 }
 
-if x&lt;-96 {instance_destroy()}
+if x&lt;-(room_width/4) {instance_destroy()}
 </string>
           </argument>
         </arguments>
@@ -114,11 +114,11 @@ with (other)
 if hp&lt;=0
 {
   PlaySFX("minion explode")
-    ShakeCamera(30,room_speed/2.3)
+  ShakeCamera(15)
   //generate jellyfish death hitsparks.
-  part_particles_create(global.Psystem, x, y, vfxm.prt_jelly_splat, 10);
-  part_particles_create(global.Psystem, x, y, vfxm.prt_jelly_spurt, 20);
-  part_particles_create(global.Psystem, x, y, vfxm.prt_jelly_ring2, 1);
+  part_particles_create(global.Psystem, x+50, y+30, vfxm.prt_jelly_splat, 10);
+  part_particles_create(global.Psystem, x+50, y+30, vfxm.prt_jelly_spurt, 20);
+  part_particles_create(global.Psystem, x+50, y+30, vfxm.prt_jelly_ring2, 1);
   
  instance_destroy()
 }

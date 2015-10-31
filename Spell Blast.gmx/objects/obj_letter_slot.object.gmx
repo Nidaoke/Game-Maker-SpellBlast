@@ -3,7 +3,7 @@
   <spriteName>spr_letterbox</spriteName>
   <solid>0</solid>
   <visible>-1</visible>
-  <depth>0</depth>
+  <depth>-1</depth>
   <persistent>0</persistent>
   <parentName>&lt;undefined&gt;</parentName>
   <maskName>&lt;undefined&gt;</maskName>
@@ -25,8 +25,7 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>index=0
-image_speed=0
+            <string>index=0 image_speed=0  blink=0
 </string>
           </argument>
         </arguments>
@@ -49,10 +48,65 @@ image_speed=0
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>var con=obj_gameplay_manager;
+            <string>var con;
 
-x=(room_width/2)-(con.tls*140/2)+(index*140)
-y=con.bottomHUD+90
+/*
+x=(room_width/2)-(con.tls*160/2)+(index*160)
+y=con.bottomHUD+70
+*/
+
+if instance_exists(obj_gameplay_manager)
+{
+    con=obj_gameplay_manager;
+    if con.game_paused=1 {return 0;}
+    blink++ if blink&gt;9 {blink=0}
+}
+
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="8" enumb="0">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>var con=obj_gameplay_manager, num=ds_list_find_value(global.letters_found_list,index)
+var col;
+
+   draw_self()
+   
+   //display letterbox cursor.     
+     if con.stop_letter_input=0 and con.letcursor=index and CheckIfAllLettersCollected()=1
+      {
+         if con.letcursorstate=0
+         {
+            if blink&lt;5 {col=65535}
+            if blink&gt;=4 {col=make_color_rgb(125,95,25)}
+            draw_sprite_ext(spr_letterbox,1,x,y, 1,1,0,col,1)
+         }
+         if con.letcursorstate=1
+         {
+            if blink&lt;5 {col=65280}
+            if blink&gt;=4 {col=make_color_rgb(25,125,25)}
+            draw_sprite_ext(spr_letterbox,1, x,y, 1,1,0,col,1)
+         }
+      }  
+
+
 </string>
           </argument>
         </arguments>

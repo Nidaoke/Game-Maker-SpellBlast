@@ -63,7 +63,7 @@ rkey=keyboard_check(vk_right) or gamepad_button_check(0,gp_padr)
 leftstickH=gamepad_axis_value(0, gp_axislh)
 leftstickV=gamepad_axis_value(0, gp_axislv)
 
-confirmkey=keyboard_check(ord("Z")) or gamepad_button_check_pressed(0,gp_face1)
+confirmkey=keyboard_check_pressed(vk_enter) or keyboard_check_pressed(ord("Z")) or gamepad_button_check_pressed(0,gp_face1) or gamepad_button_check_pressed(0,gp_start)
   
    if leftstickV&lt;-global.thumbstickDS {ukey=true}
    if leftstickV&gt;global.thumbstickDS {dkey=true}

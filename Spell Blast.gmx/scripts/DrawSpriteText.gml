@@ -15,5 +15,5 @@ for (p=1;p<=string_length(str);p++)
    g=string_char_at(str,p)
    w=ConvertCharToValue(g)
    if col=-1 {col=c_white}
-   DrawSpriteChar(w,xa+(p*(100*(sc+(sc/15)))),ya,sc,col)
+   DrawSpriteChar(w,xa+(p*(100*(sc+(sc/15)))),ya,sc)
 }

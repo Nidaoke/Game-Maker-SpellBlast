@@ -3,7 +3,7 @@
   <spriteName>&lt;undefined&gt;</spriteName>
   <solid>0</solid>
   <visible>-1</visible>
-  <depth>-10</depth>
+  <depth>-5</depth>
   <persistent>0</persistent>
   <parentName>&lt;undefined&gt;</parentName>
   <maskName>&lt;undefined&gt;</maskName>
@@ -27,10 +27,13 @@
             <kind>1</kind>
             <string>cursorY=0 maxY=2 button_delay=0
 thumbstickDS=0.2 
-
+life_reward=0
 //spawn a letter after so many enemies have been spawned.
 force_letter_spawn=0
+letter_spawn_delay=round(room_speed*(3+irandom(15) ))
 global.force_letter_spawnMAX=5
+
+global.boss_index=1//irandom(1)
 
 TLW=0
 tutorial_phase=0 tutorialCLOCK=room_speed*2
@@ -63,7 +66,8 @@ if rm = "rm_tutorial"
     for (p=0;p&lt;5;p++)
     { actionLOCK[p]=1 }
 }
-spawn_delay=0 cw=0 tls=0 chosen_word=""
+spawn_delay=irandom(30)
+cw=0 tls=0 chosen_word=""
 collect_order=0 letselected=0
 letcursor=0 letcursorstate=0
 letcursorlastpos=0 game_paused=0
@@ -76,13 +80,15 @@ match_label=0
 
 //cam shake stuff
 cam_shake_intensity=0 cam_shake_time=0
-cam_shakeX=0 cam_shakeY=0
+cam_shakeX=0 cam_shakeY=0 cam_shake_fade=0.2
+//view x and y
+vx=room_width/2-150; //center width
+vy=room_height/2-150; //center height
 
 //where the timers+letter boxes go.
 bottomHUD=room_height-240
 
 collectTIME=round(room_speed*45)
-matchTIME=round(room_speed*20)
 collectCLOCK=-1 matchCLOCK=-1
 boss_arrivalCLOCK=-1 boss_defeatCLOCK=-1
 game_overCLOCK=-1
@@ -109,6 +115,8 @@ for (p=0;p&lt;9;p++)
  //update player progress.
  ChangeLevelParameters()
 
+ matchTIME=round(room_speed*(14+(6*global.matchTIMER)))
+ 
  //choose the word to be solved.
  if rm != "rm_tutorial" {chosen_word=string_lower(dict_randomWordLength(global.word_length))}
  if rm="rm_tutorial" {chosen_word="cage"}
@@ -124,7 +132,8 @@ for (p=0;p&lt;9;p++)
     letters_arranged[p2]=letters_assigned[p2]
  }
  
- ds_list_shuffle(global.letters_spawn_list)
+ while (CheckLettersScrambled()&lt;1)
+ {ds_list_shuffle(global.letters_spawn_list)}
  
  PlayBGM("gameplay")
  
@@ -135,16 +144,23 @@ for (p=0;p&lt;9;p++)
  
  can_pause=20
  
+ var p1x=0,p1y=0, tls2=tls, bHUD=bottomHUD
  for (p2=0;p2&lt;tls;p2++)
  {
    var p3=p2
    var mst=instance_create(-900,-900, obj_letter_slot)
    with mst
-   {index=p3}
+   {
+     index=p3
+     x=(room_width/2)-(tls2*160/2)+(index*160)
+     y=bHUD+70 p1x=x p1y=y
+   }
    
    var mst2=instance_create(-900,-900, obj_letter_filler)
    with mst2
-   {index=p3}
+   {
+     index=p3 x=p1x y=p1y
+   }
  }
  
   
@@ -185,7 +201,8 @@ rkey=keyboard_check(vk_right) or gamepad_button_check(0,gp_padr)
 leftstickH=gamepad_axis_value(0, gp_axislh)
 leftstickV=gamepad_axis_value(0, gp_axislv)
 
-pause_confirmkey=keyboard_check(ord("Z")) or gamepad_button_check_pressed(0,gp_face1)
+tut_confirmkey=keyboard_check_pressed(ord("Z")) or gamepad_button_check_pressed(0,gp_face1)
+pause_confirmkey=keyboard_check_pressed(vk_enter) or keyboard_check_pressed(ord("Z")) or gamepad_button_check_pressed(0,gp_face1) or gamepad_button_check_pressed(0,gp_start)
 
 //puase the gameplay.
 pausekey=keyboard_check_pressed(vk_enter) or gamepad_button_check_pressed(0,gp_start)
@@ -198,12 +215,11 @@ if global.gamepad_enabled[0]=true
 if can_pause&gt;0 and rm != "rm_tutorial" {can_pause--}
 if can_pause=0 and rm != "rm_tutorial"
 {
-   if (pausekey) {pause_used=1}
-   //if (gp_pausekey) {pause_used=1}
+   if (pausekey) and button_delay=0 {pause_used=1}
    if pause_used=1
    {
      game_paused=ToggleValue(game_paused) 
-     if game_paused=1 {cursorY=0}
+     if game_paused=1 {cursorY=0 button_delay=15}
    }
 }
 
@@ -222,7 +238,7 @@ if rm = "rm_tutorial"
     
     if tutorial_prompt=1
     {
-        if (pause_confirmkey) and button_delay=0
+        if (tut_confirmkey) and button_delay=0
         {
            //tutorialCLOCK=room_speed
            //enabled/disable actions on specific tutorial phases.
@@ -291,23 +307,16 @@ if game_paused=1 {return 0;}
 
 blink++ if blink&gt;9 {blink=0}
 
-//shake camera.
- if cam_shake_time&gt;0
-  {
-    cam_shake_time--
-    if cam_shake_time&lt;=round(room_speed) {csa=1.4}
-    if cam_shake_time&lt;=round(room_speed/2) {csa=2}
-    cam_shakeX=random_range(-(cam_shake_intensity/csa),(cam_shake_intensity/csa))
-    cam_shakeY=random_range(-(cam_shake_intensity/csa),(cam_shake_intensity/csa))
-  }
-  
- if cam_shake_time&lt;1 {cam_shake_time=0}
- if cam_shake_time=0
-  {cam_shakeX=0 cam_shakeY=0}
+//shake camera
+ if cam_shake_intensity&gt;0 {cam_shake_intensity-=cam_shake_fade}
+ cam_shakeX=random_range(-cam_shake_intensity,cam_shake_intensity)
+ cam_shakeY=random_range(-cam_shake_intensity,cam_shake_intensity)
+
+ if cam_shake_intensity&lt;0 {cam_shake_intensity=0}  
+ if cam_shake_intensity=0 {cam_shakeX=0 cam_shakeY=0}
         
-  view_xview[0]=0+cam_shakeX
-  view_yview[0]=0+cam_shakeY
-    
+  view_xview[0]=cam_shakeX view_yview[0]=cam_shakeY
+  
 if collectCLOCK&gt;-1 {collectCLOCK--}
 
 if rm!="rm_tutorial" and matchCLOCK&gt;-1
@@ -320,11 +329,12 @@ if boss_defeatCLOCK&gt;-1 {boss_defeatCLOCK--}
 if game_overCLOCK&gt;-1 {game_overCLOCK--}
 if game_overCLOCK&gt;0 {can_pause=1000}
 if correct_matchCLOCK&gt;0 {correct_matchCLOCK--}
+if letter_spawn_delay&gt;0 {letter_spawn_delay--}
 
 if boss_defeatCLOCK=0 
 {
   if rm!="rm_tutorial"
-  { global.sublevel++ ChangeLevelParameters() room_restart() }
+  { lives++ global.sublevel++ ChangeLevelParameters() room_restart() }
 
   if rm="rm_tutorial"
   {global.tutorial_lock=0 global.sublevel=0 global.world=0 room_goto(rm_titlescreen)}
@@ -336,19 +346,22 @@ if game_overCLOCK=0
    part_particles_clear(global.STARFIELDsystem)
    room_goto(rm_titlescreen)
 }
-      
+
 if matchCLOCK=0
 {
   if stop_spawning_minions=0
   {
     if CheckIfPlayerMatchedAllLetters()=0 {correct_match=0}
-    stop_spawning_minions=1 boss_arrivalCLOCK=room_speed*5 stop_letter_input=1
-    ShakeCamera(45,room_speed*5)
+    stop_spawning_minions=1 boss_arrivalCLOCK=room_speed*4 stop_letter_input=1
+    ShakeCamera(25)
   }
 }
 if boss_arrivalCLOCK=0
 {
-   instance_create(room_width,(room_height/2)+80, obj_boss01)
+  if global.boss_index=0
+   {instance_create(room_width,(room_height/2)+80, obj_boss01)}
+  if global.boss_index=1
+   {instance_create(room_width,(room_height/7), obj_boss02)}
 }
 
 if spawn_delay&gt;0 {spawn_delay--}
@@ -357,33 +370,56 @@ if spawn_delay&lt;=0 and stop_spawning_minions=0
 {
    spawn_delay=round(room_speed*3)-(global.spawn_frequency*15)
   
-   rndnum=irandom(20)
-   if force_letter_spawn&gt;=global.force_letter_spawnMAX and stop_letter_spawn=0
-   {rndnum=1 force_letter_spawn=0}
-   
    if rm= "rm_tutorial" and tutorial_phase=2
    {force_letter_spawn=global.force_letter_spawnMAX spawn_delay=room_speed}
-    
-   if rndnum!=1 and stop_enemy_spawn=0
+   
+   if stop_enemy_spawn=0
    {
-       force_letter_spawn++
-       rndenemy=irandom(2)
+       force_letter_spawn++ rndenemy=irandom(2)
        if rndenemy=0 {instance_create(room_width+64,irandom_range(30,800),obj_enemy02)}
        if rndenemy=1 {instance_create(room_width+64,irandom_range(30,632),obj_enemy03)}
        if rndenemy=2 {instance_create(room_width+64,irandom_range(30,632),obj_enemy04)}
-   }
-  
-   if rndnum=1 and stop_letter_spawn=0 and instance_number(obj_letter)=0
-   {     
+   }   
+}
+
+if letter_spawn_delay=0 and stop_letter_spawn=0 and instance_number(obj_letter)&lt;1    
+{   
+   if rm = "rm_tutorial"
+    { 
+       force_letter_spawn=0 letter_spawn_delay=round(room_speed*(1+irandom(12)) )
        if ds_list_size(global.letters_spawn_list)&gt;0
         {
-           //var target=letters_assigned[rndlet]-1
            var target=ds_list_find_value(global.letters_spawn_list,0)
            var let=instance_create(room_width+36,irandom_range(30,800),obj_letter)
-           with let
-           { value=target fndlet=1 }
+           with let { value=target }
         }
-   }
+    }
+
+   //==
+  
+ if rm != "rm_tutorial"
+  {
+       force_letter_spawn=0 letter_spawn_delay=round(room_speed*(1+irandom(12)) )
+       if ds_list_size(global.letters_spawn_list)&gt;0
+        {
+           var target=ds_list_find_value(global.letters_spawn_list,irandom( ds_list_size(global.letters_spawn_list)-1) )
+           var dup=0
+           for (g=0;g&lt;instance_number(obj_letter);g++)
+            {
+              with (instance_find(obj_letter, g))
+              {
+                if value=target { dup++ }
+              }
+            }
+           
+           if dup=0 
+           {
+             var let=instance_create(room_width+36,irandom_range(30,800),obj_letter)
+             with let { value=target }
+           }
+        }   
+  }
+ //== 
 }
 
 </string>
@@ -416,25 +452,26 @@ var rm=room_get_name(room)
 draw_set_color(c_gray)
 draw_set_font(font0)
 
-//draw_sprite_ext(spr_HUD_labels,3, 5,5, 0.6,0.6, 0,c_white,1)
-DrawSpriteText("lives:",5,2,0.5) 
-DisplayNumberSprite(lives,290,2)
+draw_sprite(spr_player_life,0,35,-2)
+DrawSpriteText("x"+string(lives),120,2,0.7) 
+//DisplayNumberSprite(lives,300,0)
 
-//draw_sprite_ext(spr_HUD_labels,5, (room_width/2)-200,5, 0.6,0.6, 0,c_white,1)
-DrawSpriteText("score:",(room_width/2)-200,2,0.5) 
-DisplayNumberSprite(score,(room_width/2)+100,2)
+var scorestr=string(score)
+draw_sprite_ext(spr_scorebar,0,722,10, 0.8,0.8, 0,c_white,1)
+DrawSpriteText(scorestr,1150-(70*string_length(scorestr)),12,0.7) 
+//DisplayNumberSprite(score,(room_width/2)+100,0)
 
 //display "letters" label.
 //draw_sprite_ext(spr_HUD_labels,2, (room_width/2)-201,bottomHUD+12, 0.6,0.6, 0,c_white,1) 
-sc2=GetSpriteTextWidth("letters",0.5)
-DrawSpriteText("letters",(room_width/2)-(sc2/1.5),bottomHUD,0.5) 
+sc2=GetSpriteTextWidth("letters",0.35)
+DrawSpriteText("letters",(room_width/2)-(sc2/1.5),bottomHUD+55,0.35)
 
 //draw_text(10,200, string(chosen_word))
 //notify the player that they've solved the word correctly.
-if instance_exists(obj_boss01)=false and con.boss_arrivalCLOCK&lt;1
+if instance_exists(obj_boss01)=false and matchCLOCK&gt;0
  {
    if stop_letter_input=0 and CheckIfAllLettersCollected()=1 and CheckIfPlayerMatchedAllLetters()=1 and correct_match=0
-   {p1.praise=1 correct_match=1 match_label=0 correct_matchCLOCK=room_speed*3 stop_letter_input=1 }
+   {p1.praise=1 correct_match=1 match_label=0 correct_matchCLOCK=room_speed*2 stop_letter_input=1 }
  }
 
 //notify the player that they've solved the word INcorrectly.
@@ -445,44 +482,44 @@ if con.boss_arrivalCLOCK&gt;0 and con.correct_match=0
  }
 
 //display correct or INcorrect notification.
- if correct_matchCLOCK&gt;0 and game_overCLOCK&lt;=0
+if correct_matchCLOCK&gt;0 and game_overCLOCK&lt;=0
  { 
     //if correct.
     if match_label=0 
     {
       sc2=GetSpriteTextWidth("correct!",0.8)
-      DrawSpriteText("correct!",(room_width/2)-(sc2/1.5),bottomHUD-340,0.8) 
+      DrawSpriteText("correct!",(room_width/2)-(sc2/1.5),bottomHUD-150,0.8) 
     }
     //if INcorrect.
-    if match_label=1 
+    if match_label=1
     {
       sc2=GetSpriteTextWidth("wrong!",0.8)
-      DrawSpriteText("wrong!",(room_width/2)-(sc2/1.5),bottomHUD-340,0.8) 
+      DrawSpriteText("wrong!",(room_width/2)-(sc2/1.5),bottomHUD-150,0.8) 
     }
  }
  
- //display the collected letters. DEBUG
+ //display the letters in the correct arrangement. DEBUG 
  /*
-  for (p3=0;p3&lt;ds_list_size(global.letters_spawn_list);p3++)
+  for (p3=0;p3&lt;tls;p3++)
    {
-    num=ds_list_find_value(global.letters_spawn_list,p3)        
-    draw_sprite_ext(spr_letters,num,400+(p3*140),bottomHUD-100, 1,1, 0,c_white,1)   
+    //num=ds_list_find_value(global.letters_spawn_list,p3)        
+    num=letters_assigned[p3]
+    draw_sprite_ext(spr_letters,num-1,400+(p3*140),bottomHUD-100, 1,1, 0,c_white,1)   
   }  
- */
+*/
 
- //if CheckIfAllLettersCollected()=1 and CheckIfPlayerMatchedAllLetters()=0
+       //display timer.    
  if CheckIfAllLettersCollected()=1 and stop_spawning_minions=0
-    {
-       //display timer.
-       sc2=GetSpriteTextWidth("time",0.5)
-       DrawSpriteText("time", (room_width/2)-(sc2/1.5),bottomHUD-56,0.5) 
-       //draw_sprite_ext(spr_HUD_labels,6, (room_width/2)-(220/2),bottomHUD-56, 0.6,0.6, 0,c_white,1)
-      
+    {  
        var tpc=findtotalpercent(matchCLOCK,round(matchTIME));
-       
-       draw_set_color(c_orange)
-       draw_healthbar(100,bottomHUD-10,room_width-100,bottomHUD-2,tpc, c_black, c_orange,c_orange,0,true,true)
-     }
+       var tpc2=findpercentvalue(1880,tpc);
+
+       //+80
+       draw_sprite_ext(spr_timerbar,0, 10,805, 1,1, 0,c_white,1)
+       draw_sprite_part_ext(spr_timerfiller,0, 40,0,tpc2,100, 50,805, 1,1,c_white,1)
+       sc2=GetSpriteTextWidth("timer",0.4)
+       DrawSpriteText("timer",(room_width/2)-(sc2/1.5),830,0.4) 
+    }
      
  var col=0;
  /*
@@ -506,169 +543,6 @@ if con.boss_arrivalCLOCK&gt;0 and con.correct_match=0
   }
  */
    
-draw_set_alpha(1)
-draw_set_halign(fa_left)
-
-if boss_arrivalCLOCK&gt;0
-{
-   //display "get ready!" label.
-   sc2=GetSpriteTextWidth("get ready!",0.8)
-   DrawSpriteText("get ready!", (room_width/2)-(sc2/1.5),room_height/2-100,0.8) 
-   //draw_sprite_ext(spr_HUD_labels,10, (room_width/2)-(473/2),room_height/2-100, 0.6,0.6, 0,c_white,1)
-}
-if boss_defeatCLOCK&gt;0
-{
-    //display "level complete" label.
-    sc2=GetSpriteTextWidth("level complete!",0.8)
-    DrawSpriteText("level complete!", (room_width/2)-(sc2/1.5),room_height/2-100,0.8) 
-}
-if game_overCLOCK&gt;0
-{
-   //display "game over" label.
-   sc2=GetSpriteTextWidth("game over!",0.8)    
-   DrawSpriteText("game over!",(room_width/2)-(sc2/1.5),room_height/2-100,0.8) 
-   //draw_sprite_ext(spr_HUD_labels,0, (room_width/2)-(473/2),room_height/2-100, 0.6,0.6, 0,c_white,1)
-}
-
-if game_paused=1 and rm != "rm_tutorial"
-{
-   draw_set_color(c_black) draw_set_alpha(0.4)
-   draw_rectangle(0,0,view_wview[0],view_hview[0],false)
-   draw_set_alpha(1)
-   draw_set_color(c_white)
-  
-   //display "game is paused" label.
-   sc2=GetSpriteTextWidth("game is paused",0.8)    
-   DrawSpriteText("game is paused",(room_width/2)-(sc2/1.5),200,0.8) 
-   //draw_sprite_ext(spr_HUD_labels,1, (room_width/2)-(514/2),200, 0.6,0.6, 0,c_white,1)
-   
-   draw_set_color(c_white)
-   DrawSpriteText("resume game",450,480,0.5) 
-   DrawSpriteText("options",450,560,0.5)
-   DrawSpriteText("go to title screen",450,640,0.5)
-   
-   draw_arrow(390,500+(cursorY*80), 440,500+(cursorY*80),64)
-}
-
-if rm = "rm_tutorial"
-{
-    if tutorial_phase=0 and tutorialCLOCK&gt;0
-    {
-       draw_set_color(c_white)
-       sc2=GetSpriteTextWidth("tutorial",0.5)
-       DrawSpriteText("tutorial",(room_width/2)-(sc2/1.5),300,0.5)
-    }
-    
-    if tutorial_prompt=1
-    {
-        draw_set_color(c_dkgray)
-        draw_rectangle(200,70,room_width-220,room_height-240,false)    
-        draw_set_color(c_white)
-        
-        if tutorial_phase=0
-        {
-           sc2=GetSpriteTextWidth("move up or down with",0.38)    
-           DrawSpriteText("move up or down with",(room_width/2)-(sc2/1.6),90,0.38)           
-           draw_sprite(spr_control_icons,0,(room_width/2)-(164/3.5),140)
-                    
-           sc2=GetSpriteTextWidth("fire bullets at enemies with",0.38)    
-           DrawSpriteText("fire bullets at enemies with",(room_width/2)-(sc2/1.7),260,0.38)
-           draw_sprite(spr_control_icons,9,(room_width/2)-(164/1.2),310)         
-             
-           sc2=GetSpriteTextWidth("do not touch the ground below!", 0.38)    
-           DrawSpriteText("do not touch the ground below!",(room_width/2)-(sc2/1.7),420,0.38)
-           
-           sc2=GetSpriteTextWidth("press the fire button to continue",0.4)  
-           DrawSpriteText("press the fire button to continue",(room_width/2)-(sc2/1.8),room_height-310,0.4)
-           
-        }
-       if tutorial_phase=1
-        {
-           sc2=GetSpriteTextWidth("collect letters once they appear", 0.38)    
-           DrawSpriteText("collect letters once they appear",(room_width/2)-(sc2/1.7),90,0.38)
-           draw_sprite(spr_control_icons,11,(room_width/2)-(164),140)
-           
-           sc2=GetSpriteTextWidth("do not shoot letters or you", 0.38)    
-           DrawSpriteText("do not shoot letters or you",(room_width/2)-(sc2/1.7),260,0.38)
-          
-           sc2=GetSpriteTextWidth("will lose a life!", 0.38)
-           DrawSpriteText("will lose a life!",(room_width/2)-(sc2/1.7),310,0.38)
-           
-           sc2=GetSpriteTextWidth("press the fire button to continue",0.4)  
-           DrawSpriteText("press the fire button to continue",(room_width/2)-(sc2/1.8),room_height-310,0.4)
-          
-       }      
-      if tutorial_phase=2
-       {
-          sc2=GetSpriteTextWidth("when you have collected all", 0.38)    
-          DrawSpriteText("when you have collected all",(room_width/2)-(sc2/1.7),90,0.38)
-
-          sc2=GetSpriteTextWidth("the letters, you have to solve", 0.38)    
-          DrawSpriteText("the letters, you have to solve",(room_width/2)-(sc2/1.7),140,0.38)
-
-          sc2=GetSpriteTextWidth("the scrambled word before time", 0.38)
-          DrawSpriteText("the scrambled word before time",(room_width/2)-(sc2/1.7),190,0.38)
-         
-          sc2=GetSpriteTextWidth("runs out. press the left or right", 0.38)
-          DrawSpriteText("runs out. press the left or right",(room_width/2)-(sc2/1.7),240,0.38)
-   
-          sc2=GetSpriteTextWidth("arrow keys, dpad or thumbstick", 0.38)    
-          DrawSpriteText("arrow keys, dpad or thumbstick",(room_width/2)-(sc2/1.7),290,0.38)
-
-          sc2=GetSpriteTextWidth("to move the yellow cursor at", 0.38)    
-          DrawSpriteText("to move the yellow cursor at",(room_width/2)-(sc2/1.7),340,0.38)
-         
-          sc2=GetSpriteTextWidth("the bottom of the screen.", 0.38)    
-          DrawSpriteText("the bottom of the screen.",(room_width/2)-(sc2/1.7),390,0.38)
-          draw_sprite(spr_control_icons,1,(room_width/2)-(164/3.5),445)
-           
-          sc2=GetSpriteTextWidth("try it now!", 0.38)    
-          DrawSpriteText("try it now!",(room_width/2)-(sc2/1.7),570,0.38)
-
-       }
-       
-      if tutorial_phase=3
-       {
-          sc2=GetSpriteTextWidth("to move a letter around, press", 0.38)    
-          DrawSpriteText("to move a letter around, press",(room_width/2)-(sc2/1.7),90,0.38)
-
-          sc2=GetSpriteTextWidth("and hold the x key, b button or", 0.38)    
-          DrawSpriteText("and hold the x key, b button or",(room_width/2)-(sc2/1.7),140,0.38)
-          
-          sc2=GetSpriteTextWidth("circle button, then press left or", 0.38)    
-          DrawSpriteText("circle button, then press left or",(room_width/2)-(sc2/1.7),190,0.38)
-        
-          sc2=GetSpriteTextWidth("right to move the desired letter.", 0.38)    
-          DrawSpriteText("right to move the desired letter.",(room_width/2)-(sc2/1.7),240,0.38)
-        
-          draw_sprite(spr_control_icons,10,(room_width/2)-(164/1.2),300)
-           
-          sc2=GetSpriteTextWidth("try it now!", 0.38)    
-          DrawSpriteText("try it now!",(room_width/2)-(sc2/1.7),420,0.38)
-          
-       }    
-              
-      if tutorial_phase=4
-       {
-          sc2=GetSpriteTextWidth("do not forget to shoot incoming", 0.38)    
-          DrawSpriteText("do not forget to shoot incoming",(room_width/2)-(sc2/1.7),90,0.38)
-        
-          sc2=GetSpriteTextWidth("enemies while you solve the word!", 0.38)    
-          DrawSpriteText("enemies while you solve the word!",(room_width/2)-(sc2/1.7),140,0.38)
-        
-          sc2=GetSpriteTextWidth("you will be notified when you", 0.38)    
-          DrawSpriteText("you will be notified when you",(room_width/2)-(sc2/1.7),190,0.38)
-        
-          sc2=GetSpriteTextWidth("have solved the word correctly.", 0.38)    
-          DrawSpriteText("have solved the word correctly.",(room_width/2)-(sc2/1.7),240,0.38)
-                  
-          sc2=GetSpriteTextWidth("press the fire button to continue",0.4)  
-          DrawSpriteText("press the fire button to continue",(room_width/2)-(sc2/1.8),room_height-360,0.4)
-         
-       }
-    }
-}
-
 
 
 

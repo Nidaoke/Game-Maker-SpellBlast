@@ -245,6 +245,7 @@
   </datafiles>
   <NewExtensions>
     <extension index="0">extensions\Easy English Dictionary</extension>
+    <extension index="1">extensions\Screen Shake Scripts</extension>
   </NewExtensions>
   <sounds name="sound">
     <sound>sound\bgm_titlescreen</sound>
@@ -268,7 +269,6 @@
       <sprites name="boss01 sprites">
         <sprite>sprites\spr_boss01_laser</sprite>
         <sprite>sprites\spr_boss01_state01</sprite>
-        <sprite>sprites\spr_boss01_damaged</sprite>
         <sprite>sprites\spr_boss01_state02</sprite>
         <sprite>sprites\spr_boss01_state03</sprite>
         <sprite>sprites\spr_boss01_state04</sprite>
@@ -293,6 +293,15 @@
         <sprite>sprites\spr_player_shot</sprite>
         <sprite>sprites\spr_player_thruster</sprite>
         <sprite>sprites\spr_mega_weapon_waves</sprite>
+        <sprite>sprites\spr_boss01_tentacle01</sprite>
+        <sprite>sprites\spr_boss01_tentacle02</sprite>
+        <sprite>sprites\spr_impact_sploosh</sprite>
+        <sprite>sprites\spr_mucky_splat</sprite>
+        <sprite>sprites\spr_splody</sprite>
+        <sprite>sprites\spr_sploosh1</sprite>
+        <sprite>sprites\spr_sploosh2</sprite>
+        <sprite>sprites\spr_sploosh3</sprite>
+        <sprite>sprites\spr_sploosh5</sprite>
       </sprites>
       <sprites name="BGs">
         <sprite>sprites\spr_titleBG01</sprite>
@@ -320,8 +329,22 @@
       <sprites name="player gfx">
         <sprite>sprites\spr_letters</sprite>
         <sprite>sprites\spr_player_ship</sprite>
+        <sprite>sprites\spr_player_life</sprite>
         <sprite>sprites\spr_player_bullet</sprite>
         <sprite>sprites\spr_shielded_ship</sprite>
+      </sprites>
+      <sprites name="HUD">
+        <sprite>sprites\spr_scorebar</sprite>
+        <sprite>sprites\spr_timerbar</sprite>
+        <sprite>sprites\spr_timerfiller</sprite>
+      </sprites>
+      <sprites name="boss02 sprites">
+        <sprite>sprites\spr_boss02_state01</sprite>
+        <sprite>sprites\spr_boss02_state02</sprite>
+        <sprite>sprites\spr_boss02_state03</sprite>
+        <sprite>sprites\spr_boss02_state04</sprite>
+        <sprite>sprites\spr_boss02_laser</sprite>
+        <sprite>sprites\spr_boss02_weakpoint</sprite>
       </sprites>
     </sprites>
   </sprites>
@@ -335,9 +358,11 @@
   </backgrounds>
   <paths name="paths">
     <path>paths\pth_jellyfish</path>
+    <path>paths\pth_boss02</path>
   </paths>
   <scripts name="scripts">
     <script>scripts\ConvertLetterToValue.gml</script>
+    <script>scripts\ConvertValueToLetter.gml</script>
     <script>scripts\ConvertCharToValue.gml</script>
     <script>scripts\CheckIfAllLettersCollected.gml</script>
     <script>scripts\MoveLetterCursor.gml</script>
@@ -359,6 +384,11 @@
     <script>scripts\dict_randomWordLetter.gml</script>
     <script>scripts\GetSpriteTextWidth.gml</script>
     <script>scripts\ChangeLevelParameters.gml</script>
+    <script>scripts\ListStringFind.gml</script>
+    <script>scripts\CheckDuplicateLettersPresent.gml</script>
+    <script>scripts\RecordSaveData.gml</script>
+    <script>scripts\LoadSaveData.gml</script>
+    <script>scripts\CheckLettersScrambled.gml</script>
   </scripts>
   <fonts name="fonts">
     <font>fonts\font0</font>
@@ -378,10 +408,6 @@
       <object>objects\obj_enemy04</object>
       <object>objects\obj_enemy_bad_touch</object>
     </objects>
-    <objects name="boss01 stuff">
-      <object>objects\obj_boss01</object>
-      <object>objects\obj_boss01_laser</object>
-    </objects>
     <objects name="managers">
       <object>objects\obj_gameplay_manager</object>
       <object>objects\obj_titlescreen_manager</object>
@@ -389,15 +415,33 @@
       <object>objects\obj_system_manager</object>
       <object>objects\obj_font_text_manager</object>
       <object>objects\obj_mainmenu_manager</object>
+      <object>objects\obj_hudlineup_manager</object>
+      <object>objects\obj_overlay_manager</object>
+      <object>objects\obj_gameplayBG_manager</object>
     </objects>
     <objects name="letter stuff">
       <object>objects\obj_letter_slot</object>
+      <object>objects\obj_hudlineup_letter_slot</object>
       <object>objects\obj_letter_filler</object>
+      <object>objects\obj_hudlineup_letter_filler</object>
+    </objects>
+    <objects name="BOSS OBJECTS">
+      <objects name="boss01 stuff">
+        <object>objects\obj_boss01</object>
+        <object>objects\obj_boss01_laser</object>
+      </objects>
+      <objects name="boss02 stuff">
+        <object>objects\obj_boss02</object>
+        <object>objects\obj_boss02_laser</object>
+        <object>objects\obj_boss02_final</object>
+        <object>objects\obj_boss02_weakspot</object>
+      </objects>
     </objects>
   </objects>
   <rooms name="rooms">
     <room>rooms\rm_titlescreen</room>
     <room>rooms\rm_gameplay</room>
+    <room>rooms\rm_hudtest</room>
     <room>rooms\rm_tutorial</room>
     <room>rooms\font_test</room>
     <room>rooms\rm_mainmenu</room>

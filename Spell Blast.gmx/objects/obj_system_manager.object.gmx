@@ -29,9 +29,11 @@
 global.letters_spawn_list=ds_list_create()
 
 bg_scrollX=0 starfield_delay=0
-global.tutorial_lock=1
-
+global.tutorial_lock=0
+global.matchTIMER=0
 global.thumbstickDS=0.2 
+global.boss_index=0
+global.current_boss=0
 
 global.force_letter_spawnMAX=5
 global.spawn_frequency=0
@@ -68,10 +70,14 @@ dict_init();
 //show_debug_message("Random word: "+ string(dict_randomWordLetter("a",7)));
 
 // change the random seed
-random_set_seed(randomize());
+randomize();
 
 // allow one step for the dictionary to import before using any functions
-alarm[0]=5;
+//alarm[0]=room_speed
+
+//scale the game's display.
+window_set_fullscreen(true)
+
 
 </string>
           </argument>
@@ -95,7 +101,8 @@ alarm[0]=5;
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>/*wordToCheck = choose("programming", "dog", "cat", "asdf"); // the word to check for validity (not case-sensitive)
+            <string>window_center()
+/*wordToCheck = choose("programming", "dog", "cat", "asdf"); // the word to check for validity (not case-sensitive)
 wordResult = dict_isValid(wordToCheck); // the actual check which will return either true or false
 
 // an example of what can be done with the result
@@ -136,6 +143,7 @@ show_debug_message("Random word: " + string(dict_randomWordLength(5)));
             <kind>1</kind>
             <string>var exitgamekey=0, con=0, stars=0;
 var vfxm=VFX_Manager;
+var rm=room_get_name(room)
 
 //closes the game.
 exitgamekey=keyboard_check_pressed(vk_escape) or gamepad_button_check_pressed(0,gp_select)
@@ -145,6 +153,18 @@ if (exitgamekey) {game_end()}
 if instance_exists(obj_gameplay_manager)=true
 {
    con=obj_gameplay_manager;
+   if rm = "rm_tutorial" and con.tutorial_prompt=0
+   {          
+       if starfield_delay&gt;0 {starfield_delay--}   
+       if starfield_delay=0
+       {
+          starfield_delay=room_speed/1.5 stars=irandom_range(2,8)
+          //generate starfield effect.
+          for (p=0;p&lt;stars;p++)
+          {part_particles_create(global.STARFIELDsystem, room_width+70, irandom_range(10,room_height-100), vfxm.prt_starfield, 1); }
+       }
+   }
+   
    if con.game_paused=1
    {
      background_hspeed[1]=0 background_hspeed[2]=0
@@ -152,14 +172,17 @@ if instance_exists(obj_gameplay_manager)=true
    }
    background_hspeed[1]=-2 background_hspeed[2]=-2
    background_hspeed[0]=-0.01
-    
-   if starfield_delay&gt;0 {starfield_delay--}   
-   if starfield_delay=0
-   {
-      starfield_delay=room_speed/1.5 stars=irandom_range(2,8)
-      //generate starfield effect.
-      for (p=0;p&lt;stars;p++)
-      {part_particles_create(global.STARFIELDsystem, room_width+70, irandom_range(10,room_height-100), vfxm.prt_starfield, 1); }
+
+   if rm != "rm_tutorial"
+   {       
+       if starfield_delay&gt;0 {starfield_delay--}   
+       if starfield_delay=0
+       {
+          starfield_delay=room_speed/1.5 stars=irandom_range(2,8)
+          //generate starfield effect.
+          for (p=0;p&lt;stars;p++)
+          {part_particles_create(global.STARFIELDsystem, room_width+70, irandom_range(10,room_height-100), vfxm.prt_starfield, 1); }
+       }
    }
 }
 
@@ -221,7 +244,6 @@ if rm="rm_titlescreen"
     DrawSpriteText("press start",(room_width/2)-(sc2/1.75),room_height/1.8,0.7)
     //draw_sprite_ext(spr_HUD_labels,4, (room_width/2)-(536/1.8),room_height/1.8, 0.6,0.6, 0,c_white,1)
   }
-
  
  
  

@@ -58,18 +58,19 @@ image_speed=0
 var con=obj_gameplay_manager, vfxm=VFX_Manager;
 var colall=0,stop=0;
 var rm=room_get_name(room)
-var ujoy,djoy,ljoy,rjoy;
+var ujoy,djoy,ljoy,rjoy, resetkey;
 
 //player movement/shooting controls.
 ukey=keyboard_check(vk_up) or gamepad_button_check(0,gp_padu)
 dkey=keyboard_check(vk_down) or gamepad_button_check(0,gp_padd)
 lkey=keyboard_check(vk_left) or gamepad_button_check(0,gp_padl) 
 rkey=keyboard_check(vk_right) or gamepad_button_check(0,gp_padr)
+resetkey=keyboard_check_pressed(ord("R"))
 
 leftstickH=gamepad_axis_value(0, gp_axislh)
 leftstickV=gamepad_axis_value(0, gp_axislv)
 
-firekey=keyboard_check_pressed(ord("Z")) or gamepad_button_check_pressed(0,gp_face1)
+firekey=keyboard_check(ord("Z")) or gamepad_button_check(0,gp_face1)
 letterkey=keyboard_check(ord("X")) or gamepad_button_check(0,gp_face2)
 oldletterkey=false
 megakey=keyboard_check_pressed(ord("C"))
@@ -90,10 +91,12 @@ if come_back=1 and con.game_paused=0
    if x&gt;=280 {x=280 come_back=0 fire_delay=0 stop_input=0 recovery=room_speed*2}
 }
 
+if (resetkey) {room_restart()}
+
 if con.game_paused=1 {return 0;}
 
 //generate player thrusters.
-part_particles_create(global.Psystem, x-110, y-80, vfxm.prt_player_projectile_trail, 1); 
+part_particles_create(global.Psystem, x-104, y-80+random(20), vfxm.prt_player_thrusters, 1); 
 
 if come_back=1 {fire_delay=100 return 0;}
 
@@ -177,9 +180,7 @@ if CheckIfAllLettersCollected()=1 and con.stop_letter_input=0 and con.matchCLOCK
       con.letcursorstate=1
       con.letselected=ds_list_find_value(global.letters_found_list,con.letcursor) 
       if con.tutorial_phase=3
-      {
-
-      }
+      { }
     }
     
     if letterkey=true { oldletterkey=true}
@@ -190,14 +191,14 @@ if CheckIfAllLettersCollected()=1 and con.stop_letter_input=0 and con.matchCLOCK
 
 if (firekey) and fire_delay=0 and come_back=0 and con.actionLOCK[1]=0
  {
-    fire_delay=5
+    fire_delay=12
     PlaySFX("player shoot")
-    ShakeCamera(5,room_speed/7)
+    ShakeCamera(4)
  
     //generate player muzzle flash.
     part_particles_create(global.Psystem, x, y-1, vfxm.prt_player_muzzle_flash, 1); 
     
-    instance_create(x+235,y+3,obj_pbullet)
+    instance_create(x+200,y,obj_pbullet)
  }
  
  if (megakey) and con.actionLOCK[4]=0
@@ -264,34 +265,50 @@ if visible=true and come_back=0 and invincible=0 and shield=0
           <argument>
             <kind>1</kind>
             <string>var letval=0, val=0, con=obj_gameplay_manager;
+var toomuch=0,cv="",str="",ind=0,lc=0,lc2=0;
+var rm=room_get_name(room)
+var px=(other).x, py=(other).y;
+
 with (other)
 {val=value}
 
-letval=val
-
- for (p=0;p&lt;con.tls;p++)
- {
-   if letval=con.letters_assigned[p]-1 and con.letters_collected[p]=0
+  letval=val
+  //figure out if this letter shouldn't be added to the player's letter stock.
+  cv=ConvertValueToLetter(letval)
+  
+  ds_list_add(global.letters_found_list, letval)    
+  //check if the letter isn't needed.
+  for (p=0;p&lt;ds_list_size(global.letters_found_list);p++)
+   {
+     if string(ds_list_find_value(global.letters_found_list,p))=str
+     {lc++}
+   }
+  lc2=string_count( cv, con.chosen_word ) 
+    
+  //if the player acquired too many dupes.
+  if lc+1&gt;=lc2 {toomuch=1}  
+    if toomuch=1
     {
-      con.letters_collected[p]=1
-      /*
-      con.letters_collect_order[p]=con.collect_order
-      con.letters_collected_list[con.collect_order]=con.letters_assigned[con.letters_collect_order[p]]
-      */
-      ds_list_add(global.letters_found_list, letval)
-      var ind=ds_list_find_index(global.letters_spawn_list, letval);
-      if ind != -1 {ds_list_delete(global.letters_spawn_list,ind);}
-      //con.collect_order++
-      break;
+       ind=ds_list_find_index(global.letters_spawn_list, letval);
+       if ind != -1 {ds_list_delete(global.letters_spawn_list,ind);}
     }
- }
+    if toomuch=0
+    {
+      //once a letter is found, delete it from the letters that need to be spawned.
+      ind=ds_list_find_index(global.letters_spawn_list, letval);
+      if ind != -1 {ds_list_delete(global.letters_spawn_list,ind);}
+    }
  
- if CheckIfAllLettersCollected()=1
+if CheckIfAllLettersCollected()=1
+ { con.collectCLOCK=-1 con.matchCLOCK=con.matchTIME }
+ 
+ for (g=0;g&lt;instance_number(obj_letter_filler);g++)
  {
-    con.collectCLOCK=-1 con.matchCLOCK=con.matchTIME
+   with instance_find(obj_letter_filler,ds_list_size(global.letters_found_list)-1)
+   {x=px y=py}
  }
  
- PlaySFX("letter collect")
+PlaySFX("letter collect")
 with (other)
 {instance_destroy()}
 

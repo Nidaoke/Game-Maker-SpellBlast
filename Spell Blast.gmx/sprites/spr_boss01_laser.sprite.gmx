@@ -21,5 +21,7 @@
   <height>85</height>
   <frames>
     <frame index="0">images\spr_boss01_laser_0.png</frame>
+    <frame index="1">images\spr_boss01_laser_1.png</frame>
+    <frame index="2">images\spr_boss01_laser_2.png</frame>
   </frames>
 </sprite>

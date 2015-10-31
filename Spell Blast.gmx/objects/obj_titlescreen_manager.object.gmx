@@ -52,7 +52,7 @@ global.sublevel=0 global.world=0
             <string>var startgamekey=0;
 
 //start game control.
-startgamekey=keyboard_check(vk_enter) or gamepad_button_check(0,gp_start)
+startgamekey=keyboard_check_pressed(vk_enter) or gamepad_button_check_pressed(0,gp_start)
 
 if (startgamekey) {room_goto(rm_mainmenu)}
 </string>

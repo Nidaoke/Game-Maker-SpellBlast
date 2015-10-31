@@ -59,7 +59,7 @@ if con.game_paused=1 {path_speed=0 return 0}
 
 x+=move_speed 
 if runup&gt;0 {runup-- x+=move_speed}
-if x&lt;-96 {instance_destroy()}
+if x&lt;=-(room_width/4) {instance_destroy()}
 </string>
           </argument>
         </arguments>
@@ -96,9 +96,9 @@ with (other)
 
 if hp&lt;=0
 {
- PlaySFX("big rock explode")
-  ShakeCamera(30,room_speed/2.3)
- //generate asteroid poof hitsparks.
+  PlaySFX("big rock explode")
+  ShakeCamera(15)
+  //generate asteroid poof hitsparks.
   part_particles_create(global.Psystem, x, y, vfxm.prt_asteroid_poof, 5);
   
  for (p=0;p&lt;2;p++)

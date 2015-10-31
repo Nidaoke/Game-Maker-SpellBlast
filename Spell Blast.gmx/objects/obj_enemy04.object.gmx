@@ -72,7 +72,7 @@ if sprite_index=spr_enemy04_shoot and (image_index&gt;=2 and image_index&lt;3) a
 if sprite_index=spr_enemy04_shoot and image_index=image_number-1
 {image_index=0 sprite_index=spr_enemy04_idle}
 
-if x&lt;-96 {instance_destroy()}
+if x&lt;-(room_width/4) {instance_destroy()}
 </string>
           </argument>
         </arguments>
@@ -110,7 +110,7 @@ with (other)
 if hp&lt;=0
 {
 PlaySFX("minion explode")
-  ShakeCamera(30,room_speed/2.3)
+    ShakeCamera(15)
    part_particles_create(global.Psystem, x, y, vfxm.prt_green_splat, 50);
    part_particles_create(global.Psystem, x, y, vfxm.prt_green_spray, 20);
  

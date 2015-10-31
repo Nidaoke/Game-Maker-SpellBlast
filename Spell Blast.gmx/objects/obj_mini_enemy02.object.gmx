@@ -25,7 +25,7 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>hp=1 move_speed=7.4 fire_delay=room_speed
+            <string>hp=1 move_speed=6 fire_delay=room_speed
 image_speed=0
 image_xscale=0.20 image_yscale=0.20
 direction=irandom_range(120,240)
@@ -60,7 +60,7 @@ if con.game_paused=1 {return 0}
 x+=lengthdir_x(move_speed,direction)
 y+=lengthdir_y(move_speed,direction)
 
-if x&lt;-96 {instance_destroy()}
+if x&lt;=-(room_width/4) {instance_destroy()}
 </string>
           </argument>
         </arguments>
@@ -100,7 +100,7 @@ if hp&lt;=0
   PlaySFX("small rock explode")
   //generate asteroid poof hitsparks.
   part_particles_create(global.Psystem, x, y, vfxm.prt_asteroid_poof, 5);
-  ShakeCamera(30,room_speed/2.3)
+  ShakeCamera(15)
   instance_destroy()
 }
 </string>

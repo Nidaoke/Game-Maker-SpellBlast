@@ -53,6 +53,8 @@ visible=true
 
 if con.game_paused=1 {return 0;}
 x+=move_speed
+
+if x&lt;=-(room_width/4) {instance_destroy()}
 </string>
           </argument>
         </arguments>

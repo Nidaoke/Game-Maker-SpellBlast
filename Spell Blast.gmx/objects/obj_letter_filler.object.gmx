@@ -25,8 +25,9 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>index=0 image_speed=0
-val=-255 blink=0
+            <string>index=0 image_speed=0 move_speed=42
+val=-255 blink=0 track=0
+px=0 py=0
 </string>
           </argument>
         </arguments>
@@ -49,14 +50,38 @@ val=-255 blink=0
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>var con=obj_gameplay_manager;
+            <string>var con;
+var spot=0, trX=0, trY=0, ind=0
 
-if con.game_paused=1 {return 0;}
+ind=index
+for (p=0;p&lt;instance_number(obj_letter_slot);p++)
+{
+    with instance_find(obj_letter_slot,p)
+    {
+       if ind=index {trX=x+30 trY=y+30}
+    }
+}
 
-blink++ if blink&gt;9 {blink=0}
+px=trX py=trY
+if instance_exists(obj_gameplay_manager)
+{
+  con=obj_gameplay_manager;
+  if con.game_paused=1 {return 0;}
+}
+for (g=0;g&lt;move_speed;g++)
+{
+  if x&lt;px-1 {x+=0.7}
+  if x&gt;px+1 {x-=0.7}
+  if y&lt;py-1 {y+=0.5}
+  if y&gt;py+1 {y-=0.5}
+  
+  if x&gt;=px-1 and x&lt;=px+1 {x=px}
+  if y&gt;=py-1 and y&lt;=py+1 {y=py}
+  
+}
 
-x=(room_width/2)-(con.tls*140/2)+(index*140)
-y=con.bottomHUD+90
+
+
 
 
 
@@ -88,28 +113,7 @@ y=con.bottomHUD+90
 var col;
 
 if num != undefined 
-{
-   image_index=num
-   draw_self()
-   
-   //display letterbox cursor.     
-     if con.stop_letter_input=0 and con.letcursor=index and CheckIfAllLettersCollected()=1
-      {
-         if con.letcursorstate=0
-         {
-            if blink&lt;5 {col=65535}
-            if blink&gt;=4 {col=make_color_rgb(125,95,25)}
-            draw_sprite_ext(spr_letterbox,1,x,y, 1,1,0,col,1)
-         }
-         if con.letcursorstate=1
-         {
-            if blink&lt;5 {col=65280}
-            if blink&gt;=4 {col=make_color_rgb(25,125,25)}
-            draw_sprite_ext(spr_letterbox,1, x,y, 1,1,0,col,1)
-         }
-      }
-  
-}
+{ image_index=num draw_self()}
 
 
 </string>
