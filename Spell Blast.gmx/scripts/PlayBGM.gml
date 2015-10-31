@@ -1,7 +1,6 @@
 var bgmtitle=argument0, rndbgm=0;
 
 audio_stop_all()
-/*
 if bgmtitle="title screen"
 { audio_play_sound(bgm_titlescreen, 100, true);}
 if bgmtitle="gameplay"
