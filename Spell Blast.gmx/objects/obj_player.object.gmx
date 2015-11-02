@@ -101,7 +101,7 @@ part_particles_create(global.Psystem, x-104, y-80+random(20), vfxm.prt_player_th
 if come_back=1 {fire_delay=100 return 0;}
 
 ///==
-if praise=1 and lives=0 and instance_exists(obj_boss01)
+if praise=1 and lives=0 and con.boss_present=1
  {recovery=30 shield=1 praise=0}
 
 if recovery&gt;0

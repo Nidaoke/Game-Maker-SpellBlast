@@ -25,12 +25,12 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>hp=2 move_speed=-6 fire_delay=room_speed
+            <string>hp=2 move_speed=-7.6 fire_delay=room_speed
 image_xscale=0.75 image_yscale=0.75
 old_path_speed=0 image_speed=0.12
-field_sfx_delay=0 runup=18
+field_sfx_delay=0 runup=25
 
-  path_start(pth_jellyfish, 6.2, 2, false);
+  path_start(pth_jellyfish, 7, 2, false);
   old_path_speed=path_speed
 </string>
           </argument>
@@ -99,8 +99,10 @@ if x&lt;-(room_width/4) {instance_destroy()}
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>hp-- score++
-var vfxm=VFX_Manager;
+            <string>var vfxm=VFX_Manager;
+
+if runup&gt;6 {return 0}
+hp-- score++
 
 PlaySFX("player shot impact")
 with (other) 

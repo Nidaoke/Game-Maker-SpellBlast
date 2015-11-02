@@ -26,17 +26,17 @@
           <argument>
             <kind>1</kind>
             <string>image_index=1 image_speed=0
-hp=60 Xspeed=2 Yspeed=-3 move_speed=5 
+hp=50 Xspeed=2 Yspeed=-3 move_speed=5 
 arrivalCLOCK=0 destroyed=0
 attack_phase=1 fire_delay=0 attack_count=0
-attackTIME=room_speed attackCLOCK=attackTIME
-attackCLOCK2=room_speed
+attackTIME=round(room_speed/2) attackCLOCK=attackTIME
+attackCLOCK2=round(room_speed/2)
 demiseCLOCK=0 stop_shooting=0
 critical_attackTIME=round(room_speed/1.8)
 boss_state=0 damageCLOCK=0
 
   old_path_speed=0
-  path_start(pth_boss02, 4, 2, false);
+  path_start(pth_boss02_final, 6, 2, false);
   old_path_speed=path_speed
   path_speed=0
   
@@ -55,8 +55,7 @@ attack phases:
 image_speed=0 image_index=0
 image_xscale=1.4 image_yscale=1.4
 
-arrivalCLOCK=20
-attackTIME=room_speed*6 attackCLOCK=attackTIME
+arrivalCLOCK=20 attackCLOCK=attackTIME
 
 //set idle animation state.
 anim_speed=15 anim_time=0 anim_cycle=1
@@ -111,7 +110,7 @@ if attackCLOCK2&gt;0 {attackCLOCK2--}
 //shoot laser.
 if attackCLOCK2=0 and stop_shooting=0
 {
-  attackCLOCK2=30+round(room_speed*random(1.6))
+  attackCLOCK2=30+irandom(round(room_speed/1.2))
   PlaySFX("boss shoot")
   var mst=instance_create(x+100,y+60,obj_boss02_laser)
   with mst

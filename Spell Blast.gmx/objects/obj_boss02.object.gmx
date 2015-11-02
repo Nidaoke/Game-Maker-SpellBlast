@@ -3,7 +3,7 @@
   <spriteName>spr_boss02_state01</spriteName>
   <solid>0</solid>
   <visible>-1</visible>
-  <depth>10000</depth>
+  <depth>10</depth>
   <persistent>0</persistent>
   <parentName>&lt;undefined&gt;</parentName>
   <maskName>&lt;undefined&gt;</maskName>
@@ -26,15 +26,22 @@
           <argument>
             <kind>1</kind>
             <string>hp=36 Xspeed=-5 Yspeed=0 move_speed=5 arrivalCLOCK=0
+Xwave=30 Ywave=50
 phase=0 attack_phase=1 fire_delay=0 attack_count=0
-attackTIME=room_speed*2 attackCLOCK=attackTIME
-attackCLOCK2=round(room_speed*1.2)
+attackTIME=round(room_speed*1.5) attackCLOCK=attackTIME
+attackCLOCK2=round(room_speed*1)
+asteroid_attackTIME=round(room_speed/1.6)
+
 stop_shooting=0 demiseCLOCK=0
 
 critical_attackTIME=round(room_speed/4)
 boss_state=0 damageCLOCK=0 originX=0
 damagedfirst=0
 
+  old_path_speed=0
+
+  path_speed=0
+  
 /*
 -anim speed=how fast anim time progresses
 -anim time=when anim frames change
@@ -53,7 +60,7 @@ attack phases:
 
 image_speed=0 image_index=0
 image_xscale=1.6 image_yscale=1.3
-arrivalCLOCK=round(room_speed*2.6)
+arrivalCLOCK=round(room_speed*2.8)
 attackTIME=room_speed*6 attackCLOCK=attackTIME
 
 //set idle animation state.
@@ -95,15 +102,20 @@ var vfxm=VFX_Manager;
           {
              Xspeed=0 Yspeed=0
              sprite_index=spr_boss02_state02
-             anim_speed=1 anim_time=0 start_frame=6 end_frame=8
+             anim_speed=5 anim_time=0 start_frame=6 end_frame=8
              anim_frame=start_frame image_index=start_frame attack_phase=6
              //instance_create(x,y,obj_boss02_final)
           }
       }
       
-if con.game_paused=1
-{ return 0;}
+if con.game_paused=0
+{
+  if arrivalCLOCK=-1 and attack_phase&lt;6 
+  { path_speed=old_path_speed}  
+} 
+if con.game_paused=1 { path_speed=0 return 0;}
 
+x+=Xspeed y+=Yspeed
 if attack_phase&gt;5 and x&gt;=originX-1
 {
     if demiseCLOCK&gt;-1
@@ -152,10 +164,11 @@ if arrivalCLOCK=0
     with mst {visible=false part=1}
  }
 
-x+=Xspeed y+=Yspeed
+
 if arrivalCLOCK&gt;0 {return 0}
 
 if attackCLOCK&gt;0 {attackCLOCK--}
+if asteroid_attackTIME&gt;0 {asteroid_attackTIME--}
 if attackCLOCK2&gt;0 {attackCLOCK2--}
 
    //head tracking.
@@ -168,8 +181,8 @@ if attackCLOCK2&gt;0 {attackCLOCK2--}
 //shoot laser.
 if attackCLOCK2=0 and stop_shooting=0
 {
-  if boss_state=0 {attackCLOCK2=round(room_speed*2.5)}
-  if boss_state=1 {attackCLOCK2=round(room_speed*(1)+random(0.5)) }
+  if boss_state=0 {attackCLOCK2=round(room_speed*1.5)}
+  if boss_state=1 {attackCLOCK2=round(room_speed)}
   
   var bs=boss_state
   PlaySFX("boss shoot")
@@ -195,11 +208,11 @@ attack phases:
 3. bite attack(frames 6-8)
 4. transform(frames 6-8 on sprite 2)
 */
-var at=round(findpercentvalue(room_speed+20,anim_speed))
+var at=round(findpercentvalue(room_speed,anim_speed))
 if at&lt;1 {at=1}
 anim_time+=at
 //if we reached the end of an animation frame.
-if anim_time&gt;=room_speed
+if anim_time&gt;=round(room_speed*1.5)
 {
   //if we HAVE NOT reached the end of the animation.
   if anim_frame != end_frame {anim_time=0 anim_frame+=anim_cycle skip=1} 
@@ -248,7 +261,7 @@ if anim_time&gt;=room_speed
             //blowhole state.
             case 4: 
               //go to delayed blowhole shoot state.
-               anim_speed=8 anim_time=0 anim_cycle=1
+               anim_speed=15 anim_time=0 anim_cycle=1
                start_frame=5 end_frame=5
                attack_phase=5 anim_frame=start_frame
                attackCLOCK=round(room_speed/4)
@@ -272,7 +285,7 @@ if anim_time&gt;=room_speed
              image_index=0 image_index=0 anim_speed=15  
              start_frame=0 end_frame=0 
              anim_time=0 anim_frame=start_frame   
-             instance_create(x+120,y,obj_boss02_final)
+             instance_create(x+80,y,obj_boss02_final)
              attack_phase=7           
             break;
          }
@@ -280,6 +293,40 @@ if anim_time&gt;=room_speed
 }
 
 //check state data.
+var astk=0
+if (attack_phase=1 or attack_phase=4 or attack_phase=5) and arrivalCLOCK&lt;0
+{ 
+   if Xwave&lt;0 {x-=2}
+   if Xwave&gt;0 {x+=2}
+   Xwave--
+   if Xwave&lt;-30 {Xwave=30}
+   
+   if Ywave&lt;0 {y-=2}
+   if Ywave&gt;0 {y+=2}
+   Ywave--
+   if Ywave&lt;-50 {Ywave=50}
+}
+//shoot asteroids.
+if attack_phase=1 and asteroid_attackTIME=0
+{
+   if anim_frame=2 and sprite_index=spr_boss02_state01
+   {astk=1}
+   if anim_frame&gt;=7 and sprite_index=spr_boss02_state03
+   {astk=1}
+   if astk=1
+   {
+     astk=1 asteroid_attackTIME=round(room_speed*2.4)
+     var p1,px,py;
+     if instance_exists(obj_player) {p1=obj_player px=p1.x py=p1.y}
+     
+     var mst=instance_create(x+200,y+400,obj_enemy02)
+     with mst
+     {
+       direction=point_direction(px-100,py-70,x,y)    
+       image_angle=direction follow=1
+     }
+   }
+}
   //check bite approach state.
   if attack_phase=2 and x&lt;850 and Xspeed&lt;0
   {  

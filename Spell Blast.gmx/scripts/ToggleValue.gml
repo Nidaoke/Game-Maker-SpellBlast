@@ -1,5 +1,5 @@
 argument0++
-if argument0<2
-{return argument0}
-if argument0>1 or argument0<0
+if argument0>1
 {return 0}
+
+return argument0

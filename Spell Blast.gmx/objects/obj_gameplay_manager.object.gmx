@@ -28,12 +28,13 @@
             <string>cursorY=0 maxY=2 button_delay=0
 thumbstickDS=0.2 
 life_reward=0
+boss_present=0
 //spawn a letter after so many enemies have been spawned.
 force_letter_spawn=0
 letter_spawn_delay=round(room_speed*(3+irandom(15) ))
 global.force_letter_spawnMAX=5
 
-global.boss_index=1//irandom(1)
+global.boss_index=irandom(1)
 
 TLW=0
 tutorial_phase=0 tutorialCLOCK=room_speed*2
@@ -115,7 +116,7 @@ for (p=0;p&lt;9;p++)
  //update player progress.
  ChangeLevelParameters()
 
- matchTIME=round(room_speed*(14+(6*global.matchTIMER)))
+ matchTIME=round(room_speed*(14+(4*global.matchTIMER)))
  
  //choose the word to be solved.
  if rm != "rm_tutorial" {chosen_word=string_lower(dict_randomWordLength(global.word_length))}
@@ -132,8 +133,15 @@ for (p=0;p&lt;9;p++)
     letters_arranged[p2]=letters_assigned[p2]
  }
  
- while (CheckLettersScrambled()&lt;1)
- {ds_list_shuffle(global.letters_spawn_list)}
+ var scram=0;
+ while (scram=0)
+ {
+    for (p6=0;p6&lt;2;p6++)
+    {
+        ds_list_shuffle(global.letters_spawn_list)
+    }
+    if CheckLettersScrambled()&gt;1 {scram=1 break;}
+ }
  
  PlayBGM("gameplay")
  
@@ -325,7 +333,7 @@ if rm="rm_tutorial" and matchCLOCK&gt;-1 and (tutorial_phase&gt;=4 and tutorial_
 {matchCLOCK--}
 
 if boss_arrivalCLOCK&gt;-1 {boss_arrivalCLOCK--}
-if boss_defeatCLOCK&gt;-1 {boss_defeatCLOCK--}
+if boss_defeatCLOCK&gt;-1 {boss_present=0 boss_defeatCLOCK--}
 if game_overCLOCK&gt;-1 {game_overCLOCK--}
 if game_overCLOCK&gt;0 {can_pause=1000}
 if correct_matchCLOCK&gt;0 {correct_matchCLOCK--}
@@ -358,10 +366,11 @@ if matchCLOCK=0
 }
 if boss_arrivalCLOCK=0
 {
+  boss_present=1
   if global.boss_index=0
    {instance_create(room_width,(room_height/2)+80, obj_boss01)}
   if global.boss_index=1
-   {instance_create(room_width,(room_height/7), obj_boss02)}
+   {instance_create(room_width,70,obj_boss02)}
 }
 
 if spawn_delay&gt;0 {spawn_delay--}
@@ -542,8 +551,6 @@ if correct_matchCLOCK&gt;0 and game_overCLOCK&lt;=0
       }
   }
  */
-   
-
 
 
 </string>

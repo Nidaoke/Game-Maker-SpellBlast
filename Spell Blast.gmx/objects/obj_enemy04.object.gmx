@@ -25,13 +25,13 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>hp=2 move_speed=-5.7 
+            <string>hp=2 move_speed=-7
 fire_delay=round(room_speed*2.7)
 image_xscale=0.6 image_yscale=0.6
-image_speed=0.1 fired=0 runup=18
+image_speed=0.1 fired=0 runup=25
 old_path_speed=0 image_speed=0.12
 
-  path_start(pth_jellyfish, 5.2, 2, false);
+  path_start(pth_jellyfish, 6.2, 2, false);
   old_path_speed=path_speed
 </string>
           </argument>
@@ -95,8 +95,10 @@ if x&lt;-(room_width/4) {instance_destroy()}
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>hp-- score++
-var vfxm=VFX_Manager;
+            <string>var vfxm=VFX_Manager;
+
+if runup&gt;6 {return 0}
+hp-- score++
 
 PlaySFX("player shot impact")
 with (other) 
@@ -109,10 +111,10 @@ with (other)
 
 if hp&lt;=0
 {
-PlaySFX("minion explode")
-    ShakeCamera(15)
-   part_particles_create(global.Psystem, x, y, vfxm.prt_green_splat, 50);
-   part_particles_create(global.Psystem, x, y, vfxm.prt_green_spray, 20);
+   PlaySFX("minion explode")
+   ShakeCamera(15)
+   part_particles_create(global.Psystem, x, y-30, vfxm.prt_green_splat, 50);
+   part_particles_create(global.Psystem, x, y-30, vfxm.prt_green_spray, 20);
  
  instance_destroy()
 }

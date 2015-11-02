@@ -358,6 +358,7 @@
   </backgrounds>
   <paths name="paths">
     <path>paths\pth_jellyfish</path>
+    <path>paths\pth_boss02_final</path>
     <path>paths\pth_boss02</path>
   </paths>
   <scripts name="scripts">

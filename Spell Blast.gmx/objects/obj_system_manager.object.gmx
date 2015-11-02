@@ -76,7 +76,7 @@ randomize();
 //alarm[0]=room_speed
 
 //scale the game's display.
-window_set_fullscreen(true)
+//window_set_fullscreen(true)
 
 
 </string>
