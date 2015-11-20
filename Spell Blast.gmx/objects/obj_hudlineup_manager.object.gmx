@@ -35,15 +35,15 @@ for (p2=0;p2&lt;7;p2++)
  ex_word[p2]=""
 }
 
-ex_word[0]="g" ex_word[1]="a"
-ex_word[2]="d" ex_word[3]="g"
-ex_word[4]="e" ex_word[5]="t"
+ex_word[0]="c" ex_word[1]="a"
+ex_word[2]="k" ex_word[3]="e"
+//ex_word[4]="e" ex_word[5]="t"
 
 mode=0 button_delay=0 button_speed=3
 bottomHUD=room_height-240
 /*
- var p1x=0,p1y=0, tls2=6, bHUD=bottomHUD
- for (p2=0;p2&lt;6;p2++)
+ var p1x=0,p1y=0, tls2=4, bHUD=bottomHUD
+ for (p2=0;p2&lt;tls2;p2++)
  {
    var p3=p2
    var mst=instance_create(-900,-900, obj_hudlineup_letter_slot)
@@ -150,12 +150,12 @@ if (spdkey) {button_speed=0}
             <string>draw_set_color(c_white)
 draw_set_font(font0)
 
-var scorestr=string(9944)
+var scorestr=string(12744)
 draw_sprite_ext(spr_scorebar,0,722,16, 0.8,0.8, 0,c_white,1)
 DrawSpriteText(scorestr,1130-(70*string_length(scorestr)),22,0.7) 
 
 draw_sprite(spr_player_life,0,35,8)
-DrawSpriteText("x0",120,12,0.7)
+DrawSpriteText("x3",120,12,0.7)
 
 //display "letters" label.
 sc2=GetSpriteTextWidth("letters",0.35)

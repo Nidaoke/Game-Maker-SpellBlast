@@ -3,7 +3,7 @@
   <spriteName>spr_enemy01</spriteName>
   <solid>0</solid>
   <visible>-1</visible>
-  <depth>0</depth>
+  <depth>1</depth>
   <persistent>0</persistent>
   <parentName>obj_enemy_bad_touch</parentName>
   <maskName>&lt;undefined&gt;</maskName>
@@ -25,10 +25,38 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>hp=2 move_speed=-3.6 fire_delay=room_speed
-image_xscale=1.20 image_yscale=1.20
-image_speed=0.6
-path_used=0 old_path_speed=0
+            <string>hp=4 move_speed=-7.6 fire_delay=room_speed
+old_path_speed=0 field_sfx_delay=0 runup=45
+
+  attackCLOCK=room_speed*2 attack_phase=1
+  path_start(pth_helicopter_cat, 5, 2, false);
+  old_path_speed=path_speed
+  shots=3
+
+/*
+-anim speed=how fast anim time progresses
+-anim time=when anim frames change
+-anim_frame=the current frame being displayed
+-anim cycle=animate forwards(+1) or backwards(-1)
+*/
+  attackCLOCK=room_speed*2 attack_phase=1
+anim_speed=30 anim_time=0 anim_frame=0 anim_cycle=1
+start_frame=0 end_frame=2
+
+/*
+attack phases:
+1. idle(frames 0-2)
+2. attack open(frames 3-7)
+3. charge+laser shot(frames 8-10)
+4. attack close -&gt;idle(frames 3-7 in reverse, so 7-3)
+5. phase 3 to 4 then back to 3(gun is last weakpoint)
+*/
+
+image_speed=0 image_xscale=0.75 image_yscale=0.7
+
+//set idle animation state.
+anim_speed=20 anim_time=0 start_frame=0 end_frame=3
+anim_cycle=1 anim_frame=start_frame attack_phase=1
 
 </string>
           </argument>
@@ -52,20 +80,66 @@ path_used=0 old_path_speed=0
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>var con=obj_gameplay_manager;
+            <string>var con=obj_gameplay_manager, new_phase=-1, skip=0;
+var p1=0;
 
 if con.game_paused=0 {path_speed=old_path_speed}
 if con.game_paused=1 {path_speed=0 return 0}
 
-x+=move_speed
-if fire_delay&gt;0 {fire_delay--}
-if fire_delay=0
-{
-  fire_delay=-1
-  instance_create(x,y,obj_ebullet)
-}
+if runup&gt;0 {runup-- path_speed=round(old_path_speed*1.4)}
+if runup=1 {fire_delay=10}
 
-if x&lt;-96 {instance_destroy()}
+if fire_delay&gt;0 {fire_delay--}
+if attackCLOCK&gt;0 {attackCLOCK--}
+
+if x&lt;-(room_width/10) {instance_destroy()}
+
+//animate the enemy.
+//anim_speed=0 anim_time=0 anim_frame=0 anim_cycle=0
+//first, check how much time to advance the frame time.
+anim_time+=findpercentvalue(room_speed,anim_speed)
+//if we reached the end of an animation frame.
+if anim_time&gt;=room_speed
+{
+  //if we HAVE NOT reached the end of the animation.
+  if anim_frame!=end_frame {anim_time=0 anim_frame+=anim_cycle skip=1}
+  //if we HAVE reached the end of the animation.  
+  if anim_frame=end_frame and skip=0
+  {
+     if attack_phase=1
+      { anim_time=0 anim_frame=start_frame}
+  }
+}
+    
+    switch (attack_phase)
+    {
+      //idle.
+      case 1:
+       if path_position&gt;=0.95 and shots&gt;0 and fire_delay=0 and y&lt;800
+       {
+          shots-- fire_delay=round(room_speed*2)
+          //set attack animation state.
+          anim_speed=20 anim_time=0 start_frame=4 end_frame=4
+          anim_frame=start_frame anim_cycle=1 attack_phase=2
+          attackCLOCK=round(room_speed/1.3)
+          
+          //fire hairball.
+          instance_create(x,y,obj_enemy01_bullet)
+          PlaySFX("cat shoot")
+       }
+      break;
+     //attack open.
+      case 2:
+        if attackCLOCK=0
+        {
+          //set idle state.
+          anim_speed=20 anim_time=0 start_frame=0 end_frame=3
+          anim_frame=start_frame anim_cycle=1 attack_phase=1
+        }
+      break;    
+  }
+
+image_index=anim_frame
 </string>
           </argument>
         </arguments>
@@ -88,17 +162,32 @@ if x&lt;-96 {instance_destroy()}
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>hp-- score++
-var vfxm=VFX_Manager
+            <string>var vfxm=VFX_Manager;
 
+if runup&gt;6 {return 0}
+hp-- score++
+
+PlaySFX("player shot impact")
 with (other) 
 {
-
+  //generate player projectile hitsparks.
+  part_particles_create(global.Psystem, x, y, vfxm.particle_hitspark1, 10);
+  part_particles_create(global.Psystem, x, y, vfxm.particle_hitspark2, 1);
   instance_destroy()
 }
 
 if hp&lt;=0
-{instance_destroy()}
+{
+  score+=28
+  PlaySFX("minion explode")
+  ShakeCamera(13)
+  //generate jellyfish death hitsparks.
+  part_particles_create(global.Psystem, x+50, y+30, vfxm.prt_jelly_splat, 10);
+  part_particles_create(global.Psystem, x+50, y+30, vfxm.prt_jelly_spurt, 20);
+  part_particles_create(global.Psystem, x+50, y+30, vfxm.prt_jelly_ring2, 1);
+  
+ instance_destroy()
+}
 </string>
           </argument>
         </arguments>

@@ -28,8 +28,9 @@
             <string>hp=1 move_speed=-5.8 fire_delay=room_speed
 image_xscale=0.5 image_yscale=0.5
 path_used=irandom(3) image_speed=0
-old_path_speed=0 runup=25
-follow=0 head_angle=0
+old_path_speed=0 runup=24
+follow=0 head_angle=0 drift=random_range(-0.6,0.6)
+canscore=1 image_angle=irandom(359)
 
 </string>
           </argument>
@@ -58,14 +59,16 @@ follow=0 head_angle=0
 if con.game_paused=0 {path_speed=old_path_speed}
 if con.game_paused=1 {path_speed=0 return 0}
 
+image_angle+=drift
 if follow=0 {x+=move_speed }
 if follow=1
 {
   x+=lengthdir_x(move_speed,direction)
   y+=lengthdir_y(move_speed,direction)
 }
-if runup&gt;0 {runup-- x+=round(move_speed/2)}
-if x&lt;=-(room_width/4) {instance_destroy()}
+if runup&gt;0 {runup-- x+=(move_speed/2)}
+
+if x&lt;(room_width/10) {instance_destroy()}
 </string>
           </argument>
         </arguments>
@@ -91,7 +94,7 @@ if x&lt;=-(room_width/4) {instance_destroy()}
             <string>var inst=0, vfxm=VFX_Manager;
 
 if runup&gt;6 {return 0}
-hp-- score++
+hp-- 
 
 PlaySFX("player shot impact")
 with (other) 
@@ -104,15 +107,18 @@ with (other)
 
 if hp&lt;=0
 {
+  if canscore=1 {score+=20}
   PlaySFX("big rock explode")
-  ShakeCamera(15)
+  ShakeCamera(13)
   //generate asteroid poof hitsparks.
   part_particles_create(global.Psystem, x, y, vfxm.prt_asteroid_poof, 5);
   
  for (p=0;p&lt;3;p++)
  {
     //release children.
-    instance_create(x+irandom_range(-10,10),y+irandom_range(-10,10),obj_mini_enemy02)
+   var mst=instance_create(x+irandom_range(-10,10),y+irandom_range(-10,10),obj_mini_enemy02)
+   var cs=canscore
+   with mst {canscore=cs}
  }
 
 instance_destroy()

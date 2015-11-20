@@ -11,8 +11,13 @@ if sfx="letter collect"
 
 if sfx="vomitron shoot"
 { audio_play_sound(sfx_vomitron_shoot, 30, false);}
-if sfx="boss shoot"
-{ audio_play_sound(sfx_boss_shoot, 30, false);}
+if sfx="cat shoot"
+{ audio_play_sound(sfx_cat_shoot, 30, false);}
+
+if sfx="boss01 shoot"
+{ audio_play_sound(sfx_boss01_shoot, 40, false);}
+if sfx="boss02 shoot"
+{ audio_play_sound(sfx_boss02_shoot, 40, false);}
 
 if sfx="jellyfish field"
 { audio_play_sound(sfx_jellyfish_field, 30, false);}

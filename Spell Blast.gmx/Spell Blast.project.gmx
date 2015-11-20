@@ -252,13 +252,21 @@
     <sound>sound\bgm_gameplay01</sound>
     <sound>sound\bgm_gameplay02</sound>
     <sound>sound\bgm_gameplay03</sound>
+    <sound>sound\bgm_gameplay04</sound>
+    <sound>sound\bgm_gameplay05</sound>
+    <sound>sound\bgm_gameplay06</sound>
+    <sound>sound\bgm_gameplay07</sound>
+    <sound>sound\bgm_gameplay08</sound>
+    <sound>sound\bgm_boss01</sound>
     <sound>sound\sfx_player_shot</sound>
     <sound>sound\sfx_player_explode</sound>
     <sound>sound\sfx_player_shot_impact</sound>
     <sound>sound\sfx_jellyfish_field</sound>
     <sound>sound\sfx_vomitron_shoot</sound>
+    <sound>sound\sfx_cat_shoot</sound>
     <sound>sound\sfx_minion_explode</sound>
-    <sound>sound\sfx_boss_shoot</sound>
+    <sound>sound\sfx_boss02_shoot</sound>
+    <sound>sound\sfx_boss01_shoot</sound>
     <sound>sound\sfx_boss_explode</sound>
     <sound>sound\sfx_big_asteroid_explode</sound>
     <sound>sound\sfx_small_asteroid_explode</sound>
@@ -272,6 +280,8 @@
         <sprite>sprites\spr_boss01_state02</sprite>
         <sprite>sprites\spr_boss01_state03</sprite>
         <sprite>sprites\spr_boss01_state04</sprite>
+        <sprite>sprites\spr_boss01_laser2</sprite>
+        <sprite>sprites\spr_boss01_laser3</sprite>
       </sprites>
       <sprites name="particles">
         <sprite>sprites\Particle_Spark_4</sprite>
@@ -304,20 +314,22 @@
         <sprite>sprites\spr_sploosh5</sprite>
       </sprites>
       <sprites name="BGs">
-        <sprite>sprites\spr_titleBG01</sprite>
         <sprite>sprites\spr_titlecard</sprite>
-        <sprite>sprites\spr_gameplayBG01</sprite>
       </sprites>
       <sprites name="Enemies">
-        <sprite>sprites\spr_enemy_bullet</sprite>
         <sprite>sprites\spr_enemy02</sprite>
         <sprite>sprites\spr_enemy03</sprite>
         <sprite>sprites\spr_enemy03_electric</sprite>
         <sprite>sprites\spr_enemy04_idle</sprite>
         <sprite>sprites\spr_enemy04_shoot</sprite>
         <sprite>sprites\spr_enemy04_bullet</sprite>
-        <sprite>sprites\spr_enemy03_attack</sprite>
         <sprite>sprites\spr_ground_tile</sprite>
+        <sprite>sprites\spr_enemy01</sprite>
+        <sprite>sprites\spr_enemy01_bullet</sprite>
+        <sprite>sprites\spr_enemy05</sprite>
+        <sprite>sprites\spr_enemy05_bullet</sprite>
+        <sprite>sprites\spr_enemy06</sprite>
+        <sprite>sprites\spr_enemy06_bullet</sprite>
       </sprites>
       <sprites name="misc">
         <sprite>sprites\spr_spritefont</sprite>
@@ -331,7 +343,9 @@
         <sprite>sprites\spr_player_ship</sprite>
         <sprite>sprites\spr_player_life</sprite>
         <sprite>sprites\spr_player_bullet</sprite>
-        <sprite>sprites\spr_shielded_ship</sprite>
+        <sprite>sprites\spr_shielded_ship01</sprite>
+        <sprite>sprites\spr_shielded_ship02</sprite>
+        <sprite>sprites\spr_shielded_ship03</sprite>
       </sprites>
       <sprites name="HUD">
         <sprite>sprites\spr_scorebar</sprite>
@@ -343,8 +357,10 @@
         <sprite>sprites\spr_boss02_state02</sprite>
         <sprite>sprites\spr_boss02_state03</sprite>
         <sprite>sprites\spr_boss02_state04</sprite>
-        <sprite>sprites\spr_boss02_laser</sprite>
         <sprite>sprites\spr_boss02_weakpoint</sprite>
+        <sprite>sprites\spr_boss02_laser</sprite>
+        <sprite>sprites\spr_boss02_laser2</sprite>
+        <sprite>sprites\spr_boss02_laser3</sprite>
       </sprites>
     </sprites>
   </sprites>
@@ -355,11 +371,20 @@
     <background>background\bg_gameplay03</background>
     <background>background\bg_gameplay04</background>
     <background>background\bg_gameplay05</background>
+    <background>background\bg_ground_tile01</background>
+    <background>background\bg_ground_tile02</background>
+    <background>background\bg_ground_tile03</background>
+    <background>background\bg_ground_tile04</background>
+    <background>background\bg_ground_tile05</background>
+    <background>background\bg_ground_tile06</background>
   </backgrounds>
   <paths name="paths">
     <path>paths\pth_jellyfish</path>
+    <path>paths\pth_flybeast_missile</path>
     <path>paths\pth_boss02_final</path>
     <path>paths\pth_boss02</path>
+    <path>paths\pth_helicopter_cat</path>
+    <path>paths\pth_fatdude01</path>
   </paths>
   <scripts name="scripts">
     <script>scripts\ConvertLetterToValue.gml</script>
@@ -373,6 +398,10 @@
     <script>scripts\ToggleValue.gml</script>
     <script>scripts\DestroyPlayer.gml</script>
     <script>scripts\PlayBGM.gml</script>
+    <script>scripts\PlayGameplayBGM.gml</script>
+    <script>scripts\PlayBossBGM.gml</script>
+    <script>scripts\ChooseGameplayBG.gml</script>
+    <script>scripts\ChooseGameplayGT.gml</script>
     <script>scripts\DrawSpriteChar.gml</script>
     <script>scripts\DrawSpriteText.gml</script>
     <script>scripts\DisplayNumberSprite.gml</script>
@@ -390,6 +419,12 @@
     <script>scripts\RecordSaveData.gml</script>
     <script>scripts\LoadSaveData.gml</script>
     <script>scripts\CheckLettersScrambled.gml</script>
+    <script>scripts\FillBossList.gml</script>
+    <script>scripts\FillBGList.gml</script>
+    <script>scripts\FillGTList.gml</script>
+    <script>scripts\FillSongList.gml</script>
+    <script>scripts\CountActiveEnemies.gml</script>
+    <script>scripts\CountLargeEnemies.gml</script>
   </scripts>
   <fonts name="fonts">
     <font>fonts\font0</font>
@@ -405,9 +440,15 @@
       <object>objects\obj_mini_enemy02</object>
       <object>objects\obj_enemy02</object>
       <object>objects\obj_enemy03</object>
-      <object>objects\obj_enemy04_bullet</object>
+      <object>objects\obj_enemy01</object>
+      <object>objects\obj_enemy01_bullet</object>
       <object>objects\obj_enemy04</object>
+      <object>objects\obj_enemy04_bullet</object>
       <object>objects\obj_enemy_bad_touch</object>
+      <object>objects\obj_enemy05</object>
+      <object>objects\obj_enemy05_bullet</object>
+      <object>objects\obj_enemy06</object>
+      <object>objects\obj_enemy06_bullet</object>
     </objects>
     <objects name="managers">
       <object>objects\obj_gameplay_manager</object>
@@ -419,6 +460,7 @@
       <object>objects\obj_hudlineup_manager</object>
       <object>objects\obj_overlay_manager</object>
       <object>objects\obj_gameplayBG_manager</object>
+      <object>objects\enemy_spawn_house</object>
     </objects>
     <objects name="letter stuff">
       <object>objects\obj_letter_slot</object>
@@ -442,11 +484,11 @@
   <rooms name="rooms">
     <room>rooms\rm_titlescreen</room>
     <room>rooms\rm_gameplay</room>
-    <room>rooms\rm_hudtest</room>
     <room>rooms\rm_tutorial</room>
     <room>rooms\font_test</room>
     <room>rooms\rm_mainmenu</room>
     <room>rooms\rm_options</room>
+    <room>rooms\rm_hudtest</room>
   </rooms>
   <help>
     <rtf>help.rtf</rtf>

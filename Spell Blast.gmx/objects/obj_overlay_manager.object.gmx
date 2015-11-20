@@ -36,41 +36,21 @@ if con.boss_arrivalCLOCK&gt;0
 {
    //display "get ready!" label.
    sc2=GetSpriteTextWidth("get ready!",0.8)
-   DrawSpriteText("get ready!", (room_width/2)-(sc2/1.5),room_height/2-100,0.8) 
+   DrawSpriteText("get ready!", (room_width/2)-(sc2/1.7),room_height/2-100,0.8) 
    //draw_sprite_ext(spr_HUD_labels,10, (room_width/2)-(473/2),room_height/2-100, 0.6,0.6, 0,c_white,1)
 }
 if con.boss_defeatCLOCK&gt;0
 {
     //display "level complete" label.
     sc2=GetSpriteTextWidth("level complete!",0.8)
-    DrawSpriteText("level complete!", (room_width/2)-(sc2/1.5),room_height/2-100,0.8) 
+    DrawSpriteText("level complete!", (room_width/2)-(sc2/1.7),room_height/2-100,0.8) 
 }
 if con.game_overCLOCK&gt;0
 {
    //display "game over" label.
    sc2=GetSpriteTextWidth("game over!",0.8)    
-   DrawSpriteText("game over!",(room_width/2)-(sc2/1.5),room_height/2-100,0.8) 
+   DrawSpriteText("game over!",(room_width/2)-(sc2/1.7),room_height/2-100,0.8) 
    //draw_sprite_ext(spr_HUD_labels,0, (room_width/2)-(473/2),room_height/2-100, 0.6,0.6, 0,c_white,1)
-}
-
-if con.game_paused=1 and rm != "rm_tutorial"
-{
-   draw_set_color(c_black) draw_set_alpha(0.4)
-   draw_rectangle(0,0,view_wview[0]*1.2,view_hview[0]*1.2,false)
-   draw_set_alpha(1)
-   draw_set_color(c_white)
-  
-   //display "game is paused" label.
-   sc2=GetSpriteTextWidth("game is paused",0.8)    
-   DrawSpriteText("game is paused",(room_width/2)-(sc2/1.5),200,0.8) 
-   //draw_sprite_ext(spr_HUD_labels,1, (room_width/2)-(514/2),200, 0.6,0.6, 0,c_white,1)
-   
-   draw_set_color(c_white)
-   DrawSpriteText("resume game",450,480,0.5) 
-   DrawSpriteText("options",450,560,0.5)
-   DrawSpriteText("go to title screen",450,640,0.5)
-   
-   draw_arrow(390,500+(con.cursorY*80), 440,500+(con.cursorY*80),64)
 }
 
 if rm = "rm_tutorial"
@@ -79,7 +59,7 @@ if rm = "rm_tutorial"
     {
        draw_set_color(c_white)
        sc2=GetSpriteTextWidth("tutorial",0.5)
-       DrawSpriteText("tutorial",(room_width/2)-(sc2/1.5),300,0.5)
+       DrawSpriteText("tutorial",(room_width/2)-(sc2/1.7),300,0.5)
     }
     
     if con.tutorial_prompt=1
@@ -190,6 +170,48 @@ if rm = "rm_tutorial"
          
        }
     }
+}
+
+if rm="rm_gameplay" or rm="rm_tutorial"
+  {  
+    //when the word is incorrect, display correct letters for a short time.
+    if con.correct_matchCLOCK&gt;0
+     { 
+        //if INcorrect.
+        if con.match_label=1
+        {
+          sc2=GetSpriteTextWidth("wrong!",0.6)
+          DrawSpriteText("wrong!",(room_width/2)-(sc2/1.7),con.bottomHUD-250,0.6) 
+          sc2=GetSpriteTextWidth("the correct word is",0.6)
+          DrawSpriteText("the correct word is",(room_width/2)-(sc2/1.7),con.bottomHUD-170,0.6) 
+          for (p3=0;p3&lt;con.tls;p3++)
+           {
+             num=con.letters_assigned[p3]
+             draw_sprite_ext(spr_letters,num-1,(room_width/2)-(con.tls*150/2)+(p3*150),con.bottomHUD-100, 1,1, 0,c_white,1)   
+           }  
+        }
+     } 
+  }
+ 
+  
+if con.game_paused=1 and rm != "rm_tutorial"
+{
+   draw_set_color(c_black) draw_set_alpha(0.4)
+   draw_rectangle(0,0,view_wview[0]*1.2,view_hview[0]*1.2,false)
+   draw_set_alpha(1)
+   draw_set_color(c_white)
+  
+   //display "game is paused" label.
+   sc2=GetSpriteTextWidth("game is paused",0.8)    
+   DrawSpriteText("game is paused",(room_width/2)-(sc2/1.5),200,0.8) 
+   //draw_sprite_ext(spr_HUD_labels,1, (room_width/2)-(514/2),200, 0.6,0.6, 0,c_white,1)
+   
+   draw_set_color(c_white)
+   DrawSpriteText("resume game",450,480,0.5) 
+   DrawSpriteText("options",450,560,0.5)
+   DrawSpriteText("go to title screen",450,640,0.5)
+   
+   draw_arrow(390,500+(con.cursorY*80), 440,500+(con.cursorY*80),64)
 }
 
 </string>

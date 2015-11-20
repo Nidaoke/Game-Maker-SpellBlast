@@ -35,7 +35,8 @@ asteroid_attackTIME=round(room_speed/1.6)
 stop_shooting=0 demiseCLOCK=0
 
 critical_attackTIME=round(room_speed/4)
-boss_state=0 damageCLOCK=0 originX=0
+boss_state=0 damageCLOCK=0 
+originX=0 originY=0
 damagedfirst=0
 
   old_path_speed=0
@@ -95,7 +96,7 @@ var p1=0, head_angle=0, mst=0, skip=0,head_angle=0;
 var vfxm=VFX_Manager;
 
      //switch to unicorn emerging state.
-     if boss_state=2 and x&gt;=originX-1
+     if boss_state=2 and x&gt;=originX-1 and y&gt;=originY-1
      {
         stop_shooting=1
          if attack_phase&lt;6
@@ -116,7 +117,7 @@ if con.game_paused=0
 if con.game_paused=1 { path_speed=0 return 0;}
 
 x+=Xspeed y+=Yspeed
-if attack_phase&gt;5 and x&gt;=originX-1
+if attack_phase&gt;5 and x&gt;=originX-1 and y&gt;=originY-1
 {
     if demiseCLOCK&gt;-1
     {
@@ -133,9 +134,9 @@ if attack_phase&gt;5 and x&gt;=originX-1
     if demiseCLOCK=-1 and boss_state=2 
     { instance_destroy() }
 }
-if boss_state=2 and x&gt;=originX-1
+if boss_state=2 and x&gt;=originX-1 and y&gt;=originY-1
 {
-    ShakeCamera(35)
+    ShakeCamera(16)
     //generate unicorn emergence VFX.
     if anim_frame=6
     {
@@ -159,11 +160,11 @@ if boss_state=2 and x&gt;=originX-1
 if arrivalCLOCK&gt;-1 {arrivalCLOCK-- path_speed=0}
 if arrivalCLOCK=0
  {
-    attackCLOCK=attackTIME originX=x Xspeed=0 Yspeed=0
+    attackCLOCK=attackTIME Xspeed=0 Yspeed=0
+    originX=x originY=y
     mst=instance_create(x,y,obj_boss02_weakspot)
     with mst {visible=false part=1}
  }
-
 
 if arrivalCLOCK&gt;0 {return 0}
 
@@ -179,16 +180,21 @@ if attackCLOCK2&gt;0 {attackCLOCK2--}
    }
    
 //shoot laser.
+if (attackCLOCK2&gt;5 and attackCLOCK2&lt;20) and stop_shooting=0
+{
+    //generate laser charge up
+    part_particles_create(global.Psystem, x+96, y+64, vfxm.prt_boss02_laser_charge, 4); 
+}
 if attackCLOCK2=0 and stop_shooting=0
 {
   if boss_state=0 {attackCLOCK2=round(room_speed*1.5)}
   if boss_state=1 {attackCLOCK2=round(room_speed)}
   
   var bs=boss_state
-  PlaySFX("boss shoot")
+//shoot laser
   var mst=instance_create(x+100,y+60,obj_boss02_laser)
   with mst
-  {laser_type=bs direction=head_angle image_angle=direction}
+  {visible=false laser_type=bs direction=head_angle image_angle=direction}
 }
 
 if damageCLOCK=0
@@ -315,13 +321,14 @@ if attack_phase=1 and asteroid_attackTIME=0
    {astk=1}
    if astk=1
    {
-     astk=1 asteroid_attackTIME=round(room_speed*2.4)
+     astk=1 asteroid_attackTIME=round(room_speed*1.75)
      var p1,px,py;
      if instance_exists(obj_player) {p1=obj_player px=p1.x py=p1.y}
      
      var mst=instance_create(x+200,y+400,obj_enemy02)
      with mst
      {
+       canscore=0
        direction=point_direction(px-100,py-70,x,y)    
        image_angle=direction follow=1
      }
@@ -340,7 +347,7 @@ if attack_phase=1 and asteroid_attackTIME=0
  if attack_phase=3 and x&gt;originX and Xspeed&gt;0 
  { 
     attack_phase=1 attackCLOCK=round(room_speed*2.4)
-    x=originX Xspeed=0
+    x=originX Xspeed=0 Yspeed=0
  }
 //
 image_index=anim_frame

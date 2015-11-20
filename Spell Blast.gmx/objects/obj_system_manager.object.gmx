@@ -27,6 +27,13 @@
             <kind>1</kind>
             <string>global.letters_found_list=ds_list_create()
 global.letters_spawn_list=ds_list_create()
+global.sub_difficulty=0
+
+//game content lists.
+global.boss_list=ds_list_create()
+global.BG_list=ds_list_create()
+global.song_list=ds_list_create()
+global.GT_list=ds_list_create()
 
 bg_scrollX=0 starfield_delay=0
 global.tutorial_lock=0
@@ -75,8 +82,11 @@ randomize();
 // allow one step for the dictionary to import before using any functions
 //alarm[0]=room_speed
 
+var WPER,HPER
+WPER=display_get_width()
+HPER=display_get_height()-findpercentvalue(display_get_height(),7)
 //scale the game's display.
-//window_set_fullscreen(true)
+window_set_rectangle(0,0,WPER,HPER)
 
 
 </string>
@@ -171,7 +181,7 @@ if instance_exists(obj_gameplay_manager)=true
      background_hspeed[0]=0 return 0
    }
    background_hspeed[1]=-2 background_hspeed[2]=-2
-   background_hspeed[0]=-0.01
+   background_hspeed[0]=-0.08
 
    if rm != "rm_tutorial"
    {       

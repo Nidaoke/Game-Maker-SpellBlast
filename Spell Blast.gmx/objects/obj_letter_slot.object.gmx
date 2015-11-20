@@ -50,11 +50,6 @@
             <kind>1</kind>
             <string>var con;
 
-/*
-x=(room_width/2)-(con.tls*160/2)+(index*160)
-y=con.bottomHUD+70
-*/
-
 if instance_exists(obj_gameplay_manager)
 {
     con=obj_gameplay_manager;
@@ -90,21 +85,24 @@ var col;
    draw_self()
    
    //display letterbox cursor.     
-     if con.stop_letter_input=0 and con.letcursor=index and CheckIfAllLettersCollected()=1
-      {
-         if con.letcursorstate=0
-         {
-            if blink&lt;5 {col=65535}
-            if blink&gt;=4 {col=make_color_rgb(125,95,25)}
-            draw_sprite_ext(spr_letterbox,1,x,y, 1,1,0,col,1)
-         }
-         if con.letcursorstate=1
-         {
-            if blink&lt;5 {col=65280}
-            if blink&gt;=4 {col=make_color_rgb(25,125,25)}
-            draw_sprite_ext(spr_letterbox,1, x,y, 1,1,0,col,1)
-         }
-      }  
+     if con.stop_letter_input=0 
+     {
+         if con.letcursor=index and CheckIfAllLettersCollected()=1
+          {
+             if con.letcursorstate=0
+             {
+                if blink&lt;5 {col=65535}
+                if blink&gt;=4 {col=make_color_rgb(125,95,25)}
+                draw_sprite_ext(spr_letterbox,1,x,y, 1,1,0,col,1)
+             }
+             if con.letcursorstate=1
+             {
+                if blink&lt;5 {col=65280}
+                if blink&gt;=4 {col=make_color_rgb(25,125,25)}
+                draw_sprite_ext(spr_letterbox,1, x,y, 1,1,0,col,1)
+             }
+          }  
+      }
 
 
 </string>

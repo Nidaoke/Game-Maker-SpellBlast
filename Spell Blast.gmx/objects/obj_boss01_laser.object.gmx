@@ -25,9 +25,11 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>move_speed=-47 ready=6 image_speed=0
-laser_type=0
-image_xscale=0.6 image_yscale=1.3
+            <string>move_speed=0 lifetime=round(room_speed/3)
+laser_type=0 stretch_speed=0
+image_speed=0.35
+image_xscale=1 image_yscale=0.9
+
 </string>
           </argument>
         </arguments>
@@ -50,21 +52,29 @@ image_xscale=0.6 image_yscale=1.3
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>var con=obj_gameplay_manager;
+            <string>var con=obj_gameplay_manager, b01;
 
-image_index=laser_type
+if laser_type=0 {sprite_index=spr_boss01_laser}
+if laser_type=1 {sprite_index=spr_boss01_laser2}
+if laser_type=2 {sprite_index=spr_boss01_laser3}
 
-if con.game_paused=1 {return 0;}
+visible=true
+if con.game_paused=0 {image_speed=0.35}
+if con.game_paused=1 {image_speed=0 return 0;}
 
-if ready&gt;0 {ready--}
-if ready=0 {visible=true}
+if lifetime&lt;10 and image_yscale&gt;0 {image_yscale-=0.08}
 
-x+=lengthdir_x(move_speed,direction)
-y+=lengthdir_y(move_speed,direction)
+if instance_exists(obj_boss01)
+ {
+   b01=obj_boss01 x=b01.x-12 y=b01.y
+ }
+if image_xscale&lt;5 {image_xscale+=stretch_speed}
 
+if lifetime&gt;0 {lifetime--}
 image_angle=direction
 
-if x&lt;=-(room_width/4) {instance_destroy()}
+if lifetime&lt;=0 
+{ audio_stop_sound(sfx_boss01_shoot) instance_destroy() }
 </string>
           </argument>
         </arguments>

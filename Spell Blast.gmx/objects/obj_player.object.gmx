@@ -25,7 +25,7 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>move_speed=8.5 fire_delay=0 button_delay=0
+            <string>move_speed=8.8 fire_delay=0 button_delay=0
 image_xscale=0.6 image_yscale=0.6
 blink=0 stop_input=0
 invincible=0 come_back=0 recovery=0
@@ -80,10 +80,7 @@ if button_delay&gt;0 {button_delay--}
 if ud_delay&gt;0 {ud_delay--}
 
 if x&gt;=280 {x=280}
-if y&lt;100 {y=100}
-
-if shield=0 {sprite_index=spr_player_ship}
-if shield&gt;0 {sprite_index=spr_shielded_ship}
+if y&lt;190 {y=190}
 
 if come_back=1 and con.game_paused=0
 {
@@ -130,10 +127,33 @@ action lock:
 
 if con.actionLOCK[0]=0
 {
-  if (ukey) {y-=move_speed ud_delay=5 image_index=1}
-  if (dkey) {y+=move_speed ud_delay=5 image_index=2}
+  if (ukey) 
+  {
+    y-=move_speed ud_delay=5 
+    if shield=0 {image_index=1}
+  }
+  if (dkey) 
+  {
+    y+=move_speed ud_delay=5 
+    if shield=0 {image_index=2}
+  }
 }
-if !ukey and !dkey { image_index=0 }
+if !ukey and !dkey 
+{
+   if shield=0 { image_index=0 }
+}
+
+//check if player's using the shield.
+if shield=0 {image_speed=0 sprite_index=spr_player_ship}
+if shield=1
+{
+  image_speed=0.5
+  if (ukey) {sprite_index=spr_shielded_ship02}
+  if (dkey) {sprite_index=spr_shielded_ship03}
+  if !ukey and !dkey 
+  { sprite_index=spr_shielded_ship01 }
+}
+
 
 //if the player touched the ground.
 if y&gt;900

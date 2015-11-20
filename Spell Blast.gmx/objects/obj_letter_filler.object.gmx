@@ -112,7 +112,9 @@ for (g=0;g&lt;move_speed;g++)
             <string>var con=obj_gameplay_manager, num=ds_list_find_value(global.letters_found_list,index)
 var col;
 
-if num != undefined 
+if con.game_paused=1 and instance_exists(obj_boss01)=false
+{ return 0 }
+if num != undefined
 { image_index=num draw_self()}
 
 

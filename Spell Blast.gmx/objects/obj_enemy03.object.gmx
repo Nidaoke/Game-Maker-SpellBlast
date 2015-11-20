@@ -25,13 +25,10 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>hp=2 move_speed=-7.6 fire_delay=room_speed
+            <string>hp=2 move_speed=-3.5 fire_delay=room_speed
 image_xscale=0.75 image_yscale=0.75
-old_path_speed=0 image_speed=0.12
-field_sfx_delay=0 runup=25
-
-  path_start(pth_jellyfish, 7, 2, false);
-  old_path_speed=path_speed
+image_speed=0.02 field_sfx_delay=0 runup=40
+state=0 state_time=0
 </string>
           </argument>
         </arguments>
@@ -56,27 +53,40 @@ field_sfx_delay=0 runup=25
             <kind>1</kind>
             <string>var con=obj_gameplay_manager;
 
-if con.game_paused=0 {path_speed=old_path_speed}
-if con.game_paused=1 {path_speed=0 return 0}
+if con.game_paused=1 {image_speed=0 return 0}
 
-if runup&gt;0 {runup-- path_speed=round(old_path_speed*1.4)}
-if field_sfx_delay&gt;0 {field_sfx_delay--}
-if instance_exists(obj_player)
+if runup&gt;0 {runup-- x+=(move_speed)}
+if move_speed&lt;-3.5 {move_speed+=0.4}
+if move_speed&gt;-3.5 {move_speed=-3.5}
+x+=move_speed
+
+if field_sfx_delay=0 {field_sfx_delay-- }
+if state_time&gt;0 {state_time--}
+
+if image_index&gt;=2 and state=0
+{state=1 move_speed=-16 state_time=room_speed}
+if state_time=0 and state=1
+{state=0 sprite_index=spr_enemy03 image_index=0}
+
+if state=0
 {
- if distance_to_object(obj_player)&gt;=340
-    {sprite_index=spr_enemy03}
-   if distance_to_object(obj_player)&lt;340
-    {
-    sprite_index=spr_enemy03_electric
-       if field_sfx_delay=0
-       { 
-         field_sfx_delay=round(room_speed*1.6)
-         PlaySFX("jellyfish field")
-       }
-    }
+  sprite_index=spr_enemy03
+  if con.game_paused=0 or runup=0 {image_speed=0.03}
+}
+if state=1
+{
+  sprite_index=spr_enemy03_electric
+  if con.game_paused=0 or runup=0 {image_speed=0.1}
+  
+  if field_sfx_delay=0
+   { 
+    field_sfx_delay=round(room_speed*1.4)
+    PlaySFX("jellyfish field")
+   }
 }
 
-if x&lt;-(room_width/4) {instance_destroy()}
+
+if x&lt;-(room_width/10) {instance_destroy()}
 </string>
           </argument>
         </arguments>
@@ -115,8 +125,9 @@ with (other)
 
 if hp&lt;=0
 {
+  score+=20
   PlaySFX("minion explode")
-  ShakeCamera(15)
+  ShakeCamera(13)
   //generate jellyfish death hitsparks.
   part_particles_create(global.Psystem, x+50, y+30, vfxm.prt_jelly_splat, 10);
   part_particles_create(global.Psystem, x+50, y+30, vfxm.prt_jelly_spurt, 20);

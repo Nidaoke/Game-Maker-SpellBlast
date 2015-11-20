@@ -611,6 +611,32 @@ part_emitter_region(Sname,emitter1,-9,9,-58,58,ps_shape_ellipse,1);
 part_emitter_stream(Sname,emitter1,particle1,1);
 */
 
+//===============
+//for boss 2 laser charge up
+//===============
+prt_boss02_laser_charge = part_type_create();
+part_type_sprite(prt_boss02_laser_charge,spr_splody,0,0,0);
+part_type_size(prt_boss02_laser_charge,0.8,0.8,-0.05,0);
+part_type_scale(prt_boss02_laser_charge,0.9,0.9);
+part_type_color1(prt_boss02_laser_charge,16777215);
+part_type_alpha3(prt_boss02_laser_charge,0,1,1);
+part_type_speed(prt_boss02_laser_charge,0,0,0,0);
+part_type_direction(prt_boss02_laser_charge,0,0,0,0);
+part_type_gravity(prt_boss02_laser_charge,0,270);
+part_type_orientation(prt_boss02_laser_charge,0,359,10,0,1);
+part_type_blend(prt_boss02_laser_charge,1);
+part_type_life(prt_boss02_laser_charge,60,60);
+
+/*
+emitter1 = part_emitter_create(Sname);
+part_emitter_region(Sname,emitter1,x,x,y,y,0,0);
+part_emitter_stream(Sname,emitter1,particle1,5);
+*/
+
+
+
+
+
 
 
 //====================================
